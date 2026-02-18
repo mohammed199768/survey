@@ -112,3 +112,56 @@ input[type="range"]:focus-visible {
   outline-offset: 2px;
   border-radius: 25px;
 }
+
+/* Brand theme scope for Survey / Results pages */
+.brand-theme,
+.brand-theme * {
+  font-family: Arial, sans-serif !important;
+}
+
+.brand-theme {
+  color: #0f2d4a;
+}
+
+.brand-theme .text-slate-900,
+.brand-theme .text-gray-900 {
+  color: #0f2d4a !important;
+}
+
+.brand-theme .text-slate-800,
+.brand-theme .text-gray-800,
+.brand-theme .text-slate-700,
+.brand-theme .text-gray-700,
+.brand-theme .text-slate-600,
+.brand-theme .text-gray-600,
+.brand-theme .text-slate-500,
+.brand-theme .text-gray-500,
+.brand-theme .text-blue-700,
+.brand-theme .text-blue-600 {
+  color: #3d6678 !important;
+}
+
+.brand-theme .text-blue-500,
+.brand-theme .text-blue-400 {
+  color: #4d9fe0 !important;
+}
+
+.brand-theme .bg-blue-600,
+.brand-theme .bg-blue-500 {
+  background-color: #3d6678 !important;
+}
+
+.brand-theme .hover\:bg-blue-700:hover,
+.brand-theme .hover\:bg-blue-600:hover,
+.brand-theme .hover\:bg-\[\#004080\]:hover {
+  background-color: #0f2d4a !important;
+}
+
+.brand-theme .border-blue-600,
+.brand-theme .border-blue-500 {
+  border-color: #3d6678 !important;
+}
+
+.brand-theme .text-horvath-dark {
+  color: #0f2d4a !important;
+}

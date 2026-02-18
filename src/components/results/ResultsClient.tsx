@@ -53,7 +53,7 @@ export default function ResultsClient({
     : '/results/recommendations';
 
   return (
-    <div className="min-h-screen bg-[#f5f5f5] font-sans">
+    <div className="brand-theme min-h-screen bg-[#f5f5f5] font-sans">
       <Navbar />
 
       <main className="pt-24 pb-12 px-12">
