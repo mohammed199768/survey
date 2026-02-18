@@ -107,6 +107,8 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.name}
                 href={item.href}
+                // Complexity rationale: disable O(m) passive admin prefetch fan-out; navigation fetch stays demand-driven.
+                prefetch={false}
                 className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
                   isActive
                     ? 'bg-primary text-white'

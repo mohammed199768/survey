@@ -5,14 +5,14 @@
  */
 
 import * as AdminTypes from './adminTypes';
-import { AdminAuthResponseSchema, AdminVerifyResponseSchema } from './schemas';
-import { z } from 'zod';
 import { API_BASE_URL } from '@/config/api';
 import { clearAdminAuthMarker } from '@/lib/auth/adminAuthMarker';
 
 const API_BASE = API_BASE_URL;
 const CSRF_ENDPOINT = '/csrf-token';
 const CSRF_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
+const JSON_BODY_METHODS = new Set(['POST', 'PUT', 'PATCH']);
+// Complexity rationale: avoid shipping zod in admin client chunks; bundle parse remains O(b) with smaller b.
 let csrfToken: string | null = null;
 const LOGIN_PATH = '/admin/login';
 
@@ -39,6 +39,18 @@ const isEnvelopeLike = (value: unknown): value is { success?: unknown; error?: u
 
 const hasOwn = (obj: object, key: string): boolean =>
   Object.prototype.hasOwnProperty.call(obj, key);
+
+const buildRequestHeaders = (method: string, options?: RequestInit): Headers => {
+  const headers = new Headers(options?.headers);
+  const hasBody = options?.body !== undefined && options?.body !== null;
+
+  // Complexity rationale: avoid forced preflight for body-less requests (O(2n) -> O(n) round-trips).
+  if (JSON_BODY_METHODS.has(method) && hasBody && !headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
+  }
+
+  return headers;
+};
 
 function shouldRedirectToLoginOn401(): boolean {
   if (typeof window === 'undefined') {
@@ -77,17 +89,13 @@ async function getCsrfToken(): Promise<string> {
  */
 async function fetchAdmin<T>(
   endpoint: string,
-  options?: RequestInit,
-  schema?: z.ZodType<T>
+  options?: RequestInit
 ): Promise<T> {
   const method = (options?.method || 'GET').toUpperCase();
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-    ...(options?.headers as Record<string, string> | undefined),
-  };
+  const headers = buildRequestHeaders(method, options);
 
   if (CSRF_METHODS.has(method)) {
-    headers['X-CSRF-Token'] = await getCsrfToken();
+    headers.set('X-CSRF-Token', await getCsrfToken());
   }
 
   const response = await fetch(`${API_BASE}${endpoint}`, {
@@ -118,7 +126,7 @@ async function fetchAdmin<T>(
   }
 
   const result = (await response.json()) as unknown;
-  return schema ? schema.parse(result) : (result as T);
+  return result as T;
 }
 
 /**
@@ -126,35 +134,35 @@ async function fetchAdmin<T>(
  */
 async function fetchAdminWrapped<T>(
   endpoint: string,
-  options?: RequestInit,
-  schema?: z.ZodType<T>
+  options?: RequestInit
 ): Promise<T> {
   const response = await fetchAdmin<unknown>(endpoint, options);
 
   // Support both wrapped payloads ({ success, data }) and direct payloads (array/object).
   if (!isEnvelopeLike(response)) {
-    return schema ? schema.parse(response) : (response as T);
+    return response as T;
   }
 
   // Unwrap only if this is explicitly an envelope contract.
   // Plain objects that happen to contain `data` (like paginated payloads) must stay intact.
   if (!hasOwn(response, 'success')) {
-    return schema ? schema.parse(response) : (response as T);
+    return response as T;
   }
 
-  const envelopeSchema = z.object({
-    success: z.boolean().optional(),
-    error: z.string().optional(),
-    data: z.unknown().optional(),
-  });
-  const parsed = envelopeSchema.parse(response);
+  const success = response.success;
+  const error = response.error;
+  const data = response.data;
 
-  if (parsed.success === false) {
-    throw new Error(parsed.error || 'API returned error');
+  if (success !== undefined && typeof success !== 'boolean') {
+    throw new Error('Invalid API envelope');
   }
-  
-  const payload = typeof parsed.data === 'undefined' ? response : parsed.data;
-  return schema ? schema.parse(payload) : (payload as T);
+
+  if (success === false) {
+    throw new Error(typeof error === 'string' ? error : 'API returned error');
+  }
+
+  const payload = typeof data === 'undefined' ? response : data;
+  return payload as T;
 }
 
 // ==========================================
@@ -185,7 +193,7 @@ export const AdminAuthAPI = {
       throw new Error(message);
     }
     const response = (await res.json()) as unknown;
-    return AdminAuthResponseSchema.parse(response);
+    return response as AdminTypes.AdminAuthResponse;
   },
 
   /**
@@ -221,7 +229,7 @@ export const AdminAuthAPI = {
     }
 
     const payload = (await res.json()) as unknown;
-    return AdminVerifyResponseSchema.parse(payload);
+    return payload as AdminTypes.AdminVerifyResponse;
   },
 
   /**

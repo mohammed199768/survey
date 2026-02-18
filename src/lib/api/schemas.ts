@@ -1,3 +1,4 @@
+import 'server-only';
 import { z } from 'zod';
 
 const ApiNumber = z.coerce.number();

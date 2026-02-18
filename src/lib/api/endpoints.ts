@@ -5,23 +5,26 @@
  */
 
 import * as Types from './types';
-import {
-  AnswerResponseDataSchema,
-  AssessmentResponseSchema,
-  AssessmentStructureResponseSchema,
-  CompleteResponseDataSchema,
-  NarrativeDefinitionAPISchema,
-  ParticipantResponseDataSchema,
-  RecommendationsDataSchema,
-  RecommendationsDefinitionAPISchema,
-  ResultsDataSchema,
-  SessionDataInnerSchema,
-  StartResponseDataSchema,
-} from './schemas';
-import { z } from 'zod';
 import { API_BASE_URL } from '@/config/api';
 
 const API_BASE = API_BASE_URL;
+const JSON_BODY_METHODS = new Set(['POST', 'PUT', 'PATCH']);
+// Complexity rationale: keep runtime validation on server-side modules, reducing client parse cost with smaller O(b) bundles.
+
+const buildRequestHeaders = (method: string, options?: RequestInit): Headers => {
+  const headers = new Headers(options?.headers);
+  const hasBody = options?.body !== undefined && options?.body !== null;
+
+  // Complexity rationale: avoid forcing preflight (OPTIONS + GET = O(2n)); body-less requests stay simple (O(n)).
+  if (JSON_BODY_METHODS.has(method) && hasBody && !headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
+  }
+
+  return headers;
+};
+
+const isObjectLike = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
 
 const getResponseSessionHeaders = (): Record<string, string> => {
   if (typeof window === 'undefined') {
@@ -39,13 +42,12 @@ const getResponseSessionHeaders = (): Record<string, string> => {
 /**
  * Generic fetch wrapper for endpoints that return wrapped responses
  */
-async function fetchWrapped<T>(endpoint: string, schema: z.ZodType<T>, options?: RequestInit): Promise<T> {
+async function fetchWrapped<T>(endpoint: string, options?: RequestInit): Promise<T> {
+  const method = (options?.method || 'GET').toUpperCase();
   const response = await fetch(`${API_BASE}${endpoint}`, {
     ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
+    method,
+    headers: buildRequestHeaders(method, options),
     credentials: 'include',
   });
 
@@ -55,34 +57,32 @@ async function fetchWrapped<T>(endpoint: string, schema: z.ZodType<T>, options?:
   }
 
   const result = (await response.json()) as unknown;
-  
-  const envelopeSchema = z.object({
-    success: z.boolean(),
-    data: z.unknown().optional(),
-    error: z.string().optional(),
-  });
-  const parsedEnvelope = envelopeSchema.parse(result);
 
-  if (parsedEnvelope.success === false) {
-    throw new Error(parsedEnvelope.error || 'API returned error');
+  if (!isObjectLike(result) || typeof result.success !== 'boolean') {
+    throw new Error('Invalid API envelope');
   }
-  if (typeof parsedEnvelope.data === 'undefined') {
+
+  if (result.success === false) {
+    const errorMessage = typeof result.error === 'string' ? result.error : 'API returned error';
+    throw new Error(errorMessage);
+  }
+
+  if (typeof result.data === 'undefined') {
     throw new Error('API returned success without data');
   }
 
-  return schema.parse(parsedEnvelope.data);
+  return result.data as T;
 }
 
 /**
  * Generic fetch for endpoints that return unwrapped responses
  */
-async function fetchRaw<T>(endpoint: string, schema: z.ZodType<T>, options?: RequestInit): Promise<T> {
+async function fetchRaw<T>(endpoint: string, options?: RequestInit): Promise<T> {
+  const method = (options?.method || 'GET').toUpperCase();
   const response = await fetch(`${API_BASE}${endpoint}`, {
     ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
+    method,
+    headers: buildRequestHeaders(method, options),
     credentials: 'include',
   });
 
@@ -92,7 +92,7 @@ async function fetchRaw<T>(endpoint: string, schema: z.ZodType<T>, options?: Req
   }
 
   const result = (await response.json()) as unknown;
-  return schema.parse(result);
+  return result as T;
 }
 
 export const AssessmentAPI = {
@@ -100,7 +100,7 @@ export const AssessmentAPI = {
    * Get the currently active published assessment
    */
   async getActive(): Promise<Types.AssessmentResponse> {
-    return fetchWrapped('/public/assessments/active', AssessmentResponseSchema);
+    return fetchWrapped<Types.AssessmentResponse>('/public/assessments/active');
   },
 
   /**
@@ -109,7 +109,7 @@ export const AssessmentAPI = {
    */
   async getStructure(assessmentId: string): Promise<Types.AssessmentStructureResponse> {
     // Use the wrapped endpoint
-    return fetchWrapped(`/public/assessments/${assessmentId}/structure`, AssessmentStructureResponseSchema);
+    return fetchWrapped<Types.AssessmentStructureResponse>(`/public/assessments/${assessmentId}/structure`);
   },
 
   /**
@@ -117,7 +117,7 @@ export const AssessmentAPI = {
    * Returns unwrapped response from /public/assessments/active/structure
    */
   async getActiveStructure(): Promise<Types.AssessmentStructureResponse> {
-    return fetchRaw('/public/assessments/active/structure', AssessmentStructureResponseSchema);
+    return fetchRaw<Types.AssessmentStructureResponse>('/public/assessments/active/structure');
   },
 
   /**
@@ -125,7 +125,7 @@ export const AssessmentAPI = {
    * Returns unwrapped response
    */
   async getRecommendationsDefinition(): Promise<Types.RecommendationsDefinitionAPI> {
-    return fetchRaw('/public/recommendations/definition', RecommendationsDefinitionAPISchema);
+    return fetchRaw<Types.RecommendationsDefinitionAPI>('/public/recommendations/definition');
   },
 
   /**
@@ -133,7 +133,7 @@ export const AssessmentAPI = {
    * Returns unwrapped response
    */
   async getNarrativeDefinition(): Promise<Types.NarrativeDefinitionAPI> {
-    return fetchRaw('/public/narrative/definition', NarrativeDefinitionAPISchema);
+    return fetchRaw<Types.NarrativeDefinitionAPI>('/public/narrative/definition');
   }
 };
 
@@ -145,9 +145,8 @@ export const ParticipantAPI = {
     data: Types.RegistrationData,
     participantToken?: string | null
   ): Promise<Types.ParticipantResponseData> {
-    const response = await fetchWrapped(
+    const response = await fetchWrapped<Types.ParticipantResponseData>(
       '/public/participants',
-      ParticipantResponseDataSchema,
       {
         method: 'POST',
         headers: participantToken ? { 'x-participant-token': participantToken } : undefined,
@@ -163,9 +162,8 @@ export const ResponseAPI = {
    * Start a new assessment response
    */
   async start(assessmentId: string, participantId: string): Promise<Types.StartResponseData> {
-    return fetchWrapped(
+    return fetchWrapped<Types.StartResponseData>(
       '/public/responses/start',
-      StartResponseDataSchema,
       {
         method: 'POST',
         body: JSON.stringify({ assessmentId, participantId }),
@@ -183,9 +181,8 @@ export const ResponseAPI = {
     timeSpentSeconds?: number;
     notes?: string;
   }): Promise<Types.AnswerResponseData> {
-    return fetchWrapped(
+    return fetchWrapped<Types.AnswerResponseData>(
       `/public/responses/${responseId}/answer`,
-      AnswerResponseDataSchema,
       {
         method: 'PUT',
         headers: getResponseSessionHeaders(),
@@ -198,19 +195,15 @@ export const ResponseAPI = {
    * Get session data by token (for resuming)
    */
   async getSession(sessionToken: string): Promise<Types.SessionDataInner> {
-    return fetchWrapped(
-      `/public/responses/session/${sessionToken}`,
-      SessionDataInnerSchema
-    );
+    return fetchWrapped<Types.SessionDataInner>(`/public/responses/session/${sessionToken}`);
   },
 
   /**
    * Complete the assessment
    */
   async complete(responseId: string): Promise<Types.CompleteResponseData> {
-    return fetchWrapped(
+    return fetchWrapped<Types.CompleteResponseData>(
       `/public/responses/${responseId}/complete`,
-      CompleteResponseDataSchema,
       {
         method: 'POST',
         headers: getResponseSessionHeaders(),
@@ -222,9 +215,8 @@ export const ResponseAPI = {
    * Get assessment results
    */
   async getResults(responseId: string): Promise<Types.ResultsData> {
-    return fetchWrapped(
+    return fetchWrapped<Types.ResultsData>(
       `/public/responses/${responseId}/results`,
-      ResultsDataSchema,
       {
         headers: getResponseSessionHeaders(),
       }
@@ -235,9 +227,8 @@ export const ResponseAPI = {
    * Get recommendations (optional endpoint)
    */
   async getRecommendations(responseId: string): Promise<Types.RecommendationsData> {
-    return fetchWrapped(
+    return fetchWrapped<Types.RecommendationsData>(
       `/public/responses/${responseId}/recommendations`,
-      RecommendationsDataSchema,
       {
         headers: getResponseSessionHeaders(),
       }

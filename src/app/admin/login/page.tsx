@@ -19,10 +19,7 @@ export default function AdminLoginPage() {
    * بمجرد نجاح تسجيل الدخول، ستتغير حالة isAuthenticated ويتم التوجيه فوراً.
    */
   useEffect(() => {
-    router.prefetch('/admin/dashboard');
-  }, [router]);
-
-  useEffect(() => {
+    // Complexity rationale: remove eager prefetch to avoid passive admin fetch fan-out before user intent.
     if (!authLoading && isAuthenticated) {
       router.replace('/admin/dashboard');
     }
