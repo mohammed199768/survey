@@ -11,24 +11,28 @@ const resolveApiBaseUrl = (request: NextRequest): string => {
   return `${request.nextUrl.origin}/api`;
 };
 
-const buildCsp = (nonce: string): string => {
+const buildCsp = (): string => {
   if (process.env.NODE_ENV !== 'production') {
     return [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live",
+      "script-src-elem 'self' 'unsafe-inline' https://vercel.live",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https:",
       "font-src 'self' data:",
-      "connect-src 'self' https: http:",
+      "connect-src 'self' https: http: ws: wss:",
+      "object-src 'none'",
       "base-uri 'self'",
+      "form-action 'self'",
       "frame-ancestors 'none'",
     ].join('; ');
   }
 
   return [
     "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
-    `style-src 'self' 'nonce-${nonce}'`,
+    "script-src 'self' 'unsafe-inline'",
+    "script-src-elem 'self'",
+    "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
     "connect-src 'self' https:",
@@ -40,7 +44,7 @@ const buildCsp = (nonce: string): string => {
 };
 
 const applySecurityHeaders = (response: NextResponse, nonce: string): NextResponse => {
-  response.headers.set('Content-Security-Policy', buildCsp(nonce));
+  response.headers.set('Content-Security-Policy', buildCsp());
   response.headers.set(NONCE_HEADER, nonce);
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   response.headers.set('X-Content-Type-Options', 'nosniff');
