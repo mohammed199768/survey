@@ -39,7 +39,9 @@ export function DualSlider({
   topicId: _topicId,
   labels = [],
 }: DualSliderProps) {
-  const labelColumnClass = 'w-20 sm:w-24 lg:w-28 shrink-0';
+  const labelColumnClass = 'w-24 sm:w-28 lg:w-32 shrink-0';
+  const [isCurrentElastic, setIsCurrentElastic] = React.useState(false);
+  const [isTargetElastic, setIsTargetElastic] = React.useState(false);
   const toSafeScore = React.useCallback((value: unknown, fallback: number) => {
     if (typeof value === 'number' && Number.isFinite(value)) {
       return Math.max(min, Math.min(max, value));
@@ -55,6 +57,8 @@ export function DualSlider({
 
   const safeCurrent = toSafeScore(current, min);
   const safeTarget = toSafeScore(target, min);
+  const currentElasticTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+  const targetElasticTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const getPercentage = (val: number) => {
     const percentage = ((val - min) / (max - min)) * 100;
@@ -64,14 +68,31 @@ export function DualSlider({
   const handleCurrentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = parseFloat(e.target.value);
     const snappedValue = snapToValidScore(rawValue);
+    setIsCurrentElastic(true);
+    if (currentElasticTimeoutRef.current) {
+      clearTimeout(currentElasticTimeoutRef.current);
+    }
+    currentElasticTimeoutRef.current = setTimeout(() => setIsCurrentElastic(false), 260);
     onCurrentChange(snappedValue);
   };
 
   const handleTargetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = parseFloat(e.target.value);
     const snappedValue = snapToValidScore(rawValue);
+    setIsTargetElastic(true);
+    if (targetElasticTimeoutRef.current) {
+      clearTimeout(targetElasticTimeoutRef.current);
+    }
+    targetElasticTimeoutRef.current = setTimeout(() => setIsTargetElastic(false), 260);
     onTargetChange(snappedValue);
   };
+
+  React.useEffect(() => {
+    return () => {
+      if (currentElasticTimeoutRef.current) clearTimeout(currentElasticTimeoutRef.current);
+      if (targetElasticTimeoutRef.current) clearTimeout(targetElasticTimeoutRef.current);
+    };
+  }, []);
 
   const scaleMarkers = [1, 2, 3, 4, 5];
   const currentAnchor = React.useMemo(() => getAnchorForValue(safeCurrent, labels), [safeCurrent, labels]);
@@ -96,10 +117,7 @@ export function DualSlider({
   );
 
   return (
-    <div
-      className="w-full select-none font-sans pt-0 pb-1"
-      style={{ fontFamily: '"Segoe UI", Inter, Arial, sans-serif' }}
-    >
+    <div className="w-full select-none pt-0 pb-1" style={{ fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif' }}>
       <div className="flex flex-col gap-3 sm:gap-4">
         {labels.length > 0 && (
           <>
@@ -114,12 +132,12 @@ export function DualSlider({
               </div>
             </div>
 
-            <div className="hidden sm:flex items-start gap-6 -mb-1">
+            <div className="hidden sm:flex items-start gap-8 -mb-1">
               <div className={labelColumnClass}></div>
-              <div className="flex-1 grid grid-cols-5 gap-5">
+              <div className="flex-1 grid grid-cols-5 gap-7">
                 {labels.map((label, idx) => (
-                  <div key={idx} className="text-center min-h-[104px] flex items-end justify-center">
-                    <p className="text-[clamp(1rem,1vw,1.18rem)] font-medium text-slate-900 leading-[1.5] break-words">
+                  <div key={idx} className="text-center min-h-[108px] flex items-end justify-center">
+                    <p className="text-[clamp(0.92rem,0.95vw,1.08rem)] font-normal text-slate-800/95 leading-[1.5] break-words">
                       {label ?? ''}
                     </p>
                   </div>
@@ -131,22 +149,26 @@ export function DualSlider({
 
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6">
           <div className={`w-full ${labelColumnClass} sm:pr-3 text-left sm:text-right`}>
-            <span className="text-[clamp(1rem,4vw,1.35rem)] sm:text-[clamp(1.15rem,1.35vw,1.45rem)] font-bold text-[#b353a1] uppercase tracking-[0.02em]">
+            <span className="text-[0.78rem] sm:text-[0.86rem] font-medium text-[#b353a1] uppercase tracking-[0.24em]">
               SCORE
             </span>
           </div>
 
-          <div className="flex-1 relative h-9 sm:h-10">
-            <div className="absolute inset-0 bg-[#e7e8eb] rounded-full" />
+          <div className="flex-1 relative h-10 sm:h-11">
+            <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-2.5 rounded-full bg-white/10 border border-white/35 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.3),inset_0_-1px_5px_rgba(15,23,42,0.18)]" />
             <div
-              className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#c66ac0] to-[#8a63dc] transition-all duration-300 ease-out"
-              style={{ width: `${getPercentage(safeCurrent)}%` }}
+              className={`absolute left-0 top-1/2 -translate-y-1/2 h-2.5 rounded-full bg-gradient-to-b from-[#ff88d5] via-[#d555b9] to-[#782fc7] shadow-[0_0_22px_rgba(213,85,185,0.46)] transition-all duration-300 ${
+                isCurrentElastic ? 'scale-x-[1.02]' : 'scale-x-100'
+              }`}
+              style={{ width: `${getPercentage(safeCurrent)}%`, transformOrigin: 'left center' }}
             />
             <div
-              className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-9 sm:h-10 min-w-[56px] sm:min-w-[62px] px-3 sm:px-4 bg-[#b353a1] rounded-full flex items-center justify-center shadow-[0_4px_14px_rgba(179,83,161,0.28)] border border-white transition-all duration-300 ease-out z-20"
+              className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-10 sm:h-11 min-w-[64px] sm:min-w-[70px] px-3.5 sm:px-4 bg-gradient-to-b from-[#ff86d4] to-[#8a2cc6] rounded-full flex items-center justify-center border border-white/65 shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_10px_30px_rgba(0,0,0,0.2),0_0_24px_rgba(212,74,178,0.45)] transition-all duration-300 ease-out z-20 ${
+                isCurrentElastic ? 'scale-[1.05]' : 'scale-100'
+              }`}
               style={{ left: `${getPercentage(safeCurrent)}%` }}
             >
-              <span className="text-[0.92rem] sm:text-[1rem] font-bold text-white tabular-nums">
+              <span className="text-[0.96rem] sm:text-[1.05rem] font-bold text-white tabular-nums">
                 {safeCurrent.toFixed(1)}
               </span>
             </div>
@@ -165,22 +187,26 @@ export function DualSlider({
 
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6">
           <div className={`w-full ${labelColumnClass} sm:pr-3 text-left sm:text-right`}>
-            <span className="text-[clamp(1rem,4vw,1.35rem)] sm:text-[clamp(1.15rem,1.35vw,1.45rem)] font-bold text-[#3467d6] uppercase tracking-[0.02em]">
+            <span className="text-[0.78rem] sm:text-[0.86rem] font-medium text-[#3467d6] uppercase tracking-[0.24em]">
               TARGET
             </span>
           </div>
 
-          <div className="flex-1 relative h-9 sm:h-10">
-            <div className="absolute inset-0 bg-[#e7e8eb] rounded-full" />
+          <div className="flex-1 relative h-10 sm:h-11">
+            <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-2.5 rounded-full bg-white/10 border border-white/35 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.3),inset_0_-1px_5px_rgba(15,23,42,0.18)]" />
             <div
-              className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#2990ea] to-[#1e6fd9] transition-all duration-300 ease-out"
-              style={{ width: `${getPercentage(safeTarget)}%` }}
+              className={`absolute left-0 top-1/2 -translate-y-1/2 h-2.5 rounded-full bg-gradient-to-b from-[#75cbff] via-[#279af1] to-[#1e63d8] shadow-[0_0_22px_rgba(39,154,241,0.4)] transition-all duration-300 ${
+                isTargetElastic ? 'scale-x-[1.02]' : 'scale-x-100'
+              }`}
+              style={{ width: `${getPercentage(safeTarget)}%`, transformOrigin: 'left center' }}
             />
             <div
-              className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-9 sm:h-10 min-w-[56px] sm:min-w-[62px] px-3 sm:px-4 bg-[#3467d6] rounded-full flex items-center justify-center shadow-[0_4px_14px_rgba(52,103,214,0.28)] border border-white transition-all duration-300 ease-out z-20"
+              className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-10 sm:h-11 min-w-[64px] sm:min-w-[70px] px-3.5 sm:px-4 bg-gradient-to-b from-[#7cd3ff] to-[#1e63d8] rounded-full flex items-center justify-center border border-white/65 shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_10px_30px_rgba(0,0,0,0.2),0_0_24px_rgba(39,154,241,0.44)] transition-all duration-300 ease-out z-20 ${
+                isTargetElastic ? 'scale-[1.05]' : 'scale-100'
+              }`}
               style={{ left: `${getPercentage(safeTarget)}%` }}
             >
-              <span className="text-[0.92rem] sm:text-[1rem] font-bold text-white tabular-nums">
+              <span className="text-[0.96rem] sm:text-[1.05rem] font-bold text-white tabular-nums">
                 {safeTarget.toFixed(1)}
               </span>
             </div>

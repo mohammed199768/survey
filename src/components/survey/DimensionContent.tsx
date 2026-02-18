@@ -151,7 +151,7 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
           <button
             onClick={handleNext}
             disabled={isLoading}
-            className={`px-5 sm:px-8 lg:px-10 py-2.5 rounded-full text-xs sm:text-sm font-bold text-white hover:shadow-lg hover:shadow-blue-500/20 transition-all active:scale-95 flex items-center gap-2 disabled:opacity-70 ${
+            className={`px-5 sm:px-6 lg:px-7 py-3 rounded-2xl text-xs sm:text-sm font-bold text-white hover:shadow-lg hover:shadow-blue-500/20 transition-all active:scale-95 flex items-center gap-2 disabled:opacity-70 ${
               isLastTopic ? 'bg-green-600 hover:bg-green-700' : 'bg-[#00549F] hover:bg-[#004080]'
             }`}
           >
