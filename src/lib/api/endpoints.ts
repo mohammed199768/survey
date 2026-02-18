@@ -23,6 +23,19 @@ import { API_BASE_URL } from '@/config/api';
 
 const API_BASE = API_BASE_URL;
 
+const getResponseSessionHeaders = (): Record<string, string> => {
+  if (typeof window === 'undefined') {
+    return {};
+  }
+
+  const sessionToken = window.localStorage.getItem('sessionToken');
+  if (!sessionToken) {
+    return {};
+  }
+
+  return { 'x-session-token': sessionToken };
+};
+
 /**
  * Generic fetch wrapper for endpoints that return wrapped responses
  */
@@ -175,6 +188,7 @@ export const ResponseAPI = {
       AnswerResponseDataSchema,
       {
         method: 'PUT',
+        headers: getResponseSessionHeaders(),
         body: JSON.stringify(answer),
       }
     );
@@ -199,6 +213,7 @@ export const ResponseAPI = {
       CompleteResponseDataSchema,
       {
         method: 'POST',
+        headers: getResponseSessionHeaders(),
       }
     );
   },
@@ -209,7 +224,10 @@ export const ResponseAPI = {
   async getResults(responseId: string): Promise<Types.ResultsData> {
     return fetchWrapped(
       `/public/responses/${responseId}/results`,
-      ResultsDataSchema
+      ResultsDataSchema,
+      {
+        headers: getResponseSessionHeaders(),
+      }
     );
   },
 
@@ -219,7 +237,10 @@ export const ResponseAPI = {
   async getRecommendations(responseId: string): Promise<Types.RecommendationsData> {
     return fetchWrapped(
       `/public/responses/${responseId}/recommendations`,
-      RecommendationsDataSchema
+      RecommendationsDataSchema,
+      {
+        headers: getResponseSessionHeaders(),
+      }
     );
   },
 };
