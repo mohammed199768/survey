@@ -22,10 +22,11 @@ function DiamondRail({ side }: { side: 'left' | 'right' }) {
         {offsets.map((offset, idx) => (
           <div
             key={`${side}-${idx}`}
-            className="absolute w-[68px] h-[68px] border-[6px] border-[#4D9FE0] rotate-45"
+            className="absolute w-[68px] h-[68px] border-[5px] rotate-45"
             style={{
               top: `${offset + 132}px`,
               [side === 'left' ? 'left' : 'right']: `${idx * 20}px`,
+              borderColor: idx % 2 === 0 ? 'rgba(25, 76, 145, 0.62)' : 'rgba(52, 120, 197, 0.5)',
             }}
           />
         ))}
@@ -76,12 +77,16 @@ export default function LandingPage() {
           <DiamondRail side="left" />
           <DiamondRail side="right" />
 
-          <div className="rounded-[32px] border border-blue-800/20 bg-[linear-gradient(135deg,#0f2f67_0%,#11408d_56%,#2a68be_100%)] shadow-[0_24px_60px_rgba(15,23,42,0.32)] px-8 py-12 md:px-14 md:py-14 text-center text-white">
+          <div className="relative px-8 py-12 md:px-14 md:py-14 text-center text-slate-900">
+            <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center">
+              <div className="absolute w-[84%] h-[84%] rotate-45 border border-[rgba(22,66,128,0.45)]" />
+              <div className="absolute w-[96%] h-[96%] rotate-45 border border-[rgba(48,110,184,0.35)]" />
+            </div>
             <motion.p
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center px-4 py-1.5 rounded-full border border-white/35 bg-white/10 text-xs md:text-sm tracking-[0.16em] text-blue-50 font-semibold mb-6"
+              className="inline-flex items-center px-4 py-1.5 rounded-full border border-[rgba(24,73,141,0.28)] bg-white/70 text-xs md:text-sm tracking-[0.16em] text-[#1b4e94] font-semibold mb-6"
             >
               HORVATH IMPACT PLATFORM
             </motion.p>
@@ -90,7 +95,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.05 }}
-              className="text-5xl md:text-7xl font-extrabold mb-6 leading-[0.95] text-white"
+              className="text-5xl md:text-7xl font-extrabold mb-6 leading-[0.95] text-[#0b2d63]"
             >
               HORVATH
             </motion.h1>
@@ -101,8 +106,8 @@ export default function LandingPage() {
               transition={{ duration: 0.6, delay: 0.12 }}
               className="space-y-4 mb-10 max-w-2xl mx-auto"
             >
-              <p className="text-xl md:text-2xl font-medium text-blue-50">Strategic Assessment. Executive Clarity.</p>
-              <p className="text-base md:text-lg leading-relaxed text-blue-100/95">
+              <p className="text-xl md:text-2xl font-medium text-[#163f7d]">Strategic Assessment. Executive Clarity.</p>
+              <p className="text-base md:text-lg leading-relaxed text-slate-700">
                 Measure organizational readiness, surface critical capability gaps, and turn insights into high-impact action.
               </p>
             </motion.div>
@@ -111,11 +116,11 @@ export default function LandingPage() {
               {isLoading ? (
                 <BrandPreloader size={120} label="Loading assessment..." />
               ) : error ? (
-                <div className="text-red-200 font-medium">Error: {error}</div>
+                <div className="text-red-600 font-medium">Error: {error}</div>
               ) : (
                 <button
                   onClick={() => router.push('/survey')}
-                  className="w-full px-8 py-4 bg-white text-blue-700 border-2 border-white rounded-full font-semibold text-lg hover:bg-blue-50 transition-all flex items-center justify-center gap-2"
+                  className="w-full px-8 py-4 bg-[#0f4f98] text-white border-2 border-[#0f4f98] rounded-full font-semibold text-lg hover:bg-[#0c437f] hover:border-[#0c437f] transition-all flex items-center justify-center gap-2"
                 >
                   Start Assessment
                   <span>{'->'}</span>
@@ -123,13 +128,13 @@ export default function LandingPage() {
               )}
             </div>
 
-            <p className="text-sm text-blue-100/90">
+            <p className="text-sm text-slate-600">
               By clicking get started button, you agree to HORVATH&apos;s{' '}
-              <Link href="/terms" className="text-white underline hover:text-blue-100">
+              <Link href="/terms" className="text-[#1b4e94] underline hover:text-[#123c74]">
                 Terms of Service
               </Link>{' '}
               and{' '}
-              <Link href="/privacy" className="text-white underline hover:text-blue-100">
+              <Link href="/privacy" className="text-[#1b4e94] underline hover:text-[#123c74]">
                 Privacy Policy
               </Link>
             </p>
