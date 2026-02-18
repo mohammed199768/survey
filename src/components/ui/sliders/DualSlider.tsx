@@ -165,8 +165,8 @@ export function DualSlider({
               </div>
             </div>
 
-            <div className="hidden sm:block mb-4" style={{ marginLeft: labelColumnWidth }}>
-              <div className="relative h-[120px]">
+            <div className="hidden sm:block mb-3" style={{ marginLeft: labelColumnWidth }}>
+              <div className="relative h-[108px]">
                 {railWidth > 0 &&
                   labelsForGrid.map((label, idx) => {
                     const mark = idx + 1;
@@ -179,10 +179,10 @@ export function DualSlider({
                           width: `${railWidth / 4}px`,
                         }}
                       >
-                        <p className="text-[clamp(0.92rem,2.95vw,1.04rem)] lg:text-[1rem] font-medium text-slate-800 leading-[1.5] text-center h-[82px] w-full flex items-end justify-center">
+                        <p className="text-[clamp(0.86rem,2.5vw,0.96rem)] lg:text-[0.95rem] font-medium text-slate-800 leading-[1.45] text-center h-[74px] w-full flex items-end justify-center">
                           {label}
                         </p>
-                        <div className="w-px h-[18px] bg-slate-300 mt-[10px]" />
+                        <div className="w-px h-[16px] bg-slate-300 mt-2" />
                       </div>
                     );
                   })}
@@ -191,7 +191,7 @@ export function DualSlider({
           </>
         )}
 
-        <div className="space-y-6">
+        <div className="space-y-5">
           <div className="relative flex items-center gap-3 sm:gap-5">
             <div className={`${labelColumnClass} pr-2 text-left sm:text-right`} style={{ width: labelColumnWidth }}>
               <span className="text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: scoreLabelColor }}>
