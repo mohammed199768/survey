@@ -60,22 +60,20 @@ export function DualSlider({
   const currentAnchor = React.useMemo(() => getAnchorForValue(current, labels), [current, labels]);
   const targetAnchor = React.useMemo(() => getAnchorForValue(target, labels), [target, labels]);
 
-  const renderTickRow = (heightClass = 'h-6', hideEdgeTicks = false) => (
-    <div className="hidden sm:flex items-center gap-6">
-      <div className="w-36 shrink-0" />
-      <div className="flex-1 relative">
-        {scaleMarkers
-          .filter((score) => (hideEdgeTicks ? score !== min && score !== max : true))
-          .map((score) => (
-            <div
-              key={score}
-              className={`absolute rounded-full w-[2px] ${heightClass} bg-slate-400/80`}
-              style={{
-                left: `${((score - min) / (max - min)) * 100}%`,
-                transform: 'translateX(-50%)',
-              }}
-            />
+  const renderScaleRuler = () => (
+    <div className="flex items-start gap-3 sm:gap-6 mt-2 sm:mt-3">
+      <div className="hidden sm:block w-36 shrink-0" />
+      <div className="flex-1 relative h-12 border-t border-slate-200/80">
+        <div className="absolute inset-x-0 top-0 flex justify-between">
+          {scaleMarkers.map((mark) => (
+            <div key={mark} className="flex flex-col items-center -translate-x-1/2 first:translate-x-0 last:translate-x-0">
+              <div className="w-px h-3 bg-slate-300" />
+              <span className="mt-1.5 text-[0.68rem] sm:text-[0.72rem] font-semibold text-slate-400 tabular-nums">
+                {mark.toFixed(1)}
+              </span>
+            </div>
           ))}
+        </div>
       </div>
     </div>
   );
@@ -113,8 +111,6 @@ export function DualSlider({
             </div>
           </>
         )}
-
-        {renderTickRow('h-7', true)}
 
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6">
           <div className="w-full sm:w-36 sm:shrink-0 sm:pr-3 text-left sm:text-right">
@@ -184,20 +180,7 @@ export function DualSlider({
           </div>
         </div>
 
-        {renderTickRow('h-7', false)}
-
-        <div className="flex items-center gap-3 sm:gap-6 mt-1.5">
-          <div className="hidden sm:block w-36 shrink-0"></div>
-          <div className="flex-1 grid grid-cols-5">
-            {scaleMarkers.map((mark) => (
-              <div key={mark} className="flex justify-center">
-                <span className="text-[clamp(0.78rem,3.2vw,1.2rem)] sm:text-[clamp(1rem,1.05vw,1.2rem)] font-medium text-slate-500 tabular-nums">
-                  {mark.toFixed(1)}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
+        {renderScaleRuler()}
       </div>
     </div>
   );
