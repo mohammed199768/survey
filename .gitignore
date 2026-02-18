@@ -6,3 +6,4 @@ build/
 .next/
 *.log
 *.tsbuildinfo
+RAILWAY_AUDIT_RAW_OUTPUT.md
