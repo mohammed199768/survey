@@ -1,0 +1,115 @@
+'use client';
+
+import * as React from 'react';
+import { TopicStructure } from '@/lib/api/types';
+import { DualSlider } from '@/components/ui/sliders/DualSlider';
+import { useReadinessStore } from '@/store/readiness/readiness.store';
+
+export function TopicCard({ dimensionId, topic }: { dimensionId: string; topic: TopicStructure }) {
+  // Use flat responses structure from new store
+  const response = useReadinessStore((state) => state.responses[topic.id]);
+  const submitAnswer = useReadinessStore((state) => state.submitAnswer);
+  const setResponse = useReadinessStore((state) => state.setResponse);
+  const isSubmitting = useReadinessStore((state) => state.isSubmitting);
+  
+  const currentVal = response?.current ?? 1.0;
+  const targetVal = response?.target ?? 1.0;
+
+  const levelDescriptions = React.useMemo(() => {
+    if (Array.isArray(topic.levelAnchors) && topic.levelAnchors.length === 5) {
+      return topic.levelAnchors;
+    }
+
+    // Backward compatibility fallback for legacy prompt-encoded levels.
+    if (!topic.prompt) return [];
+    if (topic.prompt.includes('|')) {
+      return topic.prompt
+        .split('|')
+        .map((s) => s.replace(/^Level\s+\d+:\s*/i, '').trim())
+        .filter((s) => s.length > 0)
+        .slice(0, 5);
+    }
+    if (topic.prompt.includes('\n')) {
+      return topic.prompt
+        .split('\n')
+        .map((line) => line.trim())
+        .filter((line) => /^Level\s+\d+/i.test(line))
+        .map((line) => line.replace(/^Level\s+\d+:\s*/i, '').trim())
+        .slice(0, 5);
+    }
+
+    return [];
+  }, [topic.levelAnchors, topic.prompt]);
+
+  // Refs for debouncing - survives HMR
+  const saveTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  const debouncedSave = React.useCallback((tId: string, current: number, target: number) => {
+      if (saveTimeoutRef.current) {
+          clearTimeout(saveTimeoutRef.current);
+      }
+      
+      saveTimeoutRef.current = setTimeout(() => {
+          submitAnswer(tId, current, target);
+      }, 1000); // 1 second debounce
+  }, [submitAnswer]);
+
+  const handleScoreChange = (field: 'current' | 'target', value: number) => {
+    // Value is already snapped to valid level (1..5) by DualSlider.
+    
+    // Determine the new state
+    const newCurrent = field === 'current' ? value : currentVal;
+    const newTarget = field === 'target' ? value : targetVal;
+    
+    // 1. Immediate local update (optimistic)
+    setResponse(topic.id, newCurrent, newTarget);
+    
+    // 2. Debounced API save
+    debouncedSave(topic.id, newCurrent, newTarget);
+  };
+
+  return (
+    <div
+      className="flex flex-col h-full overflow-hidden font-sans relative"
+      style={{ fontFamily: '"Segoe UI", Inter, Arial, sans-serif' }}
+    >
+       {/* Save indicator - subtle */}
+       {isSubmitting && (
+        <div className="absolute top-2 right-2 text-xs text-blue-500 font-medium animate-pulse">
+            Saving...
+        </div>
+      )}
+
+      {/* Header */}
+      <div className="px-10 lg:px-12 pt-5 pb-4 bg-white shrink-0">
+        <h2 className="text-2xl lg:text-[2rem] font-semibold text-slate-900 tracking-[-0.005em] leading-tight">
+          {topic.label}
+        </h2>
+      </div>
+
+      {/* Prompt Strip */}
+      <div className="px-10 lg:px-12 py-4 bg-slate-50/85 border-y border-slate-100 shrink-0">
+        <p className="text-base lg:text-[1.55rem] font-medium text-slate-800 leading-[1.5] max-w-[1100px]">
+          {topic.prompt}
+        </p>
+      </div>
+
+      {/* Body */}
+      <div className="px-10 lg:px-12 pt-2 pb-8 bg-[#f6f7f9] flex-1 flex flex-col justify-start">
+        <div className="w-full mx-auto max-w-[1280px]">
+          <DualSlider
+            current={currentVal}
+            target={targetVal}
+            onCurrentChange={(val) => handleScoreChange('current', val)}
+            onTargetChange={(val) => handleScoreChange('target', val)}
+            topicId={topic.id}
+            min={1.0}
+            max={5.0}
+            step={0.5}
+            labels={levelDescriptions}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}

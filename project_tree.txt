@@ -1,0 +1,120 @@
+Project Tree:
+├─ scripts
+│  └─ verify-scoring.ts
+├─ src
+│  ├─ app
+│  │  ├─ admin
+│  │  │  ├─ analytics
+│  │  │  │  └─ page.tsx
+│  │  │  ├─ assessments
+│  │  │  │  ├─ [id]
+│  │  │  │  │  └─ page.tsx
+│  │  │  │  └─ page.tsx
+│  │  │  ├─ dashboard
+│  │  │  │  └─ page.tsx
+│  │  │  ├─ login
+│  │  │  │  └─ page.tsx
+│  │  │  ├─ responses
+│  │  │  │  ├─ [id]
+│  │  │  │  │  └─ page.tsx
+│  │  │  │  └─ page.tsx
+│  │  │  ├─ settings
+│  │  │  │  └─ page.tsx
+│  │  │  └─ layout.tsx
+│  │  ├─ results
+│  │  │  ├─ recommendations
+│  │  │  │  └─ page.tsx
+│  │  │  └─ page.tsx
+│  │  ├─ survey
+│  │  │  ├─ [dimensionId]
+│  │  │  │  └─ page.tsx
+│  │  │  ├─ layout.tsx
+│  │  │  └─ page.tsx
+│  │  ├─ globals.css
+│  │  ├─ layout.tsx
+│  │  └─ page.tsx
+│  ├─ components
+│  │  ├─ admin
+│  │  │  ├─ ActivityFeed.tsx
+│  │  │  ├─ AssessmentForm.tsx
+│  │  │  ├─ SettingsForm.tsx
+│  │  │  └─ StatCard.tsx
+│  │  ├─ common
+│  │  │  └─ ResetButton.tsx
+│  │  ├─ layout
+│  │  │  ├─ sidebar
+│  │  │  │  └─ Sidebar.tsx
+│  │  │  └─ Navbar.tsx
+│  │  ├─ results
+│  │  │  ├─ charts
+│  │  │  │  ├─ BubbleChart.tsx
+│  │  │  │  ├─ DimensionBarChart.tsx
+│  │  │  │  ├─ GapVarianceChart.tsx
+│  │  │  │  ├─ MaturityGauge.tsx
+│  │  │  │  ├─ PriorityMatrix.tsx
+│  │  │  │  └─ RiskHeatmap.tsx
+│  │  │  ├─ DimensionResultCard.tsx
+│  │  │  ├─ ExecutiveSummaryCard.tsx
+│  │  │  ├─ MaturityRadar.tsx
+│  │  │  ├─ OverallSummaryCard.tsx
+│  │  │  ├─ RecommendationsList.tsx
+│  │  │  ├─ RecommendationsPageClient.tsx
+│  │  │  ├─ ResultsClient.tsx
+│  │  │  ├─ TopGapsList.tsx
+│  │  │  └─ TopTopicsList.tsx
+│  │  ├─ survey
+│  │  │  ├─ AssessmentGateDialog.tsx
+│  │  │  ├─ DimensionContent.tsx
+│  │  │  ├─ DimensionSummaryBar.tsx
+│  │  │  └─ TopicCard.tsx
+│  │  └─ ui
+│  │     └─ sliders
+│  │        ├─ DualSlider.tsx
+│  │        └─ Slider.tsx
+│  ├─ constants
+│  ├─ lib
+│  │  ├─ api
+│  │  │  ├─ adminEndpoints.ts
+│  │  │  ├─ adminTypes.ts
+│  │  │  ├─ client.ts
+│  │  │  ├─ endpoints.ts
+│  │  │  └─ types.ts
+│  │  ├─ assessment
+│  │  │  ├─ progress.ts
+│  │  │  └─ validate.ts
+│  │  ├─ content
+│  │  │  └─ source.ts
+│  │  ├─ context
+│  │  │  └─ AdminAuthContext.tsx
+│  │  ├─ hooks
+│  │  │  └─ useAdminAuth.ts
+│  │  ├─ maturity
+│  │  │  └─ model.ts
+│  │  ├─ narrative
+│  │  │  ├─ generate.ts
+│  │  │  └─ validate.ts
+│  │  ├─ recommendations
+│  │  │  ├─ apiEngine.ts
+│  │  │  ├─ definition.ts
+│  │  │  └─ validate.ts
+│  │  ├─ scoring
+│  │  │  ├─ compute.ts
+│  │  │  └─ number.ts
+│  │  └─ storage
+│  │     └─ zustandStorage.ts
+│  ├─ store
+│  │  └─ readiness
+│  │     ├─ readiness.store.ts
+│  │     └─ types.ts
+│  └─ types
+│     └─ assessment.ts
+├─ .env.example
+├─ .env.local
+├─ next-env.d.ts
+├─ package.json
+├─ postcss.config.js
+├─ tailwind.config.js
+├─ tsconfig.json
+├─ tsconfig.tsbuildinfo
+├─ verify_schema.js
+└─ verify_schema.ts
