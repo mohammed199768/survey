@@ -1,7 +1,6 @@
 ﻿'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 interface NavbarProps {
   showBackButton?: boolean;
@@ -11,8 +10,6 @@ interface NavbarProps {
 const BRAND = 'HORV\u00C1TH';
 
 export function Navbar({ showBackButton = false, backUrl }: NavbarProps) {
-  const router = useRouter();
-
   return (
     <header
       className="fixed top-0 left-0 right-0 z-50 h-[68px] flex items-center px-6 md:px-[52px]"
@@ -42,16 +39,7 @@ export function Navbar({ showBackButton = false, backUrl }: NavbarProps) {
         </span>
       </Link>
 
-      <div className="ml-auto flex items-center gap-4">
-        {showBackButton && backUrl && (
-          <button
-            onClick={() => router.push(backUrl)}
-            className="text-sm text-white/70 hover:text-white transition-colors"
-          >
-            ← Back
-          </button>
-        )}
-      </div>
+      <div className="ml-auto" />
     </header>
   );
 }
