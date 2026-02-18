@@ -82,7 +82,8 @@ export function DualSlider({
 
   const springTrack = { type: 'spring', stiffness: 220, damping: 28 } as const;
   const springBubble = { type: 'spring', stiffness: 300, damping: 30 } as const;
-  const labelColumnClass = 'w-[72px] shrink-0';
+  const labelColumnClass = 'shrink-0';
+  const labelColumnWidth = 'clamp(56px, 7.5vw, 72px)';
   const railPaddingClass = 'px-0';
 
   React.useEffect(() => {
@@ -120,7 +121,7 @@ export function DualSlider({
         </div>
       </div>
 
-      <div className="hidden sm:block mt-6 ml-[72px]">
+      <div className="hidden sm:block mt-6" style={{ marginLeft: labelColumnWidth }}>
         <div className="relative h-9">
           {railWidth > 0 &&
             scaleMarkers.map((mark) => (
@@ -144,7 +145,7 @@ export function DualSlider({
 
   return (
     <div className="w-full select-none py-1" style={{ fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif' }}>
-      <div className="w-full max-w-[940px] mx-auto flex flex-col px-1 sm:px-2">
+      <div className="w-[96%] max-w-[940px] mx-auto flex flex-col px-[1%]">
         {labels.length > 0 && (
           <>
             <div className="sm:hidden rounded-xl bg-white/65 border border-slate-200/70 p-3 space-y-2 mb-5">
@@ -162,7 +163,7 @@ export function DualSlider({
               </div>
             </div>
 
-            <div className="hidden sm:block mb-6 ml-[72px]">
+            <div className="hidden sm:block mb-5" style={{ marginLeft: labelColumnWidth }}>
               <div className="relative h-[108px]">
                 {railWidth > 0 &&
                   labelsForGrid.map((label, idx) => {
@@ -190,7 +191,7 @@ export function DualSlider({
 
         <div className="space-y-7">
           <div className="relative flex items-center gap-3 sm:gap-5">
-            <div className={`${labelColumnClass} pr-2 text-left sm:text-right`}>
+            <div className={`${labelColumnClass} pr-2 text-left sm:text-right`} style={{ width: labelColumnWidth }}>
               <span className="text-[11px] font-black tracking-[0.18em] text-[#a855f7] uppercase">
                 SCORE
               </span>
@@ -226,7 +227,7 @@ export function DualSlider({
           </div>
 
           <div className="relative flex items-center gap-3 sm:gap-5">
-            <div className={`${labelColumnClass} pr-2 text-left sm:text-right`}>
+            <div className={`${labelColumnClass} pr-2 text-left sm:text-right`} style={{ width: labelColumnWidth }}>
               <span className="text-[11px] font-black tracking-[0.18em] text-[#2563eb] uppercase">
                 TARGET
               </span>
