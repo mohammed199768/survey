@@ -144,7 +144,7 @@ export function DualSlider({
 
   return (
     <div className="w-full select-none py-1" style={{ fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif' }}>
-      <div className="max-w-[980px] ml-0 mr-auto lg:-ml-1 flex flex-col px-0">
+      <div className="w-full max-w-[940px] mx-auto flex flex-col px-1 sm:px-2">
         {labels.length > 0 && (
           <>
             <div className="sm:hidden rounded-xl bg-white/65 border border-slate-200/70 p-3 space-y-2 mb-5">
