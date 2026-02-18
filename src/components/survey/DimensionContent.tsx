@@ -116,7 +116,7 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
   };
 
   return (
-    <div className="relative z-10 flex min-h-[calc(100vh-4rem)] flex-col px-4 sm:px-6 pt-4 pb-28 lg:ml-[344px] lg:mr-6 lg:mt-6 lg:h-[calc(100vh-7rem)] lg:min-h-0 lg:px-0 lg:pt-0 lg:pb-0">
+    <div className="relative z-10 flex min-h-[calc(100vh-4rem)] flex-col px-4 sm:px-6 pt-4 pb-28 lg:ml-[344px] lg:mr-8 lg:mt-6 lg:h-[calc(100vh-7rem)] lg:min-h-0 lg:px-0 lg:pt-0 lg:pb-0">
       {isSubmitting && (
         <div className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-blue-600 text-white text-xs px-3 py-1 rounded-full shadow-lg z-30 animate-pulse">
           Saving...
@@ -124,9 +124,9 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
       )}
 
       <div
-        className="bg-white flex-1 min-h-[calc(100vh-8rem)] lg:min-h-0 flex flex-col rounded-2xl lg:rounded-[32px]
-                    shadow-[0_10px_30px_rgba(0,0,0,0.05),0_1px_4px_rgba(0,0,0,0.02)] lg:shadow-[0_20px_50px_rgba(0,0,0,0.05),0_1px_4px_rgba(0,0,0,0.02)]
-                    border border-gray-100/50 overflow-visible lg:overflow-hidden relative"
+        className="bg-white/96 backdrop-blur-[1.5px] flex-1 min-h-[calc(100vh-8rem)] lg:min-h-0 flex flex-col rounded-2xl lg:rounded-[32px]
+                    shadow-[0_12px_34px_rgba(0,0,0,0.05),0_1px_4px_rgba(0,0,0,0.02)] lg:shadow-[0_24px_56px_rgba(0,0,0,0.06),0_1px_4px_rgba(0,0,0,0.02)]
+                    border border-white/70 overflow-visible lg:overflow-hidden relative"
       >
         <div className="flex-1 flex flex-col overflow-hidden">
           {currentTopic && (
@@ -137,7 +137,7 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
           )}
         </div>
 
-        <div className="sticky bottom-0 z-20 px-4 sm:px-6 lg:px-12 py-3 lg:py-4 bg-white/95 lg:bg-white/85 backdrop-blur-md border-t border-gray-50 flex justify-between items-center shrink-0">
+        <div className="sticky bottom-0 z-20 px-4 sm:px-6 lg:px-10 py-3 lg:py-4 bg-[linear-gradient(180deg,rgba(255,255,255,0.78)_0%,rgba(255,255,255,0.96)_38%)] backdrop-blur-md border-t border-gray-100/80 flex justify-between items-center shrink-0">
           <button
             onClick={handlePrevious}
             disabled={!hasPrevious}

@@ -82,21 +82,25 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
 
       {/* Header */}
       <div className="px-4 sm:px-5 lg:px-8 pt-4 lg:pt-5 pb-4 lg:pb-5 bg-white shrink-0">
-        <h2 className="text-[clamp(1.12rem,4.3vw,1.72rem)] lg:text-[1.72rem] font-semibold text-slate-900 tracking-[-0.005em] leading-tight">
-          {topic.label}
-        </h2>
+        <div className="w-full max-w-[1240px] mx-auto">
+          <h2 className="text-[clamp(1.12rem,4.3vw,1.72rem)] lg:text-[1.72rem] font-semibold text-slate-900 tracking-[-0.005em] leading-tight">
+            {topic.label}
+          </h2>
+        </div>
       </div>
 
       {/* Prompt Strip */}
       <div className="px-4 sm:px-5 lg:px-8 py-3 lg:py-3.5 bg-[#f6f7f9] shrink-0">
-        <p className="text-[clamp(0.88rem,2.95vw,1.12rem)] lg:text-[1.08rem] font-medium text-slate-800 leading-[1.45] max-w-[1100px]">
-          {topic.prompt}
-        </p>
+        <div className="w-full max-w-[1240px] mx-auto">
+          <p className="text-[clamp(0.88rem,2.95vw,1.12rem)] lg:text-[1.08rem] font-medium text-slate-800 leading-[1.45] max-w-[1120px]">
+            {topic.prompt}
+          </p>
+        </div>
       </div>
 
       {/* Body */}
-      <div className="px-4 sm:px-5 lg:px-8 pt-5 pb-6 lg:pb-8 bg-[#f6f7f9] flex-1 flex flex-col justify-start">
-        <div className="w-full mx-auto max-w-[1280px]">
+      <div className="px-4 sm:px-5 lg:px-8 pt-4 pb-6 lg:pb-8 bg-[linear-gradient(180deg,#f6f7f9_0%,#f8fafc_100%)] flex-1 flex flex-col justify-start">
+        <div className="w-full mx-auto max-w-[1240px]">
           <DualSlider
             current={currentVal}
             target={targetVal}
