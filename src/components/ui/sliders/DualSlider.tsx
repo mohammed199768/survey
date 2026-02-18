@@ -143,8 +143,8 @@ export function DualSlider({
   const labelsForGrid = Array.from({ length: 5 }, (_, idx) => labels[idx] ?? '');
 
   return (
-    <div className="w-full select-none py-4" style={{ fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif' }}>
-      <div className="max-w-[980px] mx-auto flex flex-col px-0">
+    <div className="w-full select-none py-1" style={{ fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif' }}>
+      <div className="max-w-[940px] ml-0 mr-auto lg:-ml-2 flex flex-col px-0">
         {labels.length > 0 && (
           <>
             <div className="sm:hidden rounded-xl bg-white/65 border border-slate-200/70 p-3 space-y-2 mb-5">
@@ -158,7 +158,7 @@ export function DualSlider({
               </div>
             </div>
 
-            <div className="hidden sm:block mb-8 ml-[72px]">
+            <div className="hidden sm:block mb-6 ml-[72px]">
               <div className="relative h-[108px]">
                 {railWidth > 0 &&
                   labelsForGrid.map((label, idx) => {
