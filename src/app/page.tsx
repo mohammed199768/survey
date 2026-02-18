@@ -1,4 +1,4 @@
-'use client';
+ï»¿'use client';
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { useReadinessStore } from '@/store/readiness/readiness.store';
 import { BrandPreloader, FullPagePreloader } from '@/components/common/BrandPreloader';
 import { Navbar } from '@/components/layout/Navbar';
+
+const BRAND = 'HORV\u00C1TH';
 
 function DiamondPattern({ side }: { side: 'left' | 'right' }) {
   const items = [0, 1, 2, 3, 4, 5, 6, 7, 8];
@@ -61,7 +63,7 @@ export default function LandingPage() {
   }, []);
 
   if (showIntroLoader) {
-    return <FullPagePreloader label="HORVÁTH Experience Initializing..." />;
+    return <FullPagePreloader label={`${BRAND} Experience Initializing...`} />;
   }
 
   return (
@@ -81,7 +83,7 @@ export default function LandingPage() {
             <span className="block w-7 h-px bg-[#4D9FE0]/60" />
           </div>
 
-          <h1 className="text-[clamp(64px,11vw,108px)] font-bold tracking-[0.08em] leading-none text-white">HORVÁTH</h1>
+          <h1 className="text-[clamp(64px,11vw,108px)] font-bold tracking-[0.08em] leading-none text-white">{BRAND}</h1>
 
           <div className="w-px h-10 my-8 bg-[linear-gradient(180deg,#4D9FE0_0%,transparent_100%)]" />
 
@@ -108,7 +110,7 @@ export default function LandingPage() {
       </main>
 
       <footer className="fixed bottom-7 left-0 right-0 z-10 text-center text-[10px] tracking-[0.10em] text-white/20 px-4">
-        By clicking get started button, you agree to HORVÁTH&apos;s{' '}
+        By clicking get started button, you agree to {BRAND}&apos;s{' '}
         <Link href="/terms" className="underline underline-offset-[3px]">
           Terms of Service
         </Link>{' '}

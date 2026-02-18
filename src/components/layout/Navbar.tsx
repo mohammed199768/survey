@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -7,6 +7,8 @@ interface NavbarProps {
   showBackButton?: boolean;
   backUrl?: string;
 }
+
+const BRAND = 'HORV\u00C1TH';
 
 export function Navbar({ showBackButton = false, backUrl }: NavbarProps) {
   const router = useRouter();
@@ -27,7 +29,7 @@ export function Navbar({ showBackButton = false, backUrl }: NavbarProps) {
           <rect x="14" y="14" width="22" height="22" stroke="#4D9FE0" strokeWidth="3" />
         </svg>
         <div className="flex items-baseline gap-2">
-          <span className="font-semibold text-lg tracking-[0.08em]">HORV�TH</span>
+          <span className="font-semibold text-lg tracking-[0.08em]">{BRAND}</span>
           <span className="text-gray-500 text-xs md:text-sm">IMPACT PLATFORM</span>
         </div>
       </Link>
@@ -58,7 +60,7 @@ export function Navbar({ showBackButton = false, backUrl }: NavbarProps) {
             onClick={() => router.push(backUrl)}
             className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
           >
-            ? Back
+            ← Back
           </button>
         )}
       </div>
