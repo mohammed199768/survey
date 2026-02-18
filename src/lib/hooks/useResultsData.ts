@@ -31,7 +31,7 @@ export function useResultsData({
   const responseId = responseIdFromQuery ?? storeResponseId;
   const [results, setResults] = React.useState<ResultsData | null>(initialResults);
   const [error, setError] = React.useState<string | null>(initialError);
-  const [isLoading, setIsLoading] = React.useState<boolean>(!initialResults && !initialError);
+  const [isLoading, setIsLoading] = React.useState<boolean>(!initialResults);
 
   React.useEffect(() => {
     if (!recommendationsDefinition || !narrativeDefinition) {
@@ -44,7 +44,7 @@ export function useResultsData({
   }, [assessment, loadAssessment, loadDefinitions, narrativeDefinition, recommendationsDefinition]);
 
   React.useEffect(() => {
-    if (initialResults || initialError) {
+    if (initialResults) {
       return;
     }
 
@@ -56,6 +56,7 @@ export function useResultsData({
 
     const fetchResults = async () => {
       try {
+        setError(null);
         const data = await ResponseAPI.getResults(responseId);
         setResults(data);
       } catch (err: unknown) {
@@ -173,4 +174,3 @@ export function useResultsData({
     topTopics,
   };
 }
-
