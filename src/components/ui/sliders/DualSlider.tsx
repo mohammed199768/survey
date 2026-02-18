@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { motion } from 'framer-motion';
 
 interface DualSliderProps {
   current: number;
@@ -39,7 +40,7 @@ export function DualSlider({
   topicId: _topicId,
   labels = [],
 }: DualSliderProps) {
-  const labelColumnClass = 'w-24 sm:w-28 lg:w-32 shrink-0';
+  const labelColumnClass = 'w-20 sm:w-24 lg:w-28 shrink-0';
   const [isCurrentElastic, setIsCurrentElastic] = React.useState(false);
   const [isTargetElastic, setIsTargetElastic] = React.useState(false);
   const toSafeScore = React.useCallback((value: unknown, fallback: number) => {
@@ -98,20 +99,24 @@ export function DualSlider({
   const currentAnchor = React.useMemo(() => getAnchorForValue(safeCurrent, labels), [safeCurrent, labels]);
   const targetAnchor = React.useMemo(() => getAnchorForValue(safeTarget, labels), [safeTarget, labels]);
 
+  const springTrack = { type: 'spring', stiffness: 170, damping: 22, mass: 0.5 } as const;
+  const springBubble = { type: 'spring', stiffness: 220, damping: 20, mass: 0.55 } as const;
+
+  const pointClass =
+    'absolute top-0 flex flex-col items-center -translate-x-1/2 first:translate-x-0 last:translate-x-0';
+
   const renderScaleRuler = () => (
-    <div className="flex items-start gap-3 sm:gap-6 mt-2 sm:mt-3">
+    <div className="flex items-start gap-4 sm:gap-6 mt-2 sm:mt-3">
       <div className={`hidden sm:block ${labelColumnClass}`} />
       <div className="flex-1 relative h-12 border-t border-slate-200/80">
-        <div className="absolute inset-x-0 top-0 flex justify-between">
-          {scaleMarkers.map((mark) => (
-            <div key={mark} className="flex flex-col items-center -translate-x-1/2 first:translate-x-0 last:translate-x-0">
-              <div className="w-px h-3 bg-slate-300" />
-              <span className="mt-1.5 text-[0.68rem] sm:text-[0.72rem] font-semibold text-slate-400 tabular-nums">
-                {mark.toFixed(1)}
-              </span>
-            </div>
-          ))}
-        </div>
+        {scaleMarkers.map((mark) => (
+          <div key={mark} className={pointClass} style={{ left: `${getPercentage(mark)}%` }}>
+            <div className="w-px h-3 bg-slate-300" />
+            <span className="mt-1.5 text-[0.68rem] sm:text-[0.72rem] font-semibold text-slate-400 tabular-nums">
+              {mark.toFixed(1)}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -132,14 +137,19 @@ export function DualSlider({
               </div>
             </div>
 
-            <div className="hidden sm:flex items-start gap-8 -mb-1">
+            <div className="hidden sm:flex items-end gap-6 -mb-1">
               <div className={labelColumnClass}></div>
-              <div className="flex-1 grid grid-cols-5 gap-7">
+              <div className="flex-1 relative h-[114px]">
                 {labels.map((label, idx) => (
-                  <div key={idx} className="text-center min-h-[108px] flex items-end justify-center">
-                    <p className="text-[clamp(0.92rem,0.95vw,1.08rem)] font-normal text-slate-800/95 leading-[1.5] break-words">
+                  <div
+                    key={idx}
+                    className={`${pointClass} w-[22%] max-w-[220px]`}
+                    style={{ left: `${getPercentage(idx + 1)}%` }}
+                  >
+                    <p className="text-[clamp(0.9rem,0.92vw,1.05rem)] font-normal text-slate-800/95 leading-[1.45] break-words text-center min-h-[86px] flex items-end justify-center">
                       {label ?? ''}
                     </p>
+                    <div className="mt-2 w-px h-3 bg-slate-300/80" />
                   </div>
                 ))}
               </div>
@@ -156,22 +166,23 @@ export function DualSlider({
 
           <div className="flex-1 relative h-10 sm:h-11">
             <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-2.5 rounded-full bg-white/10 border border-white/35 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.3),inset_0_-1px_5px_rgba(15,23,42,0.18)]" />
-            <div
-              className={`absolute left-0 top-1/2 -translate-y-1/2 h-2.5 rounded-full bg-gradient-to-b from-[#ff88d5] via-[#d555b9] to-[#782fc7] shadow-[0_0_22px_rgba(213,85,185,0.46)] transition-all duration-300 ${
-                isCurrentElastic ? 'scale-x-[1.02]' : 'scale-x-100'
-              }`}
-              style={{ width: `${getPercentage(safeCurrent)}%`, transformOrigin: 'left center' }}
+            <motion.div
+              initial={false}
+              transition={springTrack}
+              animate={{ width: `${getPercentage(safeCurrent)}%`, scaleX: isCurrentElastic ? 1.02 : 1 }}
+              className="absolute left-0 top-1/2 -translate-y-1/2 h-2.5 rounded-full bg-gradient-to-b from-[#ff88d5] via-[#d555b9] to-[#782fc7] shadow-[0_0_22px_rgba(213,85,185,0.46)]"
+              style={{ transformOrigin: 'left center' }}
             />
-            <div
-              className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-10 sm:h-11 min-w-[64px] sm:min-w-[70px] px-3.5 sm:px-4 bg-gradient-to-b from-[#ff86d4] to-[#8a2cc6] rounded-full flex items-center justify-center border border-white/65 shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_10px_30px_rgba(0,0,0,0.2),0_0_24px_rgba(212,74,178,0.45)] transition-all duration-300 ease-out z-20 ${
-                isCurrentElastic ? 'scale-[1.05]' : 'scale-100'
-              }`}
-              style={{ left: `${getPercentage(safeCurrent)}%` }}
+            <motion.div
+              initial={false}
+              transition={springBubble}
+              animate={{ left: `${getPercentage(safeCurrent)}%`, scale: isCurrentElastic ? 1.05 : 1 }}
+              className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-10 sm:h-11 min-w-[64px] sm:min-w-[70px] px-3.5 sm:px-4 bg-gradient-to-b from-[#ff86d4] to-[#8a2cc6] rounded-full flex items-center justify-center border border-white/65 shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_10px_30px_rgba(0,0,0,0.2),0_0_24px_rgba(212,74,178,0.45)] z-20"
             >
               <span className="text-[0.96rem] sm:text-[1.05rem] font-bold text-white tabular-nums">
                 {safeCurrent.toFixed(1)}
               </span>
-            </div>
+            </motion.div>
 
             <input
               type="range"
@@ -194,22 +205,23 @@ export function DualSlider({
 
           <div className="flex-1 relative h-10 sm:h-11">
             <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-2.5 rounded-full bg-white/10 border border-white/35 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.3),inset_0_-1px_5px_rgba(15,23,42,0.18)]" />
-            <div
-              className={`absolute left-0 top-1/2 -translate-y-1/2 h-2.5 rounded-full bg-gradient-to-b from-[#75cbff] via-[#279af1] to-[#1e63d8] shadow-[0_0_22px_rgba(39,154,241,0.4)] transition-all duration-300 ${
-                isTargetElastic ? 'scale-x-[1.02]' : 'scale-x-100'
-              }`}
-              style={{ width: `${getPercentage(safeTarget)}%`, transformOrigin: 'left center' }}
+            <motion.div
+              initial={false}
+              transition={springTrack}
+              animate={{ width: `${getPercentage(safeTarget)}%`, scaleX: isTargetElastic ? 1.02 : 1 }}
+              className="absolute left-0 top-1/2 -translate-y-1/2 h-2.5 rounded-full bg-gradient-to-b from-[#75cbff] via-[#279af1] to-[#1e63d8] shadow-[0_0_22px_rgba(39,154,241,0.4)]"
+              style={{ transformOrigin: 'left center' }}
             />
-            <div
-              className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-10 sm:h-11 min-w-[64px] sm:min-w-[70px] px-3.5 sm:px-4 bg-gradient-to-b from-[#7cd3ff] to-[#1e63d8] rounded-full flex items-center justify-center border border-white/65 shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_10px_30px_rgba(0,0,0,0.2),0_0_24px_rgba(39,154,241,0.44)] transition-all duration-300 ease-out z-20 ${
-                isTargetElastic ? 'scale-[1.05]' : 'scale-100'
-              }`}
-              style={{ left: `${getPercentage(safeTarget)}%` }}
+            <motion.div
+              initial={false}
+              transition={springBubble}
+              animate={{ left: `${getPercentage(safeTarget)}%`, scale: isTargetElastic ? 1.05 : 1 }}
+              className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-10 sm:h-11 min-w-[64px] sm:min-w-[70px] px-3.5 sm:px-4 bg-gradient-to-b from-[#7cd3ff] to-[#1e63d8] rounded-full flex items-center justify-center border border-white/65 shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_10px_30px_rgba(0,0,0,0.2),0_0_24px_rgba(39,154,241,0.44)] z-20"
             >
               <span className="text-[0.96rem] sm:text-[1.05rem] font-bold text-white tabular-nums">
                 {safeTarget.toFixed(1)}
               </span>
-            </div>
+            </motion.div>
 
             <input
               type="range"
