@@ -16,7 +16,6 @@ const buildCsp = (): string => {
     return [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live",
-      "script-src-elem 'self' 'unsafe-inline' https://vercel.live",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https:",
       "font-src 'self' data:",
@@ -31,7 +30,6 @@ const buildCsp = (): string => {
   return [
     "default-src 'self'",
     "script-src 'self' 'unsafe-inline'",
-    "script-src-elem 'self'",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
