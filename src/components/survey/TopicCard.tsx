@@ -5,7 +5,7 @@ import { TopicStructure } from '@/lib/api/types';
 import { DualSlider } from '@/components/ui/sliders/DualSlider';
 import { useReadinessStore } from '@/store/readiness/readiness.store';
 
-export function TopicCard({ dimensionId, topic }: { dimensionId: string; topic: TopicStructure }) {
+export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: string; topic: TopicStructure }) {
   // Use flat responses structure from new store
   const response = useReadinessStore((state) => state.responses[topic.id]);
   const submitAnswer = useReadinessStore((state) => state.submitAnswer);
@@ -81,21 +81,21 @@ export function TopicCard({ dimensionId, topic }: { dimensionId: string; topic: 
       )}
 
       {/* Header */}
-      <div className="px-10 lg:px-12 pt-5 pb-4 bg-white shrink-0">
-        <h2 className="text-2xl lg:text-[2rem] font-semibold text-slate-900 tracking-[-0.005em] leading-tight">
+      <div className="px-4 sm:px-6 lg:px-12 pt-4 lg:pt-5 pb-3 lg:pb-4 bg-white shrink-0">
+        <h2 className="text-[clamp(1.2rem,5vw,2rem)] lg:text-[2rem] font-semibold text-slate-900 tracking-[-0.005em] leading-tight">
           {topic.label}
         </h2>
       </div>
 
       {/* Prompt Strip */}
-      <div className="px-10 lg:px-12 py-4 bg-slate-50/85 border-y border-slate-100 shrink-0">
-        <p className="text-base lg:text-[1.55rem] font-medium text-slate-800 leading-[1.5] max-w-[1100px]">
+      <div className="px-4 sm:px-6 lg:px-12 py-3 lg:py-4 bg-slate-50/85 border-y border-slate-100 shrink-0">
+        <p className="text-[clamp(0.98rem,4vw,1.55rem)] lg:text-[1.55rem] font-medium text-slate-800 leading-[1.45] lg:leading-[1.5] max-w-[1100px]">
           {topic.prompt}
         </p>
       </div>
 
       {/* Body */}
-      <div className="px-10 lg:px-12 pt-2 pb-8 bg-[#f6f7f9] flex-1 flex flex-col justify-start">
+      <div className="px-4 sm:px-6 lg:px-12 pt-2 pb-6 lg:pb-8 bg-[#f6f7f9] flex-1 flex flex-col justify-start">
         <div className="w-full mx-auto max-w-[1280px]">
           <DualSlider
             current={currentVal}

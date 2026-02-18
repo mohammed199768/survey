@@ -17,9 +17,10 @@ export function Sidebar() {
   const responses = useReadinessStore((state) => state.responses);
   const loadAssessment = useReadinessStore((state) => state.loadAssessment);
   const topicRefs = React.useRef<Record<string, HTMLAnchorElement | null>>({});
-  
+
   const [showGate, setShowGate] = React.useState(false);
   const [missingItems, setMissingItems] = React.useState<MissingItem[]>([]);
+  const [isMobileOpen, setIsMobileOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (!assessment) {
@@ -35,57 +36,37 @@ export function Sidebar() {
     }
   }, [activeTopicKey, assessment, isLocked, pathname]);
 
-  // If still loading or failed, show skeleton or nothing? 
-  // For sidebar, we might validly have no data yet.
-  if (!assessment) return null; // Or a loading state
+  React.useEffect(() => {
+    setIsMobileOpen(false);
+  }, [pathname, activeTopicKey]);
+
+  if (!assessment) return null;
 
   const handleSubmit = () => {
     if (isLocked) return;
 
-    // We need to map store data to the expected format for getMissingItems 
-    // OR update getMissingItems to use store data. 
-    // For now, let's adapt the store data to match what getMissingItems expects if possible,
-    // or better, implement a store-aware check here since getMissingItems relies on the old static definition.
-    
-    // Quick store-based check:
     const missing: MissingItem[] = [];
-    assessment.dimensions.forEach(dim => {
-        dim.topics.forEach(topic => {
-            if (!responses[topic.id]) {
-                missing.push({
-                    dimensionId: dim.dimensionKey,
-                    dimensionTitle: dim.title,
-                    topicId: topic.id,
-                    topicLabel: topic.label,
-                    topicKey: topic.topicKey,
-                });
-            }
-        });
+    assessment.dimensions.forEach((dim) => {
+      dim.topics.forEach((topic) => {
+        if (!responses[topic.id]) {
+          missing.push({
+            dimensionId: dim.dimensionKey,
+            dimensionTitle: dim.title,
+            topicId: topic.id,
+            topicLabel: topic.label,
+            topicKey: topic.topicKey,
+          });
+        }
+      });
     });
 
     setMissingItems(missing);
     setShowGate(true);
   };
 
-  // Check if a topic is completed (present in responses)
   const isTopicCompleted = (topicId: string): boolean => {
     return !!responses[topicId];
   };
-
-  // Check if current path matches this topic (using topic ID)
-  // URL: /survey/[dimensionKey]?topic=[topicKey] 
-  // The API distinguishes between ID (uuid) and Key (slug). 
-  // Stores uses ID for responses. Sidebar links need to use Keys for clean URLs? 
-  // Or did we switch to IDs in the URLs too?
-  // Let's check `endpoints.ts` and `types.ts`... `TopicStructure` has `id` and `topicKey`.
-  // The store uses `id` for responses key.
-  // The URL routing in `DimensionContent` uses `topicKey` if we followed the pattern, 
-  // BUT `DimensionContent` implementation I wrote uses:
-  // `router.push(/survey/${dimension.dimensionKey}?topic=${targetTopic.topicKey});`
-  // Wait, I used `topic.topicKey` in `DimensionContent`.
-  // AND `TopicCard` uses `topic.id` to look up responses.
-  
-  // So Sidebar needs to link to keys but check completion by ID.
 
   const isActive = (dimensionKey: string, topicKey: string): boolean => {
     if (!pathname.includes(`/survey/${dimensionKey}`)) return false;
@@ -94,41 +75,74 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Floating Card Sidebar */}
-      <aside
-        className={`fixed left-6 top-24 w-[300px] h-[calc(100vh-7rem)] bg-white rounded-2xl shadow-xl flex flex-col overflow-hidden ${
-          isLocked ? 'opacity-80' : ''
-        }`}
+      <button
+        type="button"
+        aria-label={isMobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+        aria-expanded={isMobileOpen}
+        onClick={() => setIsMobileOpen((prev) => !prev)}
+        className="lg:hidden fixed top-20 left-4 z-50 w-11 h-11 rounded-full bg-white shadow-lg border border-gray-200 flex items-center justify-center"
       >
-        
-        {/* Scrollable Content Area - Dimensions and Topics */}
-        <nav className={`flex-1 overflow-y-auto px-6 py-6 ${isLocked ? 'pointer-events-none select-none' : ''}`}>
+        {isMobileOpen ? (
+          <svg className="w-5 h-5 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        ) : (
+          <svg className="w-5 h-5 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        )}
+      </button>
+
+      <button
+        type="button"
+        aria-label="Close sidebar overlay"
+        onClick={() => setIsMobileOpen(false)}
+        className={`lg:hidden fixed inset-0 z-30 bg-black/40 transition-opacity duration-300 ${
+          isMobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      />
+
+      <aside
+        className={`fixed z-40 left-0 top-16 h-[calc(100vh-4rem)] w-[86vw] max-w-[320px] bg-white rounded-r-2xl shadow-2xl flex flex-col overflow-hidden transition-transform duration-300 ease-out lg:left-6 lg:top-24 lg:w-[300px] lg:max-w-none lg:h-[calc(100vh-7rem)] lg:rounded-2xl lg:shadow-xl ${
+          isLocked ? 'opacity-90 lg:opacity-80' : ''
+        } ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
+      >
+        <nav className={`flex-1 overflow-y-auto px-5 lg:px-6 py-5 lg:py-6 ${isLocked ? 'pointer-events-none select-none' : ''}`}>
           <div className="space-y-0">
             {assessment.dimensions.map((dimension, dimIdx) => (
               <div key={dimension.id} className="mb-6">
-                {/* Dimension Title - Gray number */}
                 <h3 className="text-sm font-medium text-gray-500 mb-2 px-2">
                   {dimIdx + 1}. {dimension.title}
                 </h3>
 
-                {/* Topics List */}
                 <div className="space-y-0.5">
                   {dimension.topics.map((topic) => {
                     const completed = isTopicCompleted(topic.id);
                     const active = isActive(dimension.dimensionKey, topic.topicKey);
-                    
-                    // Determine state
+
                     let itemClass = '';
                     let icon = null;
                     let textClass = '';
 
                     if (active) {
                       itemClass = 'flex items-center gap-2 px-3 py-2.5 mb-0.5 rounded-lg bg-[#E3F2FD] transition-colors';
-                      icon = <span className="text-[#0066cc] text-sm font-bold">▶</span>;
+                      icon = (
+                        <span className="text-[#0066cc]">
+                          <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M6 4l8 6-8 6V4z" />
+                          </svg>
+                        </span>
+                      );
                       textClass = 'text-[#0066cc] font-medium text-[15px]';
                     } else if (completed) {
                       itemClass = 'flex items-center gap-2 px-3 py-2.5 mb-0.5 rounded-lg hover:bg-gray-50 transition-colors';
-                      icon = <span className="text-[#0066cc] text-sm font-bold">✓</span>;
+                      icon = (
+                        <span className="text-[#0066cc]">
+                          <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M7.8 14.2L3.6 10l1.4-1.4 2.8 2.8L15 4.2 16.4 5.6 7.8 14.2z" />
+                          </svg>
+                        </span>
+                      );
                       textClass = 'text-[#0066cc] font-normal text-[15px]';
                     } else {
                       itemClass = 'block px-3 py-2.5 mb-0.5 rounded-lg';
@@ -142,6 +156,7 @@ export function Sidebar() {
                         ref={(el) => {
                           topicRefs.current[topic.topicKey] = el;
                         }}
+                        onClick={() => setIsMobileOpen(false)}
                         className={itemClass}
                       >
                         {!!icon && icon}
@@ -155,19 +170,22 @@ export function Sidebar() {
           </div>
         </nav>
 
-        {/* Fixed Submit Button at Bottom */}
-        <div className="shrink-0 px-6 py-5 bg-white space-y-3">
+        <div className="shrink-0 px-5 lg:px-6 py-4 lg:py-5 bg-white space-y-3">
           <button
-            onClick={handleSubmit}
+            onClick={() => {
+              handleSubmit();
+              setIsMobileOpen(false);
+            }}
             className="block w-full px-6 py-3.5 bg-[#0066cc] text-white rounded-full text-base font-semibold text-center cursor-pointer transition-all duration-300 hover:bg-[#0052a3] shadow-md hover:shadow-lg"
           >
             Submit
           </button>
-          
+
           <ResetButton variant="sidebar" />
         </div>
+
         {isLocked && (
-          <div className="absolute inset-0 z-30 rounded-2xl bg-white/45 backdrop-blur-[2px] flex items-center justify-center p-6 text-center">
+          <div className="absolute inset-0 z-30 rounded-r-2xl lg:rounded-2xl bg-white/45 backdrop-blur-[2px] flex items-center justify-center p-6 text-center">
             <div>
               <p className="text-sm font-semibold text-slate-800">Sidebar Locked</p>
               <p className="text-xs text-slate-600 mt-1">
@@ -178,15 +196,14 @@ export function Sidebar() {
         )}
       </aside>
 
-      {/* CO Badge - Black circle bottom left */}
-      <div className="fixed bottom-6 left-6 w-12 h-12 bg-black text-white rounded-full flex items-center justify-center font-bold text-sm shadow-lg z-50">
+      <div className="fixed bottom-4 left-4 lg:bottom-6 lg:left-6 w-11 h-11 lg:w-12 lg:h-12 bg-black text-white rounded-full flex items-center justify-center font-bold text-xs lg:text-sm shadow-lg z-50">
         CO
       </div>
 
-      <AssessmentGateDialog 
-        open={showGate} 
-        onClose={() => setShowGate(false)} 
-        missing={missingItems} 
+      <AssessmentGateDialog
+        open={showGate}
+        onClose={() => setShowGate(false)}
+        missing={missingItems}
       />
     </>
   );
