@@ -198,7 +198,7 @@ export function DualSlider({
                 SCORE
               </span>
             </div>
-            <div ref={railRef} className={`flex-1 ${railPaddingClass}`}>
+            <div ref={railRef} className={`flex-1 ${railPaddingClass} pl-[0.8%] sm:pl-[1.1%]`}>
               <div className="w-full relative h-[52px]">
                 <div className="absolute inset-x-0 top-[5px] flex justify-between px-[1px]">
                   {scaleMarkers.map((mark) => (
@@ -239,7 +239,7 @@ export function DualSlider({
                 TARGET
               </span>
             </div>
-            <div className={`flex-1 ${railPaddingClass}`}>
+            <div className={`flex-1 ${railPaddingClass} pl-[0.8%] sm:pl-[1.1%]`}>
               <div className="w-full relative h-[52px]">
                 <div className="absolute inset-x-0 top-[5px] flex justify-between px-[1px]">
                   {scaleMarkers.map((mark) => (
