@@ -114,6 +114,19 @@ export const RecommendationRuleSchema = z.object({
   kpis: z.array(z.string()).nullish().optional().transform((value) => value ?? []),
 });
 
+const RecommendationsMetaSchema = z
+  .object({
+    dimensionColors: z.record(z.string(), z.string()).default({}).catch({}),
+    dimensionWeights: z.record(z.string(), z.number()).default({}).catch({}),
+    themeMap: z.record(z.string(), z.string()).default({}).catch({}),
+    priorityWeights: z.record(z.string(), z.number()).optional(),
+    urgencyTags: z.array(z.string()).optional(),
+    dimensionOrder: z.array(z.string()).optional(),
+    titleTemplates: z.record(z.string(), z.array(z.string())).optional(),
+    descriptionTemplate: z.string().optional(),
+  })
+  .default({});
+
 export const RecommendationsDefinitionAPISchema = z.object({
   dimensions: z.array(
     z.object({
@@ -121,16 +134,7 @@ export const RecommendationsDefinitionAPISchema = z.object({
       recommendations: z.array(RecommendationRuleSchema),
     })
   ),
-  meta: z.object({
-    dimensionColors: z.record(z.string(), z.string()),
-    dimensionWeights: z.record(z.string(), z.number()),
-    themeMap: z.record(z.string(), z.string()),
-    priorityWeights: z.record(z.string(), z.number()).optional(),
-    urgencyTags: z.array(z.string()).optional(),
-    dimensionOrder: z.array(z.string()).optional(),
-    titleTemplates: z.record(z.string(), z.array(z.string())).optional(),
-    descriptionTemplate: z.string().optional(),
-  }),
+  meta: RecommendationsMetaSchema,
 });
 
 export const NarrativeDefinitionAPISchema = z.object({
