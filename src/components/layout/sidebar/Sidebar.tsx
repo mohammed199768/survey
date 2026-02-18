@@ -27,6 +27,14 @@ export function Sidebar() {
     }
   }, [assessment, loadAssessment]);
 
+  React.useEffect(() => {
+    if (!assessment || isLocked || !activeTopicKey) return;
+    const activeEl = topicRefs.current[activeTopicKey];
+    if (activeEl) {
+      activeEl.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+    }
+  }, [activeTopicKey, assessment, isLocked, pathname]);
+
   // If still loading or failed, show skeleton or nothing? 
   // For sidebar, we might validly have no data yet.
   if (!assessment) return null; // Or a loading state
@@ -83,14 +91,6 @@ export function Sidebar() {
     if (!pathname.includes(`/survey/${dimensionKey}`)) return false;
     return activeTopicKey ? activeTopicKey === topicKey : false;
   };
-
-  React.useEffect(() => {
-    if (isLocked || !activeTopicKey) return;
-    const activeEl = topicRefs.current[activeTopicKey];
-    if (activeEl) {
-      activeEl.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
-    }
-  }, [activeTopicKey, isLocked, pathname]);
 
   return (
     <>
