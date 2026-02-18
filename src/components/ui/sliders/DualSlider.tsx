@@ -39,6 +39,8 @@ export function DualSlider({
   topicId: _topicId,
   labels = [],
 }: DualSliderProps) {
+  const labelColumnClass = 'w-20 sm:w-24 lg:w-28 shrink-0';
+
   const getPercentage = (val: number) => {
     const percentage = ((val - min) / (max - min)) * 100;
     return Math.max(0, Math.min(100, percentage));
@@ -62,7 +64,7 @@ export function DualSlider({
 
   const renderScaleRuler = () => (
     <div className="flex items-start gap-3 sm:gap-6 mt-2 sm:mt-3">
-      <div className="hidden sm:block w-36 shrink-0" />
+      <div className={`hidden sm:block ${labelColumnClass}`} />
       <div className="flex-1 relative h-12 border-t border-slate-200/80">
         <div className="absolute inset-x-0 top-0 flex justify-between">
           {scaleMarkers.map((mark) => (
@@ -98,7 +100,7 @@ export function DualSlider({
             </div>
 
             <div className="hidden sm:flex items-start gap-6 -mb-1">
-              <div className="w-36 shrink-0"></div>
+              <div className={labelColumnClass}></div>
               <div className="flex-1 grid grid-cols-5 gap-5">
                 {labels.map((label, idx) => (
                   <div key={idx} className="text-center min-h-[104px] flex items-end justify-center">
@@ -113,7 +115,7 @@ export function DualSlider({
         )}
 
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6">
-          <div className="w-full sm:w-36 sm:shrink-0 sm:pr-3 text-left sm:text-right">
+          <div className={`w-full ${labelColumnClass} sm:pr-3 text-left sm:text-right`}>
             <span className="text-[clamp(1rem,4vw,1.35rem)] sm:text-[clamp(1.15rem,1.35vw,1.45rem)] font-bold text-[#b353a1] uppercase tracking-[0.02em]">
               SCORE
             </span>
@@ -147,7 +149,7 @@ export function DualSlider({
         </div>
 
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6">
-          <div className="w-full sm:w-36 sm:shrink-0 sm:pr-3 text-left sm:text-right">
+          <div className={`w-full ${labelColumnClass} sm:pr-3 text-left sm:text-right`}>
             <span className="text-[clamp(1rem,4vw,1.35rem)] sm:text-[clamp(1.15rem,1.35vw,1.45rem)] font-bold text-[#3467d6] uppercase tracking-[0.02em]">
               TARGET
             </span>
