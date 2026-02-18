@@ -144,17 +144,21 @@ export function DualSlider({
 
   return (
     <div className="w-full select-none py-1" style={{ fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif' }}>
-      <div className="max-w-[940px] ml-0 mr-auto lg:-ml-2 flex flex-col px-0">
+      <div className="max-w-[980px] ml-0 mr-auto lg:-ml-1 flex flex-col px-0">
         {labels.length > 0 && (
           <>
             <div className="sm:hidden rounded-xl bg-white/65 border border-slate-200/70 p-3 space-y-2 mb-5">
               <div>
                 <p className="text-[11px] uppercase tracking-[0.08em] font-bold text-[#b353a1]">Score Level</p>
-                <p className="text-sm leading-[1.4] text-slate-800">{currentAnchor ?? 'No level description'}</p>
+                <p className="text-[clamp(0.92rem,2.95vw,1.04rem)] lg:text-[1rem] font-medium text-slate-800 leading-[1.5]">
+                  {currentAnchor ?? 'No level description'}
+                </p>
               </div>
               <div>
                 <p className="text-[11px] uppercase tracking-[0.08em] font-bold text-[#3467d6]">Target Level</p>
-                <p className="text-sm leading-[1.4] text-slate-800">{targetAnchor ?? 'No level description'}</p>
+                <p className="text-[clamp(0.92rem,2.95vw,1.04rem)] lg:text-[1rem] font-medium text-slate-800 leading-[1.5]">
+                  {targetAnchor ?? 'No level description'}
+                </p>
               </div>
             </div>
 
@@ -172,7 +176,7 @@ export function DualSlider({
                           width: `${railWidth / 4}px`,
                         }}
                       >
-                        <p className="text-[13px] leading-[1.5] text-slate-900 text-center h-[80px] w-full flex items-end justify-center">
+                        <p className="text-[clamp(0.92rem,2.95vw,1.04rem)] lg:text-[1rem] font-medium text-slate-800 leading-[1.5] text-center h-[80px] w-full flex items-end justify-center">
                           {label}
                         </p>
                         <div className="w-px h-[18px] bg-slate-300 mt-[10px]" />
