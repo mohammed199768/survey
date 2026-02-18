@@ -85,6 +85,8 @@ export function DualSlider({
   const labelColumnClass = 'shrink-0';
   const labelColumnWidth = 'clamp(56px, 7.5vw, 72px)';
   const railPaddingClass = 'px-0';
+  const scoreLabelColor = 'rgb(184, 92, 164)';
+  const targetLabelColor = 'rgb(58, 102, 214)';
 
   React.useEffect(() => {
     const element = railRef.current;
@@ -144,8 +146,8 @@ export function DualSlider({
   const labelsForGrid = Array.from({ length: 5 }, (_, idx) => labels[idx] ?? '');
 
   return (
-    <div className="w-full select-none py-1" style={{ fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif' }}>
-      <div className="w-[96%] max-w-[940px] mx-auto flex flex-col px-[1%]">
+    <div className="w-full select-none py-[0.25rem]" style={{ fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif' }}>
+      <div className="w-[96%] max-w-[940px] mx-auto flex flex-col px-[2%]">
         {labels.length > 0 && (
           <>
             <div className="sm:hidden rounded-xl bg-white/65 border border-slate-200/70 p-3 space-y-2 mb-5">
@@ -163,8 +165,8 @@ export function DualSlider({
               </div>
             </div>
 
-            <div className="hidden sm:block mb-5" style={{ marginLeft: labelColumnWidth }}>
-              <div className="relative h-[108px]">
+            <div className="hidden sm:block mb-4" style={{ marginLeft: labelColumnWidth }}>
+              <div className="relative h-[120px]">
                 {railWidth > 0 &&
                   labelsForGrid.map((label, idx) => {
                     const mark = idx + 1;
@@ -177,7 +179,7 @@ export function DualSlider({
                           width: `${railWidth / 4}px`,
                         }}
                       >
-                        <p className="text-[clamp(0.92rem,2.95vw,1.04rem)] lg:text-[1rem] font-medium text-slate-800 leading-[1.5] text-center h-[80px] w-full flex items-end justify-center">
+                        <p className="text-[clamp(0.92rem,2.95vw,1.04rem)] lg:text-[1rem] font-medium text-slate-800 leading-[1.5] text-center h-[82px] w-full flex items-end justify-center">
                           {label}
                         </p>
                         <div className="w-px h-[18px] bg-slate-300 mt-[10px]" />
@@ -189,24 +191,29 @@ export function DualSlider({
           </>
         )}
 
-        <div className="space-y-7">
+        <div className="space-y-6">
           <div className="relative flex items-center gap-3 sm:gap-5">
             <div className={`${labelColumnClass} pr-2 text-left sm:text-right`} style={{ width: labelColumnWidth }}>
-              <span className="text-[11px] font-black tracking-[0.18em] text-[#a855f7] uppercase">
+              <span className="text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: scoreLabelColor }}>
                 SCORE
               </span>
             </div>
             <div ref={railRef} className={`flex-1 ${railPaddingClass}`}>
               <div className="w-full relative h-[52px]">
-                <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[10px] bg-[#eef0f5] rounded-full border border-slate-200/60 shadow-[inset_0_1px_1px_rgba(15,23,42,0.08)]" />
+                <div className="absolute inset-x-0 top-[5px] flex justify-between px-[1px]">
+                  {scaleMarkers.map((mark) => (
+                    <div key={`score-top-mark-${mark}`} className="w-px h-[10px] bg-slate-300/80" />
+                  ))}
+                </div>
+                <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[10px] bg-[#f6f6f6] rounded-full border border-slate-200/60 shadow-[inset_0_1px_1px_rgba(15,23,42,0.08)]" />
                 <motion.div
-                  className="absolute left-0 top-1/2 -translate-y-1/2 h-[10px] rounded-full bg-gradient-to-r from-[#e090ff] via-[#a020d8] to-[#7c3aed] shadow-[0_2px_14px_rgba(168,85,247,0.32)]"
+                  className="absolute left-0 top-1/2 -translate-y-1/2 h-[10px] rounded-full bg-gradient-to-r from-[rgb(215,109,217)] to-[rgb(139,92,246)] shadow-[0_2px_14px_rgba(168,85,247,0.32)]"
                   animate={{ width: `${getPercentage(safeCurrent)}%` }}
                   transition={springTrack}
                   style={{ transformOrigin: 'left center' }}
                 />
                 <motion.div
-                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 min-w-[52px] h-[36px] px-[14px] bg-gradient-to-br from-[#d580f7] to-[#9333ea] rounded-full shadow-[0_4px_20px_rgba(168,85,247,0.4),0_1px_3px_rgba(0,0,0,0.1)] flex items-center justify-center border-[2.5px] border-white/90 z-20"
+                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 min-w-[52px] h-[36px] px-[14px] bg-[linear-gradient(135deg,#d580f7_0%,#9333ea_100%)] rounded-full shadow-[0_4px_20px_rgba(168,85,247,0.4),0_1px_3px_rgba(0,0,0,0.1)] flex items-center justify-center border-[2.5px] border-white/90 z-20"
                   animate={{ left: `${getPercentage(safeCurrent)}%` }}
                   transition={springBubble}
                 >
@@ -228,25 +235,37 @@ export function DualSlider({
 
           <div className="relative flex items-center gap-3 sm:gap-5">
             <div className={`${labelColumnClass} pr-2 text-left sm:text-right`} style={{ width: labelColumnWidth }}>
-              <span className="text-[11px] font-black tracking-[0.18em] text-[#2563eb] uppercase">
+              <span className="text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: targetLabelColor }}>
                 TARGET
               </span>
             </div>
             <div className={`flex-1 ${railPaddingClass}`}>
               <div className="w-full relative h-[52px]">
-                <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[10px] bg-[#eef0f5] rounded-full border border-slate-200/60 shadow-[inset_0_1px_1px_rgba(15,23,42,0.08)]" />
+                <div className="absolute inset-x-0 top-[5px] flex justify-between px-[1px]">
+                  {scaleMarkers.map((mark) => (
+                    <div key={`target-top-mark-${mark}`} className="w-px h-[10px] bg-slate-300/80" />
+                  ))}
+                </div>
+                <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[10px] bg-[#f6f6f6] rounded-full border border-slate-200/60 shadow-[inset_0_1px_1px_rgba(15,23,42,0.08)]" />
                 <motion.div
-                  className="absolute left-0 top-1/2 -translate-y-1/2 h-[10px] rounded-full bg-gradient-to-r from-[#60a5fa] via-[#2563eb] to-[#1d4ed8] shadow-[0_2px_14px_rgba(37,99,235,0.28)]"
+                  className="absolute left-0 top-1/2 -translate-y-1/2 h-[10px] rounded-full bg-gradient-to-r from-[rgb(30,144,255)] to-[rgb(0,86,179)] shadow-[0_2px_14px_rgba(37,99,235,0.28)]"
                   animate={{ width: `${getPercentage(safeTarget)}%` }}
                   transition={springTrack}
                   style={{ transformOrigin: 'left center' }}
                 />
                 <motion.div
-                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 min-w-[52px] h-[36px] px-[14px] bg-gradient-to-br from-[#60a5fa] to-[#2563eb] rounded-full shadow-[0_4px_20px_rgba(37,99,235,0.34),0_1px_3px_rgba(0,0,0,0.1)] flex items-center justify-center border-[2.5px] border-white/90 z-20"
+                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 min-w-[52px] h-[36px] px-[14px] rounded-full shadow-[0_4px_20px_rgba(37,99,235,0.34),0_1px_3px_rgba(0,0,0,0.1)] flex items-center justify-center border-[2.5px] z-20"
+                  style={
+                    safeTarget <= min
+                      ? { background: '#f6f6f6', color: 'rgb(81,160,255)', borderColor: 'rgb(81,160,255)' }
+                      : { background: 'linear-gradient(135deg, #60a5fa 0%, #2563eb 100%)', borderColor: 'rgba(255,255,255,0.9)' }
+                  }
                   animate={{ left: `${getPercentage(safeTarget)}%` }}
                   transition={springBubble}
                 >
-                  <span className="text-white font-bold text-[15px] tabular-nums">{safeTarget.toFixed(1)}</span>
+                  <span className={`font-bold text-[15px] tabular-nums ${safeTarget <= min ? 'text-[rgb(81,160,255)]' : 'text-white'}`}>
+                    {safeTarget.toFixed(1)}
+                  </span>
                 </motion.div>
 
                 <input
