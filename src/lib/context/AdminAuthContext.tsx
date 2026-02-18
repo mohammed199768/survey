@@ -3,6 +3,11 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { AdminUser, AdminAuthResponse } from '../api/adminTypes';
 import { AdminAuthAPI } from '../api/adminEndpoints';
+import {
+  clearAdminAuthMarker,
+  hasAdminAuthMarker,
+  setAdminAuthMarker,
+} from '../auth/adminAuthMarker';
 
 interface AdminAuthContextType {
   user: AdminUser | null;
@@ -31,16 +36,24 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
   // Verify token on mount
   useEffect(() => {
     const verifyToken = async () => {
+      if (!hasAdminAuthMarker()) {
+        setIsLoading(false);
+        return;
+      }
+
       try {
         const response = await AdminAuthAPI.verify();
         if (response.valid && response.user) {
           setUser(response.user);
+          setAdminAuthMarker();
         } else {
           setUser(null);
+          clearAdminAuthMarker();
         }
       } catch (err) {
         console.error('Token verification failed:', err);
         setUser(null);
+        clearAdminAuthMarker();
       } finally {
         setIsLoading(false);
       }
@@ -58,10 +71,12 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
 
       if (response.user) {
         setUser(response.user);
+        setAdminAuthMarker();
       } else {
         throw new Error(response.error || 'Login failed');
       }
     } catch (err: unknown) {
+      clearAdminAuthMarker();
       setError(toMessage(err));
       throw err;
     } finally {
@@ -75,6 +90,7 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
       await AdminAuthAPI.logout();
     } finally {
       setUser(null);
+      clearAdminAuthMarker();
       setIsLoading(false);
     }
   }, []);
@@ -84,12 +100,15 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
       const response = await AdminAuthAPI.verify();
       if (response.valid && response.user) {
         setUser(response.user);
+        setAdminAuthMarker();
         return true;
       }
       setUser(null);
+      clearAdminAuthMarker();
       return false;
     } catch {
       setUser(null);
+      clearAdminAuthMarker();
       return false;
     }
   }, []);

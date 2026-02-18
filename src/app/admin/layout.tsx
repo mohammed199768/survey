@@ -54,7 +54,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!isLoading && !isAuthenticated && pathname !== '/admin/login') {
-      router.push('/admin/login');
+      router.replace('/admin/login');
     }
   }, [isAuthenticated, isLoading, pathname, router]);
 
@@ -77,7 +77,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
     setIsLoggingOut(true);
     try {
       await logout();
-      router.push('/admin/login');
+      router.replace('/admin/login');
     } finally {
       setIsLoggingOut(false);
     }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const ADMIN_COOKIE_NAME = 'admin_token';
+const ADMIN_COOKIE_NAME = 'admin_authenticated';
 const ADMIN_LOGIN_PATH = '/admin/login';
 
 export function middleware(request: NextRequest) {
@@ -27,4 +27,3 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: ['/admin/:path*'],
 };
-

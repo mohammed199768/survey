@@ -8,6 +8,7 @@ import * as AdminTypes from './adminTypes';
 import { AdminAuthResponseSchema, AdminVerifyResponseSchema } from './schemas';
 import { z } from 'zod';
 import { API_BASE_URL } from '@/config/api';
+import { clearAdminAuthMarker } from '@/lib/auth/adminAuthMarker';
 
 const API_BASE = API_BASE_URL;
 const CSRF_ENDPOINT = '/csrf-token';
@@ -97,6 +98,7 @@ async function fetchAdmin<T>(
   });
 
   if (response.status === 401 && shouldRedirectToLoginOn401()) {
+    clearAdminAuthMarker();
     window.location.href = '/admin/login';
     throw new Error('Authentication required');
   }

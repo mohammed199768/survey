@@ -19,6 +19,10 @@ export default function AdminLoginPage() {
    * بمجرد نجاح تسجيل الدخول، ستتغير حالة isAuthenticated ويتم التوجيه فوراً.
    */
   useEffect(() => {
+    router.prefetch('/admin/dashboard');
+  }, [router]);
+
+  useEffect(() => {
     if (!authLoading && isAuthenticated) {
       router.replace('/admin/dashboard');
     }
@@ -33,10 +37,6 @@ export default function AdminLoginPage() {
 
     try {
       await login(email, password);
-      if (typeof window !== 'undefined') {
-        window.location.href = '/admin/dashboard';
-        return;
-      }
       router.replace('/admin/dashboard');
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Invalid email or password';

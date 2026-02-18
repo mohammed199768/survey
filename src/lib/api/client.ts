@@ -9,6 +9,7 @@
  */
 
 import { API_BASE_URL } from '@/config/api';
+import { clearAdminAuthMarker } from '@/lib/auth/adminAuthMarker';
 
 const CSRF_ENDPOINT = '/csrf-token';
 const CSRF_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
@@ -105,6 +106,7 @@ export class ApiClient {
         const data = raw ? (JSON.parse(raw) as ApiResponse<T>) : ({ success: true } as ApiResponse<T>);
 
         if (response.status === 401 && shouldRedirectToLoginOn401()) {
+          clearAdminAuthMarker();
           window.location.href = '/admin/login';
           throw new Error('Authentication required');
         }
