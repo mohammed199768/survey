@@ -196,10 +196,6 @@ export function Sidebar() {
         )}
       </aside>
 
-      <div className="fixed bottom-4 left-4 lg:bottom-6 lg:left-6 w-11 h-11 lg:w-12 lg:h-12 bg-black text-white rounded-full flex items-center justify-center font-bold text-xs lg:text-sm shadow-lg z-50">
-        CO
-      </div>
-
       <AssessmentGateDialog
         open={showGate}
         onClose={() => setShowGate(false)}

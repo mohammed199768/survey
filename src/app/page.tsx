@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useReadinessStore } from '@/store/readiness/readiness.store';
 import { motion } from 'framer-motion';
 import { BrandPreloader, FullPagePreloader } from '@/components/common/BrandPreloader';
+import Link from 'next/link';
 
 export default function LandingPage() {
   const router = useRouter();
@@ -98,13 +99,13 @@ export default function LandingPage() {
 
           <p className="text-sm text-gray-500">
             By clicking get started button, you agree to HORVATH&apos;s{' '}
-            <a href="#" className="text-blue-600 underline hover:text-blue-700">
+            <Link href="/terms" className="text-blue-600 underline hover:text-blue-700">
               Terms of Service
-            </a>
+            </Link>
             {' '}and{' '}
-            <a href="#" className="text-blue-600 underline hover:text-blue-700">
+            <Link href="/privacy" className="text-blue-600 underline hover:text-blue-700">
               Privacy Policy
-            </a>
+            </Link>
           </p>
         </div>
       </main>

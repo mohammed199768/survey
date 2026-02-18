@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useReadinessStore } from '@/store/readiness/readiness.store';
 import { Navbar } from '@/components/layout/Navbar';
 import { BrandPreloader } from '@/components/common/BrandPreloader';
+import Link from 'next/link';
 
 export default function SurveyPage() {
   const router = useRouter();
@@ -140,7 +141,14 @@ export default function SurveyPage() {
                   onChange={(e) => setFormData({ ...formData, consentGiven: e.target.checked })}
                 />
                 <label htmlFor="consent" className="text-sm text-slate-700 leading-relaxed">
-                  I agree to the processing of my personal data for the purpose of this assessment and accept the Terms of Service.
+                  I agree to the processing of my personal data for the purpose of this assessment and accept the{' '}
+                  <Link href="/terms" className="text-blue-600 underline hover:text-blue-700">
+                    Terms of Service
+                  </Link>{' '}
+                  and{' '}
+                  <Link href="/privacy" className="text-blue-600 underline hover:text-blue-700">
+                    Privacy Policy
+                  </Link>.
                 </label>
               </div>
 
