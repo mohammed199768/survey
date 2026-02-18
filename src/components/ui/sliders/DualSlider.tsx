@@ -40,6 +40,21 @@ export function DualSlider({
   labels = [],
 }: DualSliderProps) {
   const labelColumnClass = 'w-20 sm:w-24 lg:w-28 shrink-0';
+  const toSafeScore = React.useCallback((value: unknown, fallback: number) => {
+    if (typeof value === 'number' && Number.isFinite(value)) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    const parsed = Number(value);
+    if (Number.isFinite(parsed)) {
+      return Math.max(min, Math.min(max, parsed));
+    }
+
+    return fallback;
+  }, [max, min]);
+
+  const safeCurrent = toSafeScore(current, min);
+  const safeTarget = toSafeScore(target, min);
 
   const getPercentage = (val: number) => {
     const percentage = ((val - min) / (max - min)) * 100;
@@ -59,8 +74,8 @@ export function DualSlider({
   };
 
   const scaleMarkers = [1, 2, 3, 4, 5];
-  const currentAnchor = React.useMemo(() => getAnchorForValue(current, labels), [current, labels]);
-  const targetAnchor = React.useMemo(() => getAnchorForValue(target, labels), [target, labels]);
+  const currentAnchor = React.useMemo(() => getAnchorForValue(safeCurrent, labels), [safeCurrent, labels]);
+  const targetAnchor = React.useMemo(() => getAnchorForValue(safeTarget, labels), [safeTarget, labels]);
 
   const renderScaleRuler = () => (
     <div className="flex items-start gap-3 sm:gap-6 mt-2 sm:mt-3">
@@ -125,14 +140,14 @@ export function DualSlider({
             <div className="absolute inset-0 bg-[#e7e8eb] rounded-full" />
             <div
               className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#c66ac0] to-[#8a63dc] transition-all duration-300 ease-out"
-              style={{ width: `${getPercentage(current)}%` }}
+              style={{ width: `${getPercentage(safeCurrent)}%` }}
             />
             <div
               className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-9 sm:h-10 min-w-[56px] sm:min-w-[62px] px-3 sm:px-4 bg-[#b353a1] rounded-full flex items-center justify-center shadow-[0_4px_14px_rgba(179,83,161,0.28)] border border-white transition-all duration-300 ease-out z-20"
-              style={{ left: `${getPercentage(current)}%` }}
+              style={{ left: `${getPercentage(safeCurrent)}%` }}
             >
               <span className="text-[0.92rem] sm:text-[1rem] font-bold text-white tabular-nums">
-                {current.toFixed(1)}
+                {safeCurrent.toFixed(1)}
               </span>
             </div>
 
@@ -141,7 +156,7 @@ export function DualSlider({
               min={min}
               max={max}
               step={step}
-              value={current}
+              value={safeCurrent}
               onChange={handleCurrentChange}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-30"
             />
@@ -159,14 +174,14 @@ export function DualSlider({
             <div className="absolute inset-0 bg-[#e7e8eb] rounded-full" />
             <div
               className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#2990ea] to-[#1e6fd9] transition-all duration-300 ease-out"
-              style={{ width: `${getPercentage(target)}%` }}
+              style={{ width: `${getPercentage(safeTarget)}%` }}
             />
             <div
               className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-9 sm:h-10 min-w-[56px] sm:min-w-[62px] px-3 sm:px-4 bg-[#3467d6] rounded-full flex items-center justify-center shadow-[0_4px_14px_rgba(52,103,214,0.28)] border border-white transition-all duration-300 ease-out z-20"
-              style={{ left: `${getPercentage(target)}%` }}
+              style={{ left: `${getPercentage(safeTarget)}%` }}
             >
               <span className="text-[0.92rem] sm:text-[1rem] font-bold text-white tabular-nums">
-                {target.toFixed(1)}
+                {safeTarget.toFixed(1)}
               </span>
             </div>
 
@@ -175,7 +190,7 @@ export function DualSlider({
               min={min}
               max={max}
               step={step}
-              value={target}
+              value={safeTarget}
               onChange={handleTargetChange}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-30"
             />

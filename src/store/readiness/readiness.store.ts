@@ -22,6 +22,19 @@ import type {
 const getErrorMessage = (error: unknown, fallback: string): string =>
   error instanceof Error ? error.message : fallback;
 
+const toScore = (value: unknown, fallback = 1): number => {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return Math.max(1, Math.min(5, value));
+  }
+
+  const parsed = Number(value);
+  if (Number.isFinite(parsed)) {
+    return Math.max(1, Math.min(5, parsed));
+  }
+
+  return fallback;
+};
+
 let startSessionPromise: Promise<void> | null = null;
 
 interface ReadinessState {
@@ -258,8 +271,8 @@ export const useReadinessStore = create<ReadinessState>()(
           const responses: Record<string, { current: number; target: number }> = {};
           session.answeredTopics.forEach(t => {
               responses[t.topicId] = {
-                  current: t.currentRating,
-                  target: t.targetRating
+                  current: toScore(t.currentRating),
+                  target: toScore(t.targetRating)
               };
           });
 
