@@ -147,8 +147,7 @@ export function DualSlider({
 
   return (
     <div className="w-full select-none py-[0.25rem]" style={{ fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif' }}>
-      <div className="w-full overflow-x-auto overflow-y-visible">
-        <div className="w-[96%] min-w-[900px] max-w-[940px] mx-auto flex flex-col px-[2%]">
+      <div className="w-[96%] max-w-[940px] mx-auto flex flex-col px-[2%]">
         {labels.length > 0 && (
           <>
             <div className="sm:hidden rounded-xl bg-white/65 border border-slate-200/70 p-3 space-y-2 mb-5">
@@ -283,8 +282,7 @@ export function DualSlider({
           </div>
         </div>
 
-          {renderScaleRuler()}
-        </div>
+        {renderScaleRuler()}
       </div>
     </div>
   );

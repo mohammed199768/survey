@@ -123,11 +123,12 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
         </div>
       )}
 
-      <div
-        className="bg-white/96 backdrop-blur-[1.5px] flex-1 min-h-[calc(100vh-8rem)] lg:min-h-0 flex flex-col rounded-2xl lg:rounded-[32px]
-                    shadow-[0_12px_34px_rgba(0,0,0,0.05),0_1px_4px_rgba(0,0,0,0.02)] lg:shadow-[0_24px_56px_rgba(0,0,0,0.06),0_1px_4px_rgba(0,0,0,0.02)]
-                    border border-white/70 overflow-visible lg:overflow-hidden relative"
-      >
+      <div className="flex-1 min-h-[calc(100vh-8rem)] lg:min-h-0 overflow-x-auto overflow-y-auto lg:overflow-visible">
+        <div
+          className="bg-white/96 backdrop-blur-[1.5px] flex-1 min-h-[calc(100vh-8rem)] lg:min-h-0 flex flex-col rounded-2xl lg:rounded-[32px]
+                      shadow-[0_12px_34px_rgba(0,0,0,0.05),0_1px_4px_rgba(0,0,0,0.02)] lg:shadow-[0_24px_56px_rgba(0,0,0,0.06),0_1px_4px_rgba(0,0,0,0.02)]
+                      border border-white/70 overflow-visible lg:overflow-hidden relative md:min-w-[980px] lg:min-w-0"
+        >
         <div className="flex-1 flex flex-col overflow-hidden">
           {currentTopic && (
             <TopicCard
@@ -157,6 +158,7 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
           >
             {isLoading ? 'Processing...' : (isLastTopic ? 'Complete & View Results' : 'Next Step')} <span className="text-lg sm:text-xl">-&gt;</span>
           </button>
+        </div>
         </div>
       </div>
 
