@@ -38,10 +38,10 @@ export default function ResultsClient({
 
   if (error || !results) {
     return (
-      <div className="min-h-screen bg-[#f5f5f5] font-sans flex items-center justify-center">
+      <div className="brand-theme min-h-screen bg-[#f5f5f5] font-sans flex items-center justify-center">
         <div className="text-center">
           <div className="text-red-500 font-medium mb-4">{error || 'No results found'}</div>
-          <button onClick={() => router.push('/')} className="text-blue-600 underline">Return Home</button>
+          <button onClick={() => router.push('/')} className="brand-btn px-6 py-2.5 text-sm">Return Home</button>
         </div>
       </div>
     );
@@ -94,7 +94,7 @@ export default function ResultsClient({
           <div className="flex items-center gap-4">
             <button
               onClick={() => router.push('/survey')}
-              className="px-8 py-3 border-2 border-blue-600 text-blue-600 rounded-full font-semibold hover:bg-blue-50 transition-all"
+              className="brand-btn-outline px-8 py-3"
             >
               Previous
             </button>
@@ -103,7 +103,7 @@ export default function ResultsClient({
 
           <button
             onClick={() => router.push(recommendationsUrl)}
-            className="px-8 py-3 bg-blue-600 text-white rounded-full font-semibold hover:bg-blue-700 transition-all shadow-md"
+            className="brand-btn px-8 py-3"
           >
             See Recommendations
           </button>

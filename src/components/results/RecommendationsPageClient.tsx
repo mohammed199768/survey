@@ -190,13 +190,13 @@ export function RecommendationsPageClient({ initialResults, responseIdFromQuery 
 
   if (Object.keys(responses).length === 0 && !apiResults) {
     return (
-      <div className="min-h-screen bg-[#f5f5f5] flex items-center justify-center">
+      <div className="brand-theme min-h-screen bg-[#f5f5f5] flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">No Assessment Data</h2>
           <p className="text-gray-600 mb-6">Please complete the survey first.</p>
           <button
             onClick={() => router.push('/survey')}
-            className="px-6 py-3 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-colors"
+            className="brand-btn px-7 py-3 text-sm"
           >
             Start Survey
           </button>
@@ -207,7 +207,7 @@ export function RecommendationsPageClient({ initialResults, responseIdFromQuery 
 
   if (!recommendations || recommendations.length === 0) {
     return (
-      <div className="min-h-screen bg-[#f5f5f5] flex items-center justify-center">
+      <div className="brand-theme min-h-screen bg-[#f5f5f5] flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">No Recommendations Available</h2>
           <p className="text-gray-600 mb-6">
@@ -217,7 +217,7 @@ export function RecommendationsPageClient({ initialResults, responseIdFromQuery 
             onClick={() =>
               router.push(responseId ? `/results?responseId=${encodeURIComponent(responseId)}` : '/results')
             }
-            className="px-6 py-3 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-colors"
+            className="brand-btn px-7 py-3 text-sm"
           >
             View Results
           </button>
@@ -267,7 +267,7 @@ export function RecommendationsPageClient({ initialResults, responseIdFromQuery 
               onClick={() =>
                 router.push(responseId ? `/results?responseId=${encodeURIComponent(responseId)}` : '/results')
               }
-              className="px-8 py-3 border-2 border-blue-600 text-blue-600 rounded-full font-semibold hover:bg-blue-50 transition-all"
+              className="brand-btn-outline px-8 py-3"
             >
               Previous
             </button>
@@ -276,7 +276,7 @@ export function RecommendationsPageClient({ initialResults, responseIdFromQuery 
 
           <button
             onClick={() => alert('Download functionality coming soon!')}
-            className="px-8 py-3 bg-blue-600 text-white rounded-full font-semibold hover:bg-blue-700 transition-all shadow-md"
+            className="brand-btn px-8 py-3"
           >
             Download Report
           </button>

@@ -118,7 +118,7 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
   return (
     <div className="relative z-10 flex min-h-[calc(100vh-4rem)] flex-col px-4 sm:px-6 pt-4 pb-28 lg:ml-[344px] lg:mr-8 lg:mt-6 lg:h-[calc(100vh-7rem)] lg:min-h-0 lg:px-0 lg:pt-0 lg:pb-0">
       {isSubmitting && (
-        <div className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-blue-600 text-white text-xs px-3 py-1 rounded-full shadow-lg z-30 animate-pulse">
+        <div className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-[#3d6678] text-white text-xs px-3 py-1 rounded-full shadow-lg z-30 animate-pulse">
           Saving...
         </div>
       )}
@@ -142,8 +142,8 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
           <button
             onClick={handlePrevious}
             disabled={!hasPrevious}
-            className={`px-4 sm:px-6 lg:px-7 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 border ${
-              hasPrevious ? 'border-gray-100 text-gray-400 hover:text-gray-900 hover:bg-gray-50' : 'opacity-0 pointer-events-none'
+            className={`px-4 sm:px-6 lg:px-7 py-2.5 text-xs sm:text-sm flex items-center gap-2 ${
+              hasPrevious ? 'brand-btn-outline' : 'opacity-0 pointer-events-none'
             }`}
           >
             <span className="text-lg sm:text-xl">&lt;-</span> Previous
@@ -152,9 +152,7 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
           <button
             onClick={handleNext}
             disabled={isLoading}
-            className={`px-5 sm:px-6 lg:px-7 py-3 rounded-2xl text-xs sm:text-sm font-bold text-white hover:shadow-lg hover:shadow-blue-500/20 transition-all active:scale-95 flex items-center gap-2 disabled:opacity-70 ${
-              isLastTopic ? 'bg-green-600 hover:bg-green-700' : 'bg-[#00549F] hover:bg-[#004080]'
-            }`}
+            className="brand-btn px-5 sm:px-6 lg:px-7 py-3 text-xs sm:text-sm active:scale-95 flex items-center gap-2 disabled:opacity-70"
           >
             {isLoading ? 'Processing...' : (isLastTopic ? 'Complete & View Results' : 'Next Step')} <span className="text-lg sm:text-xl">-&gt;</span>
           </button>

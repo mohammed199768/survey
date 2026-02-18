@@ -22,11 +22,11 @@ export function ResetButton({ className = '', label = 'Reset Assessment', varian
     }
   };
 
-  const baseClasses = "text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500";
+  const baseClasses = 'text-sm transition-all focus:outline-none';
   
   const variantClasses = variant === 'sidebar' 
     ? "text-gray-400 hover:text-red-600 block text-center py-2" // Sidebar specific
-    : "text-gray-400 hover:text-red-600 px-4 py-2 rounded-md hover:bg-red-50"; // Results specific
+    : "brand-btn-outline px-6 py-3"; // Results specific
 
   return (
     <button
