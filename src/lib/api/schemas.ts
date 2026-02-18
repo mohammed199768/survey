@@ -114,8 +114,9 @@ export const RecommendationRuleSchema = z.object({
   kpis: z.array(z.string()).nullish().optional().transform((value) => value ?? []),
 });
 
-const RecommendationsMetaSchema = z
-  .object({
+const RecommendationsMetaSchema = z.preprocess(
+  (value) => value ?? {},
+  z.object({
     dimensionColors: z.record(z.string(), z.string()).default({}).catch({}),
     dimensionWeights: z.record(z.string(), z.number()).default({}).catch({}),
     themeMap: z.record(z.string(), z.string()).default({}).catch({}),
@@ -125,7 +126,7 @@ const RecommendationsMetaSchema = z
     titleTemplates: z.record(z.string(), z.array(z.string())).optional(),
     descriptionTemplate: z.string().optional(),
   })
-  .default({});
+);
 
 export const RecommendationsDefinitionAPISchema = z.object({
   dimensions: z.array(
