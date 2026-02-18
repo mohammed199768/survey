@@ -172,7 +172,7 @@ export function DualSlider({
                           width: `${railWidth / 4}px`,
                         }}
                       >
-                        <p className="text-[13px] leading-[1.5] text-slate-500 text-center h-[80px] w-full flex items-end justify-center">
+                        <p className="text-[13px] leading-[1.5] text-slate-900 text-center h-[80px] w-full flex items-end justify-center">
                           {label}
                         </p>
                         <div className="w-px h-[18px] bg-slate-300 mt-[10px]" />
