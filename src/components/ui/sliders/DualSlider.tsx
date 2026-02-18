@@ -40,6 +40,9 @@ export function DualSlider({
   topicId: _topicId,
   labels = [],
 }: DualSliderProps) {
+  const railRef = React.useRef<HTMLDivElement>(null);
+  const [railWidth, setRailWidth] = React.useState<number>(0);
+
   const toSafeScore = React.useCallback((value: unknown, fallback: number) => {
     if (typeof value === 'number' && Number.isFinite(value)) {
       return Math.max(min, Math.min(max, value));
@@ -82,6 +85,26 @@ export function DualSlider({
   const labelColumnClass = 'w-[72px] shrink-0';
   const railPaddingClass = 'px-0';
 
+  React.useEffect(() => {
+    const element = railRef.current;
+    if (!element) return;
+
+    const updateWidth = () => {
+      setRailWidth(element.getBoundingClientRect().width);
+    };
+
+    updateWidth();
+
+    const observer = new ResizeObserver(() => {
+      updateWidth();
+    });
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   const renderScaleRuler = () => (
     <>
       <div className="sm:hidden mt-5">
@@ -97,19 +120,21 @@ export function DualSlider({
         </div>
       </div>
 
-      <div className="hidden sm:flex mt-6">
-        <div className={labelColumnClass} />
-        <div className={`flex-1 ${railPaddingClass}`}>
-          <div className="grid grid-cols-5">
-            {scaleMarkers.map((mark) => (
-              <div key={mark} className="flex flex-col items-center">
+      <div className="hidden sm:block mt-6 ml-[72px]">
+        <div className="relative h-9">
+          {railWidth > 0 &&
+            scaleMarkers.map((mark) => (
+              <div
+                key={mark}
+                className="absolute top-0 -translate-x-1/2 flex flex-col items-center"
+                style={{ left: `${((mark - 1) / 4) * railWidth}px` }}
+              >
                 <div className="w-px h-3 bg-slate-300" />
                 <span className="mt-2 text-[12px] font-bold text-slate-400 tabular-nums italic">
                   {mark.toFixed(1)}
                 </span>
               </div>
             ))}
-          </div>
         </div>
       </div>
     </>
@@ -133,19 +158,27 @@ export function DualSlider({
               </div>
             </div>
 
-            <div className="hidden sm:flex mb-8">
-              <div className={labelColumnClass} />
-              <div className={`flex-1 ${railPaddingClass}`}>
-                <div className="grid grid-cols-5">
-                  {labelsForGrid.map((label, idx) => (
-                    <div key={idx} className="px-2 flex flex-col items-center">
-                      <p className="text-[13px] leading-[1.5] text-slate-500 text-center min-h-[80px] flex items-end justify-center">
-                        {label}
-                      </p>
-                      <div className="w-px h-[18px] bg-slate-300 mt-[10px]" />
-                    </div>
-                  ))}
-                </div>
+            <div className="hidden sm:block mb-8 ml-[72px]">
+              <div className="relative h-[108px]">
+                {railWidth > 0 &&
+                  labelsForGrid.map((label, idx) => {
+                    const mark = idx + 1;
+                    return (
+                      <div
+                        key={idx}
+                        className="absolute top-0 -translate-x-1/2 flex flex-col items-center"
+                        style={{
+                          left: `${((mark - 1) / 4) * railWidth}px`,
+                          width: `${railWidth / 4}px`,
+                        }}
+                      >
+                        <p className="text-[13px] leading-[1.5] text-slate-500 text-center h-[80px] w-full flex items-end justify-center">
+                          {label}
+                        </p>
+                        <div className="w-px h-[18px] bg-slate-300 mt-[10px]" />
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           </>
@@ -158,7 +191,7 @@ export function DualSlider({
                 SCORE
               </span>
             </div>
-            <div className={`flex-1 ${railPaddingClass}`}>
+            <div ref={railRef} className={`flex-1 ${railPaddingClass}`}>
               <div className="w-full relative h-[52px]">
                 <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[10px] bg-[#eef0f5] rounded-full border border-slate-200/60 shadow-[inset_0_1px_1px_rgba(15,23,42,0.08)]" />
                 <motion.div
