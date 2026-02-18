@@ -4,7 +4,7 @@ const ADMIN_LOGIN_PATH = '/admin/login';
 const NONCE_HEADER = 'x-nonce';
 
 const resolveApiBaseUrl = (request: NextRequest): string => {
-  const configured = process.env.NEXT_PUBLIC_API_URL?.replace(/\/+$/, '');
+  const configured = process.env.NEXT_PUBLIC_APP_ORIGIN?.replace(/\/+$/, '');
   if (configured) {
     return configured.endsWith('/api') ? configured : `${configured}/api`;
   }

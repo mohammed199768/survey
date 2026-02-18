@@ -11,19 +11,13 @@ const viteApiUrl =
     ? (import.meta as ImportMetaLike).env?.VITE_API_URL
     : undefined;
 
-const envApiBaseUrl = viteApiUrl || process.env.NEXT_PUBLIC_API_URL;
+// Single source for frontend origin (change once in env and it propagates everywhere).
+const appOrigin =
+  process.env.NEXT_PUBLIC_APP_ORIGIN ||
+  viteApiUrl ||
+  'https://survey-one-beryl.vercel.app';
 
-const rawApiBaseUrl =
-  envApiBaseUrl ||
-  (process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '');
-
-if (!rawApiBaseUrl) {
-  throw new Error(
-    'Missing NEXT_PUBLIC_API_URL. Set it in Vercel Project Settings -> Environment Variables.',
-  );
-}
-
-const withoutTrailingSlash = rawApiBaseUrl.replace(/\/+$/, '');
+const withoutTrailingSlash = appOrigin.replace(/\/+$/, '');
 
 export const API_BASE_URL = withoutTrailingSlash.endsWith('/api')
   ? withoutTrailingSlash
