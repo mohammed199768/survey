@@ -91,7 +91,7 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
       </div>
 
       {/* Prompt Strip */}
-      <div className="px-4 sm:px-5 lg:px-8 pt-5 pb-6 lg:pb-7 bg-white shrink-0">
+      <div className="px-4 sm:px-5 lg:px-8 pt-5 pb-3 lg:pb-4 bg-white shrink-0">
         <div className="w-full max-w-[1240px] mx-auto">
           <p className="text-[clamp(0.92rem,2.95vw,1.04rem)] lg:text-[1rem] font-medium text-slate-800 leading-[1.5] max-w-[1120px]">
             {topic.prompt}
@@ -100,7 +100,7 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
       </div>
 
       {/* Body */}
-      <div className="px-4 sm:px-5 lg:px-8 pt-2 pb-6 lg:pb-8 bg-white flex-1 flex flex-col justify-start">
+      <div className="px-4 sm:px-5 lg:px-8 pt-0 pb-6 lg:pb-8 bg-white flex-1 flex flex-col justify-start">
         <div className="w-full mx-auto max-w-[1240px]">
           <DualSlider
             current={currentVal}
