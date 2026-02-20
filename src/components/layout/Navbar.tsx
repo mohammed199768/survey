@@ -1,13 +1,12 @@
-'use client';
+﻿'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 
 interface NavbarProps {
   showBackButton?: boolean;
   backUrl?: string;
 }
-
-const BRAND = 'HORV\u00C1TH';
 
 export function Navbar({ showBackButton = false, backUrl }: NavbarProps) {
   return (
@@ -20,23 +19,17 @@ export function Navbar({ showBackButton = false, backUrl }: NavbarProps) {
         fontFamily: 'Arial, sans-serif',
       }}
     >
-      <Link href="/" className="flex items-center gap-[10px] no-underline group">
-        <svg
-          viewBox="0 0 40 40"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-8 h-8 shrink-0"
-        >
-          <rect x="4" y="4" width="22" height="22" stroke="#7fbadc" strokeWidth="3" />
-          <rect x="14" y="14" width="22" height="22" stroke="#7fbadc" strokeWidth="3" />
-        </svg>
-
-        <span
-          className="font-bold tracking-[0.20em] text-[17px] text-[#7fbadc] uppercase"
-          style={{ fontFamily: 'Arial, sans-serif', letterSpacing: '0.20em' }}
-        >
-          {BRAND}
-        </span>
+      <Link href="/" className="no-underline group">
+        <div className="flex items-center">
+          <Image
+            src="/logo (3).webp"
+            alt="Horv\u00E1th"
+            width={140}
+            height={40}
+            priority
+            className="object-contain h-10 w-auto"
+          />
+        </div>
       </Link>
 
       <div className="ml-auto flex items-center gap-5">
@@ -52,3 +45,4 @@ export function Navbar({ showBackButton = false, backUrl }: NavbarProps) {
     </header>
   );
 }
+

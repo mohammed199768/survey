@@ -1,4 +1,5 @@
-import React from 'react';
+﻿import React from 'react';
+import Image from 'next/image';
 
 type BrandPreloaderProps = {
   size?: number;
@@ -30,7 +31,7 @@ function HorvathSymbol({ size = 180 }: { size?: number }) {
       viewBox="0 0 320 280"
       fill="none"
       role="img"
-      aria-label="HORVÁTH loading mark"
+      aria-label="Horv\u00E1th loading mark"
       className="overflow-visible"
     >
       <g className="origin-center animate-[spin_22s_linear_infinite]">
@@ -72,9 +73,16 @@ export function BrandPreloader({
       </div>
       {showLabel && (
         <div className="text-center">
-          <p className="text-[clamp(1.75rem,4vw,2.6rem)] tracking-[0.12em] font-extrabold text-slate-800 uppercase leading-none">
-            HORVÁTH
-          </p>
+          <div className="flex justify-center">
+            <Image
+              src="/logo (3).webp"
+              alt="Horv\u00E1th"
+              width={180}
+              height={52}
+              priority
+              className="object-contain h-12 w-auto"
+            />
+          </div>
           <p className="text-[11px] tracking-[0.24em] font-semibold text-slate-500 uppercase mt-2">
             Impact Platform
           </p>
@@ -96,3 +104,4 @@ export function FullPagePreloader({ label = 'Preparing your experience...' }: Fu
     </div>
   );
 }
+

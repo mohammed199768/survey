@@ -1,5 +1,6 @@
-'use client';
+﻿'use client';
 
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -88,15 +89,15 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
       {/* Sidebar */}
       <aside className="fixed inset-y-0 left-0 z-50 w-64 bg-[#1d6996] shadow-lg">
         {/* Logo */}
-        <div className="h-16 flex items-center px-6 border-b border-white/15">
-          <div className="flex items-center space-x-3">
-            <div className="h-8 w-8 bg-[#3a92c6] rounded-lg flex items-center justify-center">
-              <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-            </div>
-            <span className="text-lg font-bold text-white">HORVÁTH</span>
-          </div>
+        <div className="flex items-center px-6 h-16 border-b border-white/15">
+          <Image
+            src="/logo (3).webp"
+            alt="Horv\u00E1th"
+            width={130}
+            height={36}
+            priority
+            className="object-contain h-9 w-auto"
+          />
         </div>
 
         {/* Navigation */}
@@ -178,3 +179,4 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     </AdminAuthProvider>
   );
 }
+

@@ -5,6 +5,9 @@ const API_UPSTREAM_URL = (
 ).replace(/\/+$/, '');
 
 const nextConfig: NextConfig = {
+  images: {
+    formats: ['image/webp', 'image/avif'],
+  },
   async rewrites() {
     return [
       {
