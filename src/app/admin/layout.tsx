@@ -36,6 +36,15 @@ const navItems = [
     ),
   },
   {
+    name: 'Participants',
+    href: '/admin/participants',
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 14a4 4 0 10-8 0M12 12a4 4 0 100-8 4 4 0 000 8zm-7 9a7 7 0 0114 0H5z" />
+      </svg>
+    ),
+  },
+  {
     name: 'Analytics',
     href: '/admin/analytics',
     icon: (

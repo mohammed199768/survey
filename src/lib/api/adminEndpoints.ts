@@ -382,6 +382,7 @@ export const ResponseAdminAPI = {
     if (params?.limit) queryParams.set('limit', params.limit.toString());
     if (params?.status) queryParams.set('status', params.status);
     if (params?.assessment_id) queryParams.set('assessment_id', params.assessment_id);
+    if (params?.participant_id) queryParams.set('participant_id', params.participant_id);
     if (params?.search) queryParams.set('search', params.search);
     
     const queryString = queryParams.toString();
@@ -470,7 +471,54 @@ export const ResponseAdminAPI = {
           : [],
       })),
     };
-  }
+  },
+
+  async deleteResponse(id: string): Promise<{ success: boolean; message: string }> {
+    return fetchAdminWrapped<{ success: boolean; message: string }>(`/admin/responses/${id}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
+export const ParticipantAdminAPI = {
+  async list(page: number, limit: number): Promise<AdminTypes.PaginatedParticipants> {
+    const queryParams = new URLSearchParams();
+    queryParams.set('page', page.toString());
+    queryParams.set('limit', limit.toString());
+
+    const queryString = queryParams.toString();
+    const endpoint = `/admin/participants${queryString ? `?${queryString}` : ''}`;
+    const result = await fetchAdminWrapped<AdminTypes.PaginatedParticipants>(endpoint);
+    const rows = Array.isArray(result?.data) ? result.data : [];
+    const pagination = result?.pagination ?? {
+      total: rows.length,
+      page,
+      limit,
+      pages: 1,
+    };
+
+    return {
+      data: rows.map((row) => ({
+        ...row,
+        response_count: asNumber(row.response_count),
+      })),
+      pagination: {
+        total: asNumber(pagination.total),
+        page: asNumber(pagination.page, page),
+        limit: asNumber(pagination.limit, limit),
+        pages: asNumber(pagination.pages, 1),
+      },
+    };
+  },
+
+  async delete(id: string): Promise<{ success: boolean; message: string; deletedResponseCount: number }> {
+    return fetchAdminWrapped<{ success: boolean; message: string; deletedResponseCount: number }>(
+      `/admin/participants/${id}`,
+      {
+        method: 'DELETE',
+      }
+    );
+  },
 };
 
 // ==========================================
@@ -629,6 +677,7 @@ export const AdminAPI = {
   dashboard: DashboardAPI,
   assessments: AssessmentAdminAPI,
   responses: ResponseAdminAPI,
+  participants: ParticipantAdminAPI,
   analytics: AnalyticsAPI,
   recommendations: RecommendationAdminAPI,
 };

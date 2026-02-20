@@ -1,11 +1,10 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ResponseAdminAPI } from '@/lib/api/adminEndpoints';
 import { 
   ResponseListItem, 
-  PaginatedResponse,
   PaginationInfo,
   ResponseListParams
 } from '@/lib/api/adminTypes';
@@ -97,6 +96,7 @@ function ProgressBar({ progress }: { progress: number }) {
 
 export default function ResponsesPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [responses, setResponses] = useState<ResponseListItem[]>([]);
   const [pagination, setPagination] = useState<PaginationInfo>({
     total: 0,
@@ -111,6 +111,10 @@ export default function ResponsesPage() {
   const [status, setStatus] = useState('all');
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+
+  const participantId = searchParams.get('participant_id') || undefined;
   
   const debouncedSearch = useDebounce(search, 300);
 
@@ -123,6 +127,7 @@ export default function ResponsesPage() {
         page: currentPage,
         limit: 20,
         status: status !== 'all' ? status : undefined,
+        participant_id: participantId,
       };
       
       // Add search parameter if provided
@@ -139,7 +144,7 @@ export default function ResponsesPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, status, debouncedSearch]);
+  }, [currentPage, status, debouncedSearch, participantId]);
 
   useEffect(() => {
     fetchResponses();
@@ -148,10 +153,49 @@ export default function ResponsesPage() {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [status, debouncedSearch]);
+  }, [status, debouncedSearch, participantId]);
+
+  const handleClearParticipantFilter = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('participant_id');
+    const query = params.toString();
+    router.replace(query ? `/admin/responses?${query}` : '/admin/responses');
+  };
 
   const handleRowClick = (responseId: string) => {
     router.push(`/admin/responses/${responseId}`);
+  };
+
+  const handleDeleteResponse = async (responseId: string) => {
+    const previousResponses = responses;
+    const previousPagination = pagination;
+
+    setActionLoading(responseId);
+    setDeleteConfirm(null);
+
+    const nextResponses = previousResponses.filter((response) => response.id !== responseId);
+    const nextTotal = Math.max(0, previousPagination.total - 1);
+
+    setResponses(nextResponses);
+    setPagination((prev) => ({
+      ...prev,
+      total: nextTotal,
+      pages: Math.max(1, Math.ceil(nextTotal / prev.limit)),
+    }));
+
+    try {
+      await ResponseAdminAPI.deleteResponse(responseId);
+      if (nextResponses.length === 0 && currentPage > 1) {
+        setCurrentPage((page) => Math.max(1, page - 1));
+      }
+    } catch (err) {
+      console.error('Failed to delete response:', err);
+      setResponses(previousResponses);
+      setPagination(previousPagination);
+      setError('Failed to delete response. Please try again.');
+    } finally {
+      setActionLoading(null);
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -303,6 +347,20 @@ export default function ResponsesPage() {
         </div>
       </div>
 
+      {participantId && (
+        <div className="flex items-center gap-3">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-horvath-50 text-horvath-900">
+            Participant filter: {participantId.slice(0, 8)}...
+          </span>
+          <button
+            onClick={handleClearParticipantFilter}
+            className="text-sm font-medium text-primary hover:text-primary-hover"
+          >
+            Clear filter
+          </button>
+        </div>
+      )}
+
       {/* Error Message */}
       {error && (
         <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
@@ -394,15 +452,50 @@ export default function ResponsesPage() {
                       {formatDate(response.completed_at || response.last_updated_at)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRowClick(response.id);
-                        }}
-                        className="text-primary hover:text-primary-hover font-medium"
-                      >
-                        View
-                      </button>
+                      <div className="flex items-center justify-end gap-3">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRowClick(response.id);
+                          }}
+                          className="text-primary hover:text-primary-hover font-medium"
+                        >
+                          View
+                        </button>
+                        {deleteConfirm === response.id ? (
+                          <div className="flex items-center space-x-1">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteResponse(response.id);
+                              }}
+                              disabled={actionLoading === response.id}
+                              className="px-2 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700 disabled:opacity-50"
+                            >
+                              {actionLoading === response.id ? '...' : 'Confirm'}
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setDeleteConfirm(null);
+                              }}
+                              className="px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded hover:bg-gray-200"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setDeleteConfirm(response.id);
+                            }}
+                            className="text-red-600 hover:text-red-700 font-medium"
+                          >
+                            Delete
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))

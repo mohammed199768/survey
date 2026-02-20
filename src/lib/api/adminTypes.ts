@@ -243,8 +243,21 @@ export interface ResponseListParams {
   limit?: number;
   status?: string;
   assessment_id?: string;
+  participant_id?: string;
   search?: string;
 }
+
+export interface AdminParticipant {
+  id: string;
+  full_name: string;
+  email: string;
+  company_name: string | null;
+  created_at: string;
+  response_count: number;
+  last_activity: string | null;
+}
+
+export type PaginatedParticipants = PaginatedResponse<AdminParticipant>;
 
 // ==========================================
 // Pagination Types
