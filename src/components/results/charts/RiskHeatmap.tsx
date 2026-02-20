@@ -39,7 +39,7 @@ export function RiskHeatmap({ dimensions }: RiskHeatmapProps) {
   
   return (
     <div className="w-full h-full flex flex-col p-4">
-      <div className="flex-1 grid grid-cols-2 gap-3">
+      <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
         {dimensions.map((dim, idx) => {
           const gap = calculateGap(dim.targetAvg, dim.currentAvg);
           const colors = getCellColor(dim.currentAvg, dim.targetAvg);
@@ -83,7 +83,7 @@ export function RiskHeatmap({ dimensions }: RiskHeatmapProps) {
           );
         })}
       </div>
-      <div className="flex justify-center gap-6 mt-3 pt-3 border-t border-slate-200">
+      <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-3 pt-3 border-t border-slate-200">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded" style={{ backgroundColor: 'rgba(239, 68, 68, 0.4)', borderLeft: `2px solid ${SEMANTIC_COLORS.error}` }} />
           <span className="text-[10px] font-light uppercase tracking-wider" style={{ fontFamily: 'Arial, sans-serif', color: BRAND_COLORS.light }}>Critical Gap</span>

@@ -47,7 +47,7 @@ export function DimensionBarChart({ dimensions }: DimensionBarChartProps) {
       {/* ── Overall Row: circles only, no bars ── */}
       <div className="mb-4 pb-3 border-b border-gray-200">
         <div className="flex items-center gap-3">
-          <div className="w-24 text-right text-xs font-bold text-green-600 uppercase">
+          <div className="w-20 sm:w-24 text-right text-xs font-bold text-green-600 uppercase">
             Overall
           </div>
 
@@ -94,7 +94,7 @@ export function DimensionBarChart({ dimensions }: DimensionBarChartProps) {
 
       {/* X-Axis Scale */}
       <div className="flex mt-3 pt-3 border-t border-gray-100 text-xs text-gray-400">
-        <div className="w-24" /> {/* label spacer */}
+        <div className="w-20 sm:w-24" /> {/* label spacer */}
         <div className="flex-1 flex justify-between px-1 ml-3">
           {[1.0, 2.0, 3.0, 4.0, 5.0].map(v => (
             <span key={v}>{v.toFixed(1)}</span>
@@ -104,7 +104,7 @@ export function DimensionBarChart({ dimensions }: DimensionBarChartProps) {
       </div>
 
       {/* Legend */}
-      <div className="flex justify-center gap-6 mt-3">
+      <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-3">
         <div className="flex items-center gap-2">
           <div
             className="w-3 h-3 rounded-full"
@@ -149,7 +149,7 @@ function DimensionRow({ label, current, target, maxScore, index }: DimensionRowP
       transition={{ delay: index * 0.08, duration: 0.4 }}
     >
       {/* Label */}
-      <div className="w-24 text-right text-xs font-semibold text-gray-600 truncate">
+      <div className="w-20 sm:w-24 text-right text-xs font-semibold text-gray-600 truncate">
         {label}
       </div>
 

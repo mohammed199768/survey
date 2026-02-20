@@ -41,7 +41,7 @@ export function GapVarianceChart({ gaps }: GapVarianceChartProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1, duration: 0.4 }}
             >
-              <div className="w-24 text-right truncate">
+              <div className="w-20 sm:w-24 text-right truncate">
                 <span className="text-xs font-bold uppercase tracking-wider truncate block" style={{ fontFamily: 'Arial, sans-serif', color: BRAND_COLORS.primary }}>
                   {gap.dimensionTitle.split(' ')[0]}
                 </span>
@@ -64,7 +64,7 @@ export function GapVarianceChart({ gaps }: GapVarianceChartProps) {
           );
         })}
       </div>
-      <div className="flex justify-center gap-6 mt-4 pt-4 border-t border-slate-200">
+      <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-4 pt-4 border-t border-slate-200">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded" style={{ backgroundColor: SEMANTIC_COLORS.error }} />
           <span className="text-[10px] font-light uppercase tracking-wider" style={{ fontFamily: 'Arial, sans-serif', color: BRAND_COLORS.light }}>Critical {'>'}1.5)</span>

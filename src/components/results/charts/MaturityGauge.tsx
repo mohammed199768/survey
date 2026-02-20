@@ -50,7 +50,7 @@ export function MaturityGauge({
   return (
     <div className="flex flex-col items-center">
       
-      <div className="flex items-center justify-center gap-8">
+      <div className="flex items-center justify-center gap-4 sm:gap-8">
         
         {/* Left: Scale Labels */}
         <div className="flex flex-col justify-between h-80 text-sm text-gray-500 font-medium py-2">

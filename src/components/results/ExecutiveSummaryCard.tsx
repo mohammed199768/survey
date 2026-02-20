@@ -9,7 +9,7 @@ export function ExecutiveSummaryCard({ model }: { model: NarrativeModel }) {
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden font-sans">
       {/* Header Profile */}
-      <div className="p-10 bg-slate-50/50 border-b border-slate-100">
+      <div className="p-4 sm:p-10 bg-slate-50/50 border-b border-slate-100">
          <div className="flex items-center gap-3 mb-6">
             <div className="w-1.5 h-6 bg-horvath-700 rounded-full" />
             <span className="text-[10px] font-black text-horvath-700 uppercase tracking-[0.3em]">
@@ -17,7 +17,7 @@ export function ExecutiveSummaryCard({ model }: { model: NarrativeModel }) {
             </span>
          </div>
          
-         <h2 className="text-4xl font-black text-horvath-900 tracking-tighter uppercase leading-[0.9] mb-6">
+         <h2 className="text-xl sm:text-4xl font-black text-horvath-900 tracking-tighter uppercase leading-[0.9] mb-6">
             {model.headline}
          </h2>
          
@@ -26,7 +26,7 @@ export function ExecutiveSummaryCard({ model }: { model: NarrativeModel }) {
          </p>
       </div>
 
-      <div className="p-10 grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="p-4 sm:p-10 grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-12">
          {/* Strategic Priorities */}
          <div className="space-y-6">
             <div className="flex items-center gap-3 border-b border-slate-100 pb-4">

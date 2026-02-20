@@ -27,11 +27,11 @@ export function OverallSummaryCard({ summary }: { summary: OverallScoreSummary }
          </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-8 mb-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 mb-auto">
         {stats.map((stat) => (
           <div key={stat.label}>
              <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-2">{stat.label}</span>
-             <span className={`text-3xl font-black font-mono tracking-tighter ${stat.color}`}>{stat.value}</span>
+             <span className={`text-xl sm:text-3xl font-black font-mono tracking-tighter ${stat.color}`}>{stat.value}</span>
           </div>
         ))}
       </div>

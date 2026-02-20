@@ -273,13 +273,6 @@ export function RecommendationsPageClient({ initialResults, responseIdFromQuery 
             </button>
             <ResetButton />
           </div>
-
-          <button
-            onClick={() => alert('Download functionality coming soon!')}
-            className="brand-btn px-8 py-3"
-          >
-            Download Report
-          </button>
         </div>
       </main>
 

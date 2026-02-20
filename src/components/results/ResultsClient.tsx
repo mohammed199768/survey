@@ -53,18 +53,18 @@ export default function ResultsClient({
     : '/results/recommendations';
 
   return (
-    <div className="brand-theme min-h-screen bg-[#f9fafb] font-sans">
+    <div className="brand-theme min-h-screen bg-[#f9fafb] font-sans overflow-x-hidden">
       <Navbar />
 
-      <main className="pt-24 pb-12 px-12">
-        <div className="grid grid-cols-12 gap-6 mb-8">
-          <div className="col-span-3 bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
+      <main className="pt-24 pb-12 px-4 sm:px-8 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 mb-8">
+          <div className="col-span-1 lg:col-span-3 bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
             <h3 className="text-sm font-medium text-gray-700">Overall Assessment Score</h3>
             <p className="text-xs text-gray-500 mb-6">Executive KPI</p>
             <MaturityGauge score={results.overallScore} targetScore={overallTargetScore} title="Overall Assessment Score" />
           </div>
 
-          <div className="col-span-5 bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
+          <div className="col-span-1 lg:col-span-5 bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
             <div className="flex items-start justify-between mb-2">
               <div>
                 <h3 className="text-sm font-medium text-gray-700">Assessment Results Overview</h3>
@@ -79,7 +79,7 @@ export default function ResultsClient({
             <DimensionBarChart dimensions={dimensionModels} />
           </div>
 
-          <div className="col-span-4 bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
+          <div className="col-span-1 lg:col-span-4 bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-medium text-gray-700">Top Topics</h3>
               <span className="text-xs font-medium text-gray-500">Score</span>
@@ -90,11 +90,11 @@ export default function ResultsClient({
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <button
               onClick={() => router.push('/survey')}
-              className="brand-btn-outline px-8 py-3"
+              className="brand-btn-outline px-4 sm:px-8 py-3"
             >
               Previous
             </button>
@@ -103,7 +103,7 @@ export default function ResultsClient({
 
           <button
             onClick={() => router.push(recommendationsUrl)}
-            className="brand-btn px-8 py-3"
+            className="brand-btn px-4 sm:px-8 py-3 w-full sm:w-auto"
           >
             See Recommendations
           </button>

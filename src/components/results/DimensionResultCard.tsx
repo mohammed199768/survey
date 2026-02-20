@@ -43,16 +43,16 @@ export function DimensionResultCard({
          </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 mb-8 py-4 border-y border-slate-50 font-mono">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 py-4 border-y border-slate-50 font-mono">
          <div className="flex flex-col">
             <span className="text-[8px] text-slate-400 block uppercase font-black tracking-widest mb-1">Actual</span>
             <span className="text-xl font-black text-horvath-900 tracking-tighter leading-none">{formatScore(dimension.currentAvg)}</span>
          </div>
-         <div className="flex flex-col border-x border-slate-100 px-4">
+         <div className="flex flex-col sm:border-x border-slate-100 px-0 sm:px-4">
             <span className="text-[8px] text-horvath-700 block uppercase font-black tracking-widest mb-1">Target</span>
             <span className="text-xl font-black text-horvath-700 tracking-tighter leading-none">{formatScore(dimension.targetAvg)}</span>
          </div>
-         <div className="flex flex-col text-right">
+         <div className="flex flex-col sm:text-right">
             <span className="text-[8px] text-slate-400 block uppercase font-black tracking-widest mb-1">Gap</span>
             <span className={twMerge(
                "text-xl font-black tracking-tighter leading-none transition-colors",
@@ -63,7 +63,7 @@ export function DimensionResultCard({
          </div>
       </div>
 
-      <div className="mt-auto flex items-center justify-between">
+      <div className="mt-auto flex flex-wrap items-center justify-between gap-3">
          <div className="flex flex-col">
             <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Coverage</span>
             <span className="text-xs font-black text-horvath-900">
@@ -73,7 +73,7 @@ export function DimensionResultCard({
          
          <Link 
            href={`/survey/${dimension.id}`}
-           className="px-6 py-2 bg-horvath-50 hover:bg-horvath-900 text-horvath-900 hover:text-white rounded-xl text-[9px] font-black uppercase tracking-widest border border-slate-200 hover:border-horvath-900 transition-all flex items-center gap-2 group/link"
+           className="px-6 py-2 bg-horvath-50 hover:bg-horvath-900 text-horvath-900 hover:text-white rounded-xl text-[9px] font-black uppercase tracking-widest border border-slate-200 hover:border-horvath-900 transition-all flex items-center gap-2 group/link w-full sm:w-auto justify-center"
          >
            Configure
            <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
