@@ -36,6 +36,20 @@ const toScore = (value: unknown, fallback = 1): number => {
 };
 
 let startSessionPromise: Promise<void> | null = null;
+const LEGACY_SESSION_TOKEN_KEY = 'sessionToken';
+const READINESS_PERSIST_KEY = 'readiness-storage';
+
+const getInitialSessionState = () => ({
+  participantInfo: null,
+  participantId: null,
+  participantToken: null,
+  responseId: null,
+  sessionToken: null,
+  responses: {},
+  pendingTopics: new Set<string>(),
+  currentDimensionIndex: 0,
+  progress: 0,
+});
 
 interface ReadinessState {
   // API State
@@ -77,6 +91,7 @@ interface ReadinessState {
   setResponse: (topicId: string, current: number, target: number) => void;
   nextDimension: () => void;
   previousDimension: () => void;
+  clearSessionState: () => void;
   clearAllData: () => void;
   
   // Error Handling
@@ -95,15 +110,7 @@ export const useReadinessStore = create<ReadinessState>()(
       assessment: null,
       recommendationsDefinition: null,
       narrativeDefinition: null,
-      participantInfo: null,
-      participantId: null,
-      participantToken: null,
-      responseId: null,
-      sessionToken: null,
-      responses: {},
-      pendingTopics: new Set<string>(),
-      currentDimensionIndex: 0,
-      progress: 0,
+      ...getInitialSessionState(),
 
       loadAssessment: async () => {
         set({ isLoading: true, error: null });
@@ -174,13 +181,21 @@ export const useReadinessStore = create<ReadinessState>()(
       },
 
       startAssessment: async () => {
-         const { assessment, participantId } = get();
+         const { assessment, participantId, participantInfo, participantToken, clearSessionState } = get();
          if (!assessment || !assessment.assessment.id || !participantId) {
              set({ error: 'Missing assessment or participant data' });
              return;
          }
 
-        set({ isLoading: true, error: null });
+        clearSessionState();
+        set({
+          participantId,
+          participantInfo,
+          participantToken,
+          assessment,
+          isLoading: true,
+          error: null,
+        });
         try {
           const response = await ResponseAPI.start(assessment.assessment.id, participantId);
           set({ 
@@ -188,10 +203,7 @@ export const useReadinessStore = create<ReadinessState>()(
             sessionToken: response.sessionToken,
             isLoading: false 
           });
-          
-          if (typeof window !== 'undefined') {
-              localStorage.setItem('sessionToken', response.sessionToken);
-          }
+
           console.log('✅ Assessment started:', response.responseId);
         } catch (error: unknown) {
           set({ error: getErrorMessage(error, 'Failed to start assessment'), isLoading: false });
@@ -290,6 +302,11 @@ export const useReadinessStore = create<ReadinessState>()(
         set({ isLoading: true, error: null });
         try {
           const session = await ResponseAPI.getSession(token);
+
+          if (session.status === 'completed') {
+            get().clearSessionState();
+            return;
+          }
           
           // Reconstruct local responses from session data
           const responses: Record<string, { current: number; target: number }> = {};
@@ -313,13 +330,10 @@ export const useReadinessStore = create<ReadinessState>()(
            if (!assessment) {
                await get().loadAssessment();
            }
-
         } catch (error: unknown) {
-          set({ error: getErrorMessage(error, 'Failed to resume session'), isLoading: false });
-          // safeJSONStorage handles window check internally if implemented well, 
-          // or we can wrap it. But since we use persist, better to use the storage engine.
-          // However, manual removal:
-          if (typeof window !== 'undefined') localStorage.removeItem('sessionToken'); 
+          const message = getErrorMessage(error, 'Failed to resume session');
+          get().clearSessionState();
+          set({ error: message });
         }
       },
 
@@ -348,26 +362,26 @@ export const useReadinessStore = create<ReadinessState>()(
         }));
       },
 
-      clearAllData: () => {
+      clearSessionState: () => {
+        startSessionPromise = null;
+
         if (typeof window !== 'undefined') {
-             localStorage.removeItem('sessionToken');
-             localStorage.removeItem('readiness-storage'); // Also clear persisted store
+          localStorage.removeItem(LEGACY_SESSION_TOKEN_KEY);
+          localStorage.removeItem(READINESS_PERSIST_KEY);
         }
+
+        useReadinessStore.persist.clearStorage();
         set({
-          assessment: null,
-          recommendationsDefinition: null,
-          narrativeDefinition: null,
-          participantInfo: null,
-          participantId: null,
-          participantToken: null,
-          responseId: null,
-          sessionToken: null,
-          responses: {},
-          pendingTopics: new Set<string>(),
-          currentDimensionIndex: 0,
-          progress: 0,
-          error: null
+          ...getInitialSessionState(),
+          isLoading: false,
+          isLoadingDefinitions: false,
+          isSubmitting: false,
+          error: null,
         });
+      },
+
+      clearAllData: () => {
+        get().clearSessionState();
         console.log('🗑️ All data cleared');
       },
 

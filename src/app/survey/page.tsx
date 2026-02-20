@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useReadinessStore } from '@/store/readiness/readiness.store';
 import { Navbar } from '@/components/layout/Navbar';
@@ -11,6 +11,7 @@ export default function SurveyPage() {
   const router = useRouter();
   const registerParticipant = useReadinessStore((state) => state.registerParticipant);
   const startAssessment = useReadinessStore((state) => state.startAssessment);
+  const clearSessionState = useReadinessStore((state) => state.clearSessionState);
   const assessment = useReadinessStore((state) => state.assessment);
   const isLoading = useReadinessStore((state) => state.isLoading);
   
@@ -23,6 +24,10 @@ export default function SurveyPage() {
   });
 
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    clearSessionState();
+  }, [clearSessionState]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

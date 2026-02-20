@@ -6,6 +6,7 @@
 
 import * as Types from './types';
 import { API_BASE_URL } from '@/config/api';
+import { useReadinessStore } from '@/store/readiness/readiness.store';
 
 const API_BASE = API_BASE_URL;
 const JSON_BODY_METHODS = new Set(['POST', 'PUT', 'PATCH']);
@@ -31,7 +32,7 @@ const getResponseSessionHeaders = (): Record<string, string> => {
     return {};
   }
 
-  const sessionToken = window.localStorage.getItem('sessionToken');
+  const sessionToken = useReadinessStore.getState().sessionToken;
   if (!sessionToken) {
     return {};
   }
