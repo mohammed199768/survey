@@ -35,11 +35,7 @@ export default function AdminDashboardPage() {
 
         const published = assessments.find((assessment) => assessment.is_published);
         if (published?.title) {
-          setPublishedSurveyTitle(
-            published.title.length > 30
-              ? `${published.title.slice(0, 30)}...`
-              : published.title
-          );
+          setPublishedSurveyTitle(published.title);
         } else {
           setPublishedSurveyTitle('No published survey');
         }
