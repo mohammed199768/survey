@@ -81,7 +81,6 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
   const handleNext = async () => {
     if (isLastTopic) {
       const missing = getMissingItemsFromStore(assessment, responses, pendingTopics);
-
       if (missing.length > 0) {
         setMissingItems(missing);
         setShowCompletionDialog(true);
@@ -96,7 +95,6 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
       }
       return;
     }
-
     if (topicIndex < dimension.topics.length - 1) {
       const targetTopic = dimension.topics[topicIndex + 1];
       router.push(`/survey/${dimension.dimensionKey}?topic=${targetTopic.topicKey}`);
@@ -106,7 +104,7 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
       router.push(`/survey/${nextDim.dimensionKey}?topic=${nextTopic.topicKey}`);
     }
   };
-
+  
   const handlePrevious = () => {
     if (topicIndex > 0) {
       const targetTopic = dimension.topics[topicIndex - 1];
