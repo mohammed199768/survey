@@ -30,19 +30,6 @@ interface TopicFormData {
   order: number;
 }
 
-const CATEGORIES = [
-  'Leadership',
-  'Strategy',
-  'Operations',
-  'Marketing',
-  'Finance',
-  'Technology',
-  'People',
-  'Culture',
-  'Customer',
-  'Innovation'
-];
-
 export function AssessmentForm({ assessment, onSuccess, onCancel }: AssessmentFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingDetails, setIsLoadingDetails] = useState(!!assessment);
@@ -143,7 +130,7 @@ export function AssessmentForm({ assessment, onSuccess, onCancel }: AssessmentFo
       key: '',
       title: '',
       description: '',
-      category: CATEGORIES[0],
+      category: '',
       order: dimensions.length,
       topics: []
     };
@@ -368,15 +355,13 @@ export function AssessmentForm({ assessment, onSuccess, onCancel }: AssessmentFo
                                   <label className="block text-sm font-medium text-gray-700 mb-1">
                                     Category
                                   </label>
-                                  <select
+                                  <input
+                                    type="text"
                                     value={dimension.category}
                                     onChange={(e) => updateDimension(dimensionIndex, 'category', e.target.value)}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
-                                  >
-                                    {CATEGORIES.map(cat => (
-                                      <option key={cat} value={cat}>{cat}</option>
-                                    ))}
-                                  </select>
+                                    placeholder="e.g., Leadership"
+                                  />
                                 </div>
                               </div>
 
