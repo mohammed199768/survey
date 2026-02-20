@@ -9,11 +9,13 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
   // Use flat responses structure from new store
   const response = useReadinessStore((state) => state.responses[topic.id]);
   const submitAnswer = useReadinessStore((state) => state.submitAnswer);
-  const setResponse = useReadinessStore((state) => state.setResponse);
   const isSubmitting = useReadinessStore((state) => state.isSubmitting);
+  const [localError, setLocalError] = React.useState(false);
   
-  const currentVal = response?.current ?? 1.0;
-  const targetVal = response?.target ?? 1.0;
+  const confirmedCurrent = response?.current ?? 1.0;
+  const confirmedTarget = response?.target ?? 1.0;
+  const [localCurrent, setLocalCurrent] = React.useState(confirmedCurrent);
+  const [localTarget, setLocalTarget] = React.useState(confirmedTarget);
 
   const levelDescriptions = React.useMemo(() => {
     if (Array.isArray(topic.levelAnchors) && topic.levelAnchors.length === 5) {
@@ -41,16 +43,37 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
     return [];
   }, [topic.levelAnchors, topic.prompt]);
 
+  React.useEffect(() => {
+    setLocalCurrent(confirmedCurrent);
+  }, [confirmedCurrent]);
+
+  React.useEffect(() => {
+    setLocalTarget(confirmedTarget);
+  }, [confirmedTarget]);
+
   // Refs for debouncing - survives HMR
   const saveTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+  const errorTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
-  const debouncedSave = React.useCallback((tId: string, current: number, target: number) => {
+  const debouncedSave = React.useCallback((tId: string, current: number, target: number, rollbackCurrent: number, rollbackTarget: number) => {
       if (saveTimeoutRef.current) {
           clearTimeout(saveTimeoutRef.current);
       }
       
       saveTimeoutRef.current = setTimeout(() => {
-          submitAnswer(tId, current, target);
+          void (async () => {
+            try {
+              await submitAnswer(tId, current, target);
+            } catch {
+              setLocalCurrent(rollbackCurrent);
+              setLocalTarget(rollbackTarget);
+              setLocalError(true);
+              if (errorTimeoutRef.current) {
+                clearTimeout(errorTimeoutRef.current);
+              }
+              errorTimeoutRef.current = setTimeout(() => setLocalError(false), 3000);
+            }
+          })();
       }, 1000); // 1 second debounce
   }, [submitAnswer]);
 
@@ -58,14 +81,16 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
     // Value is already snapped to valid level (1..5) by DualSlider.
     
     // Determine the new state
-    const newCurrent = field === 'current' ? value : currentVal;
-    const newTarget = field === 'target' ? value : targetVal;
+    const newCurrent = field === 'current' ? value : localCurrent;
+    const newTarget = field === 'target' ? value : localTarget;
+    const rollbackCurrent = confirmedCurrent;
+    const rollbackTarget = confirmedTarget;
+
+    setLocalCurrent(newCurrent);
+    setLocalTarget(newTarget);
     
-    // 1. Immediate local update (optimistic)
-    setResponse(topic.id, newCurrent, newTarget);
-    
-    // 2. Debounced API save
-    debouncedSave(topic.id, newCurrent, newTarget);
+    // Debounced API save
+    debouncedSave(topic.id, newCurrent, newTarget, rollbackCurrent, rollbackTarget);
   };
 
   return (
@@ -103,8 +128,8 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
       <div className="px-4 sm:px-5 lg:px-8 pt-1 pb-6 lg:pb-8 bg-white flex-1 flex flex-col justify-start">
         <div className="w-full mx-auto max-w-[1240px]">
           <DualSlider
-            current={currentVal}
-            target={targetVal}
+            current={localCurrent}
+            target={localTarget}
             onCurrentChange={(val) => handleScoreChange('current', val)}
             onTargetChange={(val) => handleScoreChange('target', val)}
             topicId={topic.id}
@@ -113,6 +138,9 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
             step={0.5}
             labels={levelDescriptions}
           />
+          {localError && (
+            <p className="text-xs text-red-500 mt-1">Failed to save. Please try again.</p>
+          )}
         </div>
       </div>
     </div>

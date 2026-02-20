@@ -57,6 +57,7 @@ interface ReadinessState {
   
   // User Responses (local state)
   responses: Record<string, { current: number; target: number }>;
+  pendingTopics: Set<string>;
   
   // Progress
   currentDimensionIndex: number;
@@ -100,6 +101,7 @@ export const useReadinessStore = create<ReadinessState>()(
       responseId: null,
       sessionToken: null,
       responses: {},
+      pendingTopics: new Set<string>(),
       currentDimensionIndex: 0,
       progress: 0,
 
@@ -207,8 +209,9 @@ export const useReadinessStore = create<ReadinessState>()(
             }
             await startSessionPromise;
           } catch (error: unknown) {
-            set({ error: getErrorMessage(error, 'Unable to start response session') });
-            return;
+            const message = getErrorMessage(error, 'Unable to start response session');
+            set({ error: message });
+            throw new Error(message);
           } finally {
             startSessionPromise = null;
           }
@@ -216,22 +219,21 @@ export const useReadinessStore = create<ReadinessState>()(
           responseId = get().responseId;
           if (!responseId) {
             set({ error: 'No active response session' });
-            return;
+            throw new Error('No active response session');
           }
         }
 
         const currentRating = Math.max(1, Math.min(5, current));
         const targetRating = Math.max(1, Math.min(5, target));
 
-        // Optimistic update (preserve decimal values, including 0.5 increments)
-        set((state) => ({
-            responses: {
-                ...state.responses,
-                [topicId]: { current: currentRating, target: targetRating }
-            }
-        }));
-
-        set({ isSubmitting: true });
+        set((state) => {
+          const pendingTopics = new Set(state.pendingTopics);
+          pendingTopics.add(topicId);
+          return {
+            pendingTopics,
+            isSubmitting: true,
+          };
+        });
 
         try {
             const response = await ResponseAPI.submitAnswer(responseId, {
@@ -239,11 +241,33 @@ export const useReadinessStore = create<ReadinessState>()(
                 currentRating,
                 targetRating
             });
-            
-            set({ progress: response.progress, isSubmitting: false });
+
+            set((state) => {
+              const pendingTopics = new Set(state.pendingTopics);
+              pendingTopics.delete(topicId);
+              return {
+                responses: {
+                  ...state.responses,
+                  [topicId]: { current: currentRating, target: targetRating }
+                },
+                progress: response.progress,
+                pendingTopics,
+                isSubmitting: pendingTopics.size > 0,
+              };
+            });
         } catch (error: unknown) {
-            console.error('Failed to submit answer:', error);
-            set({ isSubmitting: false });
+            set((state) => {
+              const pendingTopics = new Set(state.pendingTopics);
+              pendingTopics.delete(topicId);
+              return {
+                pendingTopics,
+                isSubmitting: pendingTopics.size > 0,
+              };
+            });
+            const message = getErrorMessage(error, 'Failed to submit answer');
+            set({ error: message });
+            console.error('Answer submission failed, not saved locally:', error);
+            throw error;
         }
       },
 
@@ -339,6 +363,7 @@ export const useReadinessStore = create<ReadinessState>()(
           responseId: null,
           sessionToken: null,
           responses: {},
+          pendingTopics: new Set<string>(),
           currentDimensionIndex: 0,
           progress: 0,
           error: null

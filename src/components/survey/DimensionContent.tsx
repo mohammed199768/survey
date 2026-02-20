@@ -21,14 +21,16 @@ type ResponseMap = Record<string, { current: number; target: number }>;
 
 const getMissingItemsFromStore = (
   assessment: AssessmentStructureResponse | null,
-  responses: ResponseMap
+  responses: ResponseMap,
+  pendingTopics: Set<string>
 ): MissingItem[] => {
   const missing: MissingItem[] = [];
   if (!assessment) return missing;
 
   assessment.dimensions.forEach((dim) => {
     dim.topics.forEach((topic) => {
-      if (!responses[topic.id]) {
+      const isAnswered = !!responses[topic.id] && !pendingTopics.has(topic.id);
+      if (!isAnswered) {
         missing.push({
           dimensionId: dim.dimensionKey,
           dimensionTitle: dim.title,
@@ -54,6 +56,7 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
   const completeAssessment = useReadinessStore((state) => state.completeAssessment);
   const isLoading = useReadinessStore((state) => state.isLoading);
   const isSubmitting = useReadinessStore((state) => state.isSubmitting);
+  const pendingTopics = useReadinessStore((state) => state.pendingTopics);
 
   const dimension = assessment?.dimensions.find((d) => d.dimensionKey === dimensionId);
 
@@ -77,7 +80,7 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
 
   const handleNext = async () => {
     if (isLastTopic) {
-      const missing = getMissingItemsFromStore(assessment, responses);
+      const missing = getMissingItemsFromStore(assessment, responses, pendingTopics);
 
       if (missing.length > 0) {
         setMissingItems(missing);
@@ -151,11 +154,14 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
 
           <button
             onClick={handleNext}
-            disabled={isLoading}
+            disabled={isLoading || isSubmitting || pendingTopics.size > 0}
             className="brand-btn px-5 sm:px-6 lg:px-7 py-3 text-xs sm:text-sm active:scale-95 flex items-center gap-2 disabled:opacity-70"
           >
             {isLoading ? 'Processing...' : (isLastTopic ? 'Complete & View Results' : 'Next Step')} <span className="text-lg sm:text-xl">&gt;</span>
           </button>
+          {pendingTopics.size > 0 && (
+            <span className="text-xs text-horvath-300 animate-pulse">Saving...</span>
+          )}
         </div>
         </div>
       </div>
