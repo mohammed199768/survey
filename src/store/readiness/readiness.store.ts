@@ -81,7 +81,7 @@ interface ReadinessState {
   loadAssessment: () => Promise<void>;
   loadDefinitions: () => Promise<void>;
   registerParticipant: (data: ParticipantData) => Promise<void>;
-  startAssessment: () => Promise<void>;
+  startAssessment: (forceNew?: boolean) => Promise<void>;
   submitAnswer: (topicId: string, current: number, target: number) => Promise<void>;
   completeAssessment: () => Promise<void>;
   resumeSession: (token: string) => Promise<void>;

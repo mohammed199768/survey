@@ -26,7 +26,12 @@ export default function SurveyPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    clearSessionState();
+    const { responseId, sessionToken } = useReadinessStore.getState();
+    const hasActiveSession = Boolean(responseId && sessionToken);
+    
+    if (!hasActiveSession) {
+      clearSessionState();
+    }
   }, [clearSessionState]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -42,8 +47,8 @@ export default function SurveyPage() {
       // 1. Register participant
       await registerParticipant(formData);
       
-      // 2. Start assessment response
-      await startAssessment();
+      // 2. Start assessment response (force fresh start)
+      await startAssessment(true);
       
       // 3. Navigate to first dimension
       // Re-fetch assessment from store to ensure we have the latest data if needed, 
