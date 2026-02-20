@@ -180,19 +180,24 @@ export const useReadinessStore = create<ReadinessState>()(
         }
       },
 
-      startAssessment: async () => {
-         const { assessment, participantId, participantInfo, participantToken, clearSessionState } = get();
+      startAssessment: async (forceNew = false) => {
+         const { assessment, participantId, participantInfo, participantToken } = get();
          if (!assessment || !assessment.assessment.id || !participantId) {
              set({ error: 'Missing assessment or participant data' });
              return;
          }
 
-        clearSessionState();
+        if (forceNew) {
+          get().clearSessionState();
+          set({
+            participantId,
+            participantInfo,
+            participantToken,
+            assessment,
+          });
+        }
+
         set({
-          participantId,
-          participantInfo,
-          participantToken,
-          assessment,
           isLoading: true,
           error: null,
         });
@@ -399,6 +404,7 @@ export const useReadinessStore = create<ReadinessState>()(
         sessionToken: state.sessionToken,
         responses: state.responses,
         currentDimensionIndex: state.currentDimensionIndex,
+        progress: state.progress,
         // Persist definitions nicely so we don't refetch every reload if not needed?
         // Actually, let's NOT persist definitions to ensure freshness, or persist them.
         // User request didn't specify, but persisting reduces network load.
@@ -406,6 +412,11 @@ export const useReadinessStore = create<ReadinessState>()(
         recommendationsDefinition: state.recommendationsDefinition,
         narrativeDefinition: state.narrativeDefinition,
       }),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.pendingTopics = new Set<string>();
+        }
+      },
     }
   )
 );
