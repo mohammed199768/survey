@@ -159,9 +159,6 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
           >
             {isLoading ? 'Processing...' : (isLastTopic ? 'Complete & View Results' : 'Next Step')} <span className="text-lg sm:text-xl">&gt;</span>
           </button>
-          {pendingTopics.size > 0 && (
-            <span className="text-xs text-horvath-300 animate-pulse">Saving...</span>
-          )}
         </div>
         </div>
       </div>
