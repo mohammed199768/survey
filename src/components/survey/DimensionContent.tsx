@@ -149,7 +149,7 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
               hasPrevious ? 'brand-btn-outline' : 'opacity-0 pointer-events-none'
             }`}
           >
-            <span className="text-lg sm:text-xl">&lt;</span> Previous
+            <span className="text-lg sm:text-xl"></span> Previous
           </button>
 
           <button
@@ -157,7 +157,7 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
             disabled={isLoading || isSubmitting || pendingTopics.size > 0}
             className="brand-btn px-5 sm:px-6 lg:px-7 py-3 text-xs sm:text-sm active:scale-95 flex items-center gap-2 disabled:opacity-70"
           >
-            {isLoading ? 'Processing...' : (isLastTopic ? 'Complete & View Results' : 'Next Step')} <span className="text-lg sm:text-xl">&gt;</span>
+            {isLoading ? 'Processing...' : (isLastTopic ? 'Complete & View Results' : 'Next Step')} <span className="text-lg sm:text-xl"></span>
           </button>
         </div>
         </div>
