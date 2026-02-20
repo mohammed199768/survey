@@ -7,7 +7,7 @@ type BrandPreloaderProps = {
   className?: string;
 };
 
-const STROKE = '#2f87c6';
+const STROKE = '#3a92c6';
 
 function HorvathSymbol({ size = 180 }: { size?: number }) {
   const squares = [

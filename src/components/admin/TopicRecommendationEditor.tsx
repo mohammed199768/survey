@@ -234,7 +234,7 @@ export function TopicRecommendationEditor({ topicId }: Props) {
         <button
           type="button"
           onClick={resetForm}
-          className="rounded bg-blue-600 px-3 py-1.5 text-sm font-semibold text-white"
+          className="rounded bg-horvath-700 px-3 py-1.5 text-sm font-semibold text-white"
         >
           + Add Recommendation
         </button>

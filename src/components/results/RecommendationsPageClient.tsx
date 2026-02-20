@@ -18,7 +18,7 @@ interface RecommendationsPageClientProps {
   responseIdFromQuery: string | null;
 }
 
-const DEFAULT_COLORS = ['#ec4899', '#3b82f6', '#10b981', '#8b5cf6', '#1d4ed8', '#f97316'];
+const DEFAULT_COLORS = ['#ec4899', '#3a92c6', '#10b981', '#8b5cf6', '#1d6996', '#f97316'];
 
 const clamp10 = (value: number) => Math.max(0, Math.min(10, value));
 const round1 = (value: number) => Math.round(value * 10) / 10;
@@ -120,7 +120,7 @@ export function RecommendationsPageClient({ initialResults, responseIdFromQuery 
           score,
           gap,
           target,
-          color: dimensionColorByKey.get(dimension.dimensionKey) || '#666666',
+          color: dimensionColorByKey.get(dimension.dimensionKey) || '#64748b',
         };
       })
     );
@@ -190,7 +190,7 @@ export function RecommendationsPageClient({ initialResults, responseIdFromQuery 
 
   if (Object.keys(responses).length === 0 && !apiResults) {
     return (
-      <div className="brand-theme min-h-screen bg-[#f5f5f5] flex items-center justify-center">
+      <div className="brand-theme min-h-screen bg-[#f9fafb] flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">No Assessment Data</h2>
           <p className="text-gray-600 mb-6">Please complete the survey first.</p>
@@ -207,7 +207,7 @@ export function RecommendationsPageClient({ initialResults, responseIdFromQuery 
 
   if (!recommendations || recommendations.length === 0) {
     return (
-      <div className="brand-theme min-h-screen bg-[#f5f5f5] flex items-center justify-center">
+      <div className="brand-theme min-h-screen bg-[#f9fafb] flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">No Recommendations Available</h2>
           <p className="text-gray-600 mb-6">
@@ -227,7 +227,7 @@ export function RecommendationsPageClient({ initialResults, responseIdFromQuery 
   }
 
   return (
-    <div className="brand-theme min-h-screen bg-[#f5f5f5] font-sans">
+    <div className="brand-theme min-h-screen bg-[#f9fafb] font-sans">
       <Navbar showBackButton backUrl="/results" />
 
       <main className="pt-24 pb-12 px-12">

@@ -9,6 +9,20 @@ interface DimensionBarChartProps {
   dimensions: DimensionResultModel[];
 }
 
+const BRAND_COLORS = {
+  primary: '#1d6996',
+  secondary: '#3a92c6',
+  tertiary: '#54a5d5',
+  light: '#7fbadc',
+  pale: '#b6d5eb',
+} as const;
+
+const SEMANTIC_COLORS = {
+  success: '#10b981',
+  warning: '#f59e0b',
+  error: '#ef4444',
+} as const;
+
 export function DimensionBarChart({ dimensions }: DimensionBarChartProps) {
   const maxScore = 5;
 
@@ -40,9 +54,9 @@ export function DimensionBarChart({ dimensions }: DimensionBarChartProps) {
           <div className="flex-1 relative h-10 bg-gray-200 rounded-lg flex items-center gap-6 px-4">
             {/* Current circle + score */}
             <div className="flex items-center gap-2">
-              <div
+                <div
                 className="w-4 h-4 rounded-full flex-shrink-0"
-                style={{ backgroundColor: '#D87BBC' }}
+                style={{ backgroundColor: BRAND_COLORS.light }}
               />
               <span className="text-sm font-semibold text-gray-900">
                 {formatScore(overallCurrent)}
@@ -50,9 +64,9 @@ export function DimensionBarChart({ dimensions }: DimensionBarChartProps) {
             </div>
             {/* Target circle + score */}
             <div className="flex items-center gap-2">
-              <div
+                <div
                 className="w-4 h-4 rounded-full flex-shrink-0"
-                style={{ backgroundColor: '#3B82F6' }}
+                style={{ backgroundColor: BRAND_COLORS.secondary }}
               />
               <span className="text-sm font-semibold text-gray-900">
                 {formatScore(overallTarget)}
@@ -94,14 +108,14 @@ export function DimensionBarChart({ dimensions }: DimensionBarChartProps) {
         <div className="flex items-center gap-2">
           <div
             className="w-3 h-3 rounded-full"
-            style={{ backgroundColor: '#D87BBC' }}
+            style={{ backgroundColor: BRAND_COLORS.light }}
           />
           <span className="text-xs text-gray-500">Current - {dateNow}</span>
         </div>
         <div className="flex items-center gap-2">
           <div
             className="w-3 h-3 rounded-full"
-            style={{ backgroundColor: '#3B82F6' }}
+            style={{ backgroundColor: BRAND_COLORS.secondary }}
           />
           <span className="text-xs text-gray-500">Target - {dateTarget}</span>
         </div>
@@ -146,7 +160,7 @@ function DimensionRow({ label, current, target, maxScore, index }: DimensionRowP
           <div className="absolute inset-0 bg-gray-100 rounded-lg" />
           <motion.div
             className="absolute inset-y-0 left-0 rounded-lg flex items-center justify-center"
-            style={{ backgroundColor: '#D87BBC' }}
+            style={{ backgroundColor: BRAND_COLORS.light }}
             initial={{ width: 0 }}
             animate={{ width: `${currentPct}%` }}
             transition={{ delay: index * 0.08 + 0.1, duration: 0.7, ease: 'easeOut' }}
@@ -162,7 +176,7 @@ function DimensionRow({ label, current, target, maxScore, index }: DimensionRowP
           <div className="absolute inset-0 bg-gray-100 rounded-lg" />
           <motion.div
             className="absolute inset-y-0 left-0 rounded-lg flex items-center justify-center"
-            style={{ backgroundColor: '#3B82F6' }}
+            style={{ backgroundColor: BRAND_COLORS.secondary }}
             initial={{ width: 0 }}
             animate={{ width: `${targetPct}%` }}
             transition={{ delay: index * 0.08 + 0.25, duration: 0.7, ease: 'easeOut' }}

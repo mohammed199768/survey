@@ -86,16 +86,16 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg">
+      <aside className="fixed inset-y-0 left-0 z-50 w-64 bg-[#1d6996] shadow-lg">
         {/* Logo */}
-        <div className="h-16 flex items-center px-6 border-b border-gray-200">
+        <div className="h-16 flex items-center px-6 border-b border-white/15">
           <div className="flex items-center space-x-3">
-            <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
+            <div className="h-8 w-8 bg-[#3a92c6] rounded-lg flex items-center justify-center">
               <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
             </div>
-            <span className="text-lg font-bold text-gray-900">HORVÁTH</span>
+            <span className="text-lg font-bold text-white">HORVÁTH</span>
           </div>
         </div>
 
@@ -111,8 +111,8 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
                 prefetch={false}
                 className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
                   isActive
-                    ? 'bg-primary text-white'
-                    : 'text-gray-700 hover:bg-gray-100'
+                    ? 'border-l-4 border-[#7fbadc] bg-[rgba(255,255,255,0.10)] text-white'
+                    : 'text-white/80 hover:bg-[rgba(255,255,255,0.10)] hover:text-white'
                 }`}
               >
                 <span className="mr-3">{item.icon}</span>
@@ -123,11 +123,11 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
         </nav>
 
         {/* Bottom Section - Logout */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/15">
           <button
             onClick={handleLogout}
             disabled={isLoggingOut}
-            className="flex items-center w-full px-4 py-3 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50"
+            className="flex items-center w-full px-4 py-3 text-sm font-medium text-white/80 rounded-lg hover:bg-[rgba(255,255,255,0.10)] hover:text-white transition-colors disabled:opacity-50"
           >
             <svg className="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

@@ -79,9 +79,9 @@ export function MaturityRadar({ definition, dimensions }: MaturityRadarProps) {
         {/* Current State Area (Primary Blue Flat) */}
         <motion.polygon
           points={currentPoints}
-          fill="#348AC7"
+          fill="#3a92c6"
           fillOpacity="0.08"
-          stroke="#348AC7"
+          stroke="#3a92c6"
           strokeWidth="1.5"
           strokeLinejoin="round"
           initial={{ opacity: 0, scale: 0.95 }}
@@ -108,7 +108,7 @@ export function MaturityRadar({ definition, dimensions }: MaturityRadarProps) {
             cx={CENTER + Math.cos(angles[i]) * ((RADIUS * currentValues[i]) / 5)}
             cy={CENTER + Math.sin(angles[i]) * ((RADIUS * currentValues[i]) / 5)}
             r="3"
-            fill="#348AC7"
+            fill="#3a92c6"
           />
         ))}
 
@@ -129,7 +129,7 @@ export function MaturityRadar({ definition, dimensions }: MaturityRadarProps) {
                 <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-0.5">
                   {dim.title.split(' ')[0]}
                 </span>
-                <span className="text-[10px] font-black text-horvath-dark font-mono">
+                <span className="text-[10px] font-black text-horvath-900 font-mono">
                   {formatScore(currentValues[i])}
                 </span>
               </div>
@@ -141,7 +141,7 @@ export function MaturityRadar({ definition, dimensions }: MaturityRadarProps) {
       {/* Legend */}
       <div className="flex justify-center gap-6 mt-4">
         <div className="flex items-center gap-2">
-          <div className="w-2.5 h-2.5 bg-horvath-primary rounded-sm shadow-sm" />
+          <div className="w-2.5 h-2.5 bg-horvath-700 rounded-sm shadow-sm" />
           <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Active</span>
         </div>
         <div className="flex items-center gap-2">

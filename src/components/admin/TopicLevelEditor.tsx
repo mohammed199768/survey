@@ -106,7 +106,7 @@ export function TopicLevelEditor({ topicId, topicLabel }: Props) {
         type="button"
         onClick={onSave}
         disabled={saving}
-        className="rounded bg-blue-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
+        className="rounded bg-horvath-700 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
       >
         {saving ? 'Saving...' : 'Save Labels'}
       </button>

@@ -82,7 +82,7 @@ export default function AdminAnalyticsPage() {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8">
-        <StatCard icon={ClipboardList} label="Total Responses" value={totalResponses} iconColor="text-blue-600" />
+        <StatCard icon={ClipboardList} label="Total Responses" value={totalResponses} iconColor="text-horvath-700" />
         <StatCard icon={Users} label="Completion Rate" value={`${fmtNum(completionRate)}%`} iconColor="text-green-600" />
         <StatCard icon={TrendingUp} label="Average Score" value={fmtNum(avgScore)} iconColor="text-purple-600" />
         <StatCard icon={Target} label="Average Gap" value={fmtNum(avgGap)} iconColor="text-orange-600" />

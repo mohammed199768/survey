@@ -9,12 +9,26 @@ interface RiskHeatmapProps {
   dimensions: DimensionResultModel[];
 }
 
+const BRAND_COLORS = {
+  primary: '#1d6996',
+  secondary: '#3a92c6',
+  tertiary: '#54a5d5',
+  light: '#7fbadc',
+  pale: '#b6d5eb',
+} as const;
+
+const SEMANTIC_COLORS = {
+  success: '#10b981',
+  warning: '#f59e0b',
+  error: '#ef4444',
+} as const;
+
 export function RiskHeatmap({ dimensions }: RiskHeatmapProps) {
   const getCellColor = (current: number, target: number) => {
     const gap = calculateGap(target, current);
-    if (gap > 1.5) return { bg: 'rgba(239, 68, 68, 0.2)', border: '#EF4444' };
-    if (gap > 0.5) return { bg: 'rgba(245, 158, 11, 0.2)', border: '#F59E0B' };
-    return { bg: 'rgba(16, 185, 129, 0.2)', border: '#10B981' };
+    if (gap > 1.5) return { bg: 'rgba(239, 68, 68, 0.2)', border: SEMANTIC_COLORS.error };
+    if (gap > 0.5) return { bg: 'rgba(245, 158, 11, 0.2)', border: SEMANTIC_COLORS.warning };
+    return { bg: 'rgba(16, 185, 129, 0.2)', border: SEMANTIC_COLORS.success };
   };
   
   const getRiskLevel = (gap: number) => {
@@ -43,15 +57,15 @@ export function RiskHeatmap({ dimensions }: RiskHeatmapProps) {
               transition={{ delay: idx * 0.1, duration: 0.4 }}
             >
               <div className="relative z-10">
-                <span className="text-[9px] font-bold uppercase tracking-widest block mb-1" style={{ fontFamily: 'Arial, sans-serif', color: '#1A4563' }}>
+                <span className="text-[9px] font-bold uppercase tracking-widest block mb-1" style={{ fontFamily: 'Arial, sans-serif', color: BRAND_COLORS.primary }}>
                   {dim.title.substring(0, 18)}
                 </span>
-                <span className="text-xs font-black" style={{ fontFamily: 'Arial Black, Arial, sans-serif', color: '#1A4563' }}>
+                <span className="text-xs font-black" style={{ fontFamily: 'Arial Black, Arial, sans-serif', color: BRAND_COLORS.primary }}>
                   {formatScore(dim.currentAvg)}
                 </span>
               </div>
               <div className="relative z-10 flex items-end justify-between">
-                <span className="text-[10px] font-light uppercase tracking-wider" style={{ fontFamily: 'Arial, sans-serif', color: '#64748B' }}>
+                <span className="text-[10px] font-light uppercase tracking-wider" style={{ fontFamily: 'Arial, sans-serif', color: BRAND_COLORS.light }}>
                   vs {formatScore(dim.targetAvg)}
                 </span>
                 <span 
@@ -71,16 +85,16 @@ export function RiskHeatmap({ dimensions }: RiskHeatmapProps) {
       </div>
       <div className="flex justify-center gap-6 mt-3 pt-3 border-t border-slate-200">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded" style={{ backgroundColor: 'rgba(239, 68, 68, 0.4)', borderLeft: '2px solid #EF4444' }} />
-          <span className="text-[10px] font-light uppercase tracking-wider" style={{ fontFamily: 'Arial, sans-serif', color: '#64748B' }}>Critical Gap</span>
+          <div className="w-3 h-3 rounded" style={{ backgroundColor: 'rgba(239, 68, 68, 0.4)', borderLeft: `2px solid ${SEMANTIC_COLORS.error}` }} />
+          <span className="text-[10px] font-light uppercase tracking-wider" style={{ fontFamily: 'Arial, sans-serif', color: BRAND_COLORS.light }}>Critical Gap</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded" style={{ backgroundColor: 'rgba(245, 158, 11, 0.4)', borderLeft: '2px solid #F59E0B' }} />
-          <span className="text-[10px] font-light uppercase tracking-wider" style={{ fontFamily: 'Arial, sans-serif', color: '#64748B' }}>Moderate</span>
+          <div className="w-3 h-3 rounded" style={{ backgroundColor: 'rgba(245, 158, 11, 0.4)', borderLeft: `2px solid ${SEMANTIC_COLORS.warning}` }} />
+          <span className="text-[10px] font-light uppercase tracking-wider" style={{ fontFamily: 'Arial, sans-serif', color: BRAND_COLORS.light }}>Moderate</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded" style={{ backgroundColor: 'rgba(16, 185, 129, 0.4)', borderLeft: '2px solid #10B981' }} />
-          <span className="text-[10px] font-light uppercase tracking-wider" style={{ fontFamily: 'Arial, sans-serif', color: '#64748B' }}>On Track</span>
+          <div className="w-3 h-3 rounded" style={{ backgroundColor: 'rgba(16, 185, 129, 0.4)', borderLeft: `2px solid ${SEMANTIC_COLORS.success}` }} />
+          <span className="text-[10px] font-light uppercase tracking-wider" style={{ fontFamily: 'Arial, sans-serif', color: BRAND_COLORS.light }}>On Track</span>
         </div>
       </div>
     </div>

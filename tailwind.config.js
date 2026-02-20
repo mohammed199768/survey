@@ -6,11 +6,19 @@ module.exports = {
     extend: {
       colors: {
         horvath: {
-          base: '#F9FAFB',
-          surface: '#FFFFFF',
-          primary: '#348AC7',
-          dark: '#1A4563',
-          slate: '#64748B',
+          900: '#1d6996',
+          700: '#3a92c6',
+          500: '#54a5d5',
+          300: '#7fbadc',
+          100: '#b6d5eb',
+          50: '#d8e9f5',
+          0: '#ffffff',
+        },
+        primary: {
+          DEFAULT: '#3a92c6',
+          hover: '#54a5d5',
+          dark: '#1d6996',
+          foreground: '#ffffff',
         },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
@@ -19,10 +27,6 @@ module.exports = {
         'card-foreground': 'hsl(var(--card-foreground))',
         popover: 'hsl(var(--popover))',
         'popover-foreground': 'hsl(var(--popover-foreground))',
-        primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
-        },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',

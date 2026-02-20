@@ -21,11 +21,25 @@ interface BubbleChartProps {
   onLegendClick?: (dimensionId: string) => void;
 }
 
+const BRAND_COLORS = {
+  primary: '#1d6996',
+  secondary: '#3a92c6',
+  tertiary: '#54a5d5',
+  light: '#7fbadc',
+  pale: '#b6d5eb',
+} as const;
+
+const SEMANTIC_COLORS = {
+  success: '#10b981',
+  warning: '#f59e0b',
+  error: '#ef4444',
+} as const;
+
 const DEFAULT_LEGEND: LegendItem[] = [
-  { id: 'strategy', name: 'Strategy', color: '#10b981' },
+  { id: 'strategy', name: 'Strategy', color: SEMANTIC_COLORS.success },
   { id: 'value', name: 'Value', color: '#f97316' },
-  { id: 'data', name: 'Data', color: '#3b82f6' },
-  { id: 'technology', name: 'Technology', color: '#1d4ed8' },
+  { id: 'data', name: 'Data', color: BRAND_COLORS.secondary },
+  { id: 'technology', name: 'Technology', color: BRAND_COLORS.primary },
   { id: 'capabilities', name: 'Capabilities', color: '#8b5cf6' },
   { id: 'governance', name: 'Governance', color: '#ec4899' },
 ];
@@ -127,7 +141,7 @@ export function BubbleChart({
             y1={padding}
             x2={xScale(v)}
             y2={chartHeight - padding}
-            stroke="#e5e7eb"
+            stroke="#b6d5eb"
             strokeWidth="1"
             strokeDasharray="3,3"
           />
@@ -140,7 +154,7 @@ export function BubbleChart({
             y1={yScale(v)}
             x2={chartWidth - padding}
             y2={yScale(v)}
-            stroke="#e5e7eb"
+            stroke="#b6d5eb"
             strokeWidth="1"
             strokeDasharray="3,3"
           />
@@ -265,7 +279,7 @@ export function BubbleChart({
               key={d.id}
               onClick={() => onLegendClick?.(d.id)}
               className={`flex items-center gap-2 p-2 rounded-lg transition-all ${
-                isActive ? 'bg-blue-50 ring-2 ring-blue-400' : 'hover:bg-gray-50'
+                isActive ? 'bg-horvath-50 ring-2 ring-horvath-700' : 'hover:bg-gray-50'
               }`}
               style={{ opacity: isDimmedLegend ? 0.45 : 1 }}
             >

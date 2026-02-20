@@ -34,7 +34,7 @@ export function ActivityFeed({ activities, isLoading }: ActivityFeedProps) {
       case 'completed':
         return 'bg-green-100 text-green-800';
       case 'in_progress':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-horvath-50 text-horvath-900';
       default:
         return 'bg-gray-100 text-gray-800';
     }
@@ -45,7 +45,7 @@ export function ActivityFeed({ activities, isLoading }: ActivityFeedProps) {
       case 'completed':
         return <CheckCircle className="w-5 h-5 text-green-600" />;
       case 'in_progress':
-        return <Clock className="w-5 h-5 text-blue-600" />;
+        return <Clock className="w-5 h-5 text-horvath-700" />;
       default:
         return <FileText className="w-5 h-5 text-gray-600" />;
     }

@@ -3,7 +3,7 @@ import { Navbar } from '@/components/layout/Navbar';
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-[#f7f8fa] font-sans">
+    <div className="min-h-screen bg-[#d8e9f5] font-sans">
       <Navbar />
       <main className="pt-24 pb-16 px-6">
         <div className="max-w-3xl mx-auto rounded-3xl border border-white/80 bg-white/95 shadow-[0_12px_40px_rgba(15,23,42,0.08)] p-8 md:p-10">
@@ -22,7 +22,7 @@ export default function TermsPage() {
           </p>
 
           <div className="mt-8">
-            <Link href="/" className="text-blue-600 hover:text-blue-700 underline">
+            <Link href="/" className="text-horvath-700 hover:text-horvath-500 underline">
               Back to Home
             </Link>
           </div>

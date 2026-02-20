@@ -118,7 +118,7 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
   return (
     <div className="relative z-10 flex min-h-[calc(100vh-4rem)] flex-col px-4 sm:px-6 pt-4 pb-28 lg:ml-[344px] lg:mr-8 lg:mt-6 lg:h-[calc(100vh-7rem)] lg:min-h-0 lg:px-0 lg:pt-0 lg:pb-0">
       {isSubmitting && (
-        <div className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-[#3d6678] text-white text-xs px-3 py-1 rounded-full shadow-lg z-30 animate-pulse">
+        <div className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-[#1d6996] text-white text-xs px-3 py-1 rounded-full shadow-lg z-30 animate-pulse">
           Saving...
         </div>
       )}
@@ -127,7 +127,7 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
         <div
           className="bg-white/96 backdrop-blur-[1.5px] flex-1 min-h-[calc(100vh-8rem)] lg:min-h-0 flex flex-col rounded-2xl lg:rounded-[32px]
                       shadow-[0_12px_34px_rgba(0,0,0,0.05),0_1px_4px_rgba(0,0,0,0.02)] lg:shadow-[0_24px_56px_rgba(0,0,0,0.06),0_1px_4px_rgba(0,0,0,0.02)]
-                      border border-white/70 overflow-visible lg:overflow-hidden relative md:min-w-[980px] lg:min-w-0"
+                      border border-horvath-100 overflow-visible lg:overflow-hidden relative md:min-w-[980px] lg:min-w-0"
         >
         <div className="flex-1 flex flex-col overflow-hidden">
           {currentTopic && (

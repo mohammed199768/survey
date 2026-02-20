@@ -70,12 +70,12 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
 
   return (
     <div
-      className="flex flex-col h-full overflow-hidden relative"
+      className="flex flex-col h-full overflow-hidden relative bg-white border border-horvath-100 rounded-2xl"
       style={{ fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif' }}
     >
        {/* Save indicator - subtle */}
        {isSubmitting && (
-        <div className="absolute top-2 right-2 text-xs text-blue-500 font-medium animate-pulse">
+        <div className="absolute top-2 right-2 text-xs text-horvath-500 font-medium animate-pulse">
             Saving...
         </div>
       )}
@@ -86,7 +86,7 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
           <h2 className="text-[clamp(1.12rem,4.3vw,1.72rem)] lg:text-[1.72rem] font-semibold text-slate-900 tracking-[-0.005em] leading-tight">
             {topic.label}
           </h2>
-          <div className="h-px bg-[#eef0f5] mt-3.5" />
+          <div className="h-px bg-[#d8e9f5] mt-3.5" />
         </div>
       </div>
 

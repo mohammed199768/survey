@@ -24,7 +24,7 @@ export function AssessmentGateDialog({ open, onClose, missing }: AssessmentGateD
         {isComplete ? (
           <>
             {/* Success Icon */}
-            <div className="w-16 h-16 bg-gradient-to-br from-[#00549F] to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="w-16 h-16 bg-gradient-to-br from-[#1d6996] to-horvath-700 rounded-full flex items-center justify-center mx-auto mb-6">
               <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
@@ -41,7 +41,7 @@ export function AssessmentGateDialog({ open, onClose, missing }: AssessmentGateD
             <div className="flex flex-col gap-3">
               <button
                 onClick={() => router.push('/results')}
-                className="w-full px-6 py-4 bg-gradient-to-r from-[#00549F] to-blue-700 text-white font-semibold rounded-xl hover:from-[#004080] hover:to-blue-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                className="w-full px-6 py-4 bg-gradient-to-r from-[#1d6996] to-horvath-700 text-white font-semibold rounded-xl hover:from-[#1d6996] hover:to-horvath-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
                 View Results
               </button>

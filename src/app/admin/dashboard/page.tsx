@@ -104,7 +104,7 @@ export default function AdminDashboardPage() {
           icon={ClipboardList}
           label="Published Survey"
           value={publishedSurveyTitle}
-          iconColor="text-blue-600"
+          iconColor="text-horvath-700"
         />
         <StatCard
           icon={Users}
@@ -139,7 +139,7 @@ export default function AdminDashboardPage() {
             icon={BarChart3}
             label="In Progress"
             value={stats?.in_progress_responses ?? 0}
-            iconColor="text-indigo-600"
+            iconColor="text-horvath-900"
           />
           <StatCard
             icon={Users}
@@ -189,7 +189,7 @@ export default function AdminDashboardPage() {
             </div>
             <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
               <span className="text-sm text-gray-600">In Progress</span>
-              <span className="font-semibold text-blue-600">{stats?.in_progress_responses ?? 0}</span>
+              <span className="font-semibold text-horvath-700">{stats?.in_progress_responses ?? 0}</span>
             </div>
             <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
               <span className="text-sm text-gray-600">Active Participants</span>

@@ -55,14 +55,14 @@ function StatusBadge({ status }: { status: string }) {
 function ScoreGauge({ score, size = 'md' }: { score: number; size?: 'sm' | 'md' | 'lg' }) {
   const getScoreColor = (score: number) => {
     if (score >= 4) return 'text-green-600';
-    if (score >= 3) return 'text-blue-600';
+    if (score >= 3) return 'text-horvath-700';
     if (score >= 2) return 'text-yellow-600';
     return 'text-red-600';
   };
 
   const getBgColor = (score: number) => {
     if (score >= 4) return 'bg-green-100';
-    if (score >= 3) return 'bg-blue-100';
+    if (score >= 3) return 'bg-horvath-50';
     if (score >= 2) return 'bg-yellow-100';
     return 'bg-red-100';
   };
@@ -122,14 +122,14 @@ function ProgressBar({ progress }: { progress: number }) {
 function TopicAnswerCard({ answer }: { answer: TopicAnswer }) {
   const getGapColor = (gap: number) => {
     if (gap <= 0.5) return 'text-green-600 bg-green-50';
-    if (gap <= 1.5) return 'text-blue-600 bg-blue-50';
+    if (gap <= 1.5) return 'text-horvath-700 bg-horvath-50';
     if (gap <= 2.5) return 'text-yellow-600 bg-yellow-50';
     return 'text-red-600 bg-red-50';
   };
 
   const getRatingColor = (rating: number) => {
     if (rating >= 4) return 'text-green-600';
-    if (rating >= 3) return 'text-blue-600';
+    if (rating >= 3) return 'text-horvath-700';
     if (rating >= 2) return 'text-yellow-600';
     return 'text-red-600';
   };
@@ -152,7 +152,7 @@ function TopicAnswerCard({ answer }: { answer: TopicAnswer }) {
           <div className="flex items-center gap-2">
             <div className="flex-1 bg-gray-100 rounded-full h-2">
               <div 
-                className="bg-blue-500 h-2 rounded-full"
+                className="bg-horvath-500 h-2 rounded-full"
                 style={{ width: `${(answer.current_rating / 5) * 100}%` }}
               />
             </div>
@@ -206,14 +206,14 @@ function DimensionBreakdown({ priorities }: { priorities: PriorityScore[] }) {
 
   const getScoreColor = (score: number) => {
     if (score >= 4) return 'bg-green-500';
-    if (score >= 3) return 'bg-blue-500';
+    if (score >= 3) return 'bg-horvath-500';
     if (score >= 2) return 'bg-yellow-500';
     return 'bg-red-500';
   };
 
   const getGapColor = (gap: number) => {
     if (gap <= 5) return 'text-green-600';
-    if (gap <= 15) return 'text-blue-600';
+    if (gap <= 15) return 'text-horvath-700';
     if (gap <= 25) return 'text-yellow-600';
     return 'text-red-600';
   };
@@ -258,7 +258,7 @@ function TopGapsList({ answers }: { answers: TopicAnswer[] }) {
 
   const getGapColor = (gap: number) => {
     if (gap <= 0.5) return 'bg-green-100 text-green-800';
-    if (gap <= 1.5) return 'bg-blue-100 text-blue-800';
+    if (gap <= 1.5) return 'bg-horvath-50 text-horvath-900';
     if (gap <= 2.5) return 'bg-yellow-100 text-yellow-800';
     return 'bg-red-100 text-red-800';
   };
@@ -307,7 +307,7 @@ function GeneratedRecommendations({ priorities }: { priorities: PriorityScore[] 
 
   const categoryClasses: Record<PriorityRecommendation['category'], string> = {
     'Quick Win': 'bg-green-100 text-green-800',
-    Project: 'bg-blue-100 text-blue-800',
+    Project: 'bg-horvath-50 text-horvath-900',
     'Big Bet': 'bg-purple-100 text-purple-800',
   };
 
@@ -492,7 +492,7 @@ export default function ResponseDetailPage({ params }: { params: Promise<{ id: s
                 <div className="mt-4">
                   <span className={`text-lg font-bold ${
                     response.overall_gap <= 10 ? 'text-green-600' :
-                    response.overall_gap <= 20 ? 'text-blue-600' :
+                    response.overall_gap <= 20 ? 'text-horvath-700' :
                     response.overall_gap <= 30 ? 'text-yellow-600' : 'text-red-600'
                   }`}>
                     Gap: {response.overall_gap > 0 ? '+' : ''}{response.overall_gap.toFixed(1)}

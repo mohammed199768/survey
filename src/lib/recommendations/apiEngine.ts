@@ -65,7 +65,7 @@ export function generateRecommendationsFromAPI(
           dimension: dimResult.dimensionKey,
           category,
           metrics,
-          color: colors[dimResult.dimensionKey] || '#666666',
+          color: colors[dimResult.dimensionKey] || '#64748b',
           topics: [], // API rules aren't strictly topic-bound in the same way, or we can use keys
           // Narrative fields
           why: rule.why,

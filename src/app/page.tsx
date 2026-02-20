@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -26,7 +26,7 @@ function DiamondPattern({ side }: { side: 'left' | 'right' }) {
           return (
             <div
               key={`${side}-${i}`}
-              className="absolute w-[60px] h-[60px] rotate-45 border-[5px] border-[#4D9FE0]"
+              className="absolute w-[60px] h-[60px] rotate-45 border-[5px] border-[#3a92c6]"
               style={{ left: `${20 + row * 30}px`, top: `${10 + col * 90 + row * 30}px` }}
             />
           );
@@ -72,20 +72,20 @@ export default function LandingPage() {
       <DiamondPattern side="left" />
       <DiamondPattern side="right" />
 
-      <div className="fixed inset-0 z-0 pointer-events-none bg-[linear-gradient(rgba(77,159,224,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(77,159,224,0.04)_1px,transparent_1px)] bg-[length:64px_64px]" />
-      <div className="fixed left-1/2 top-1/2 z-0 pointer-events-none w-[80vw] h-[80vh] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse,rgba(77,159,224,0.07)_0%,transparent_65%)]" />
+      <div className="fixed inset-0 z-0 pointer-events-none bg-[linear-gradient(rgba(58,146,198,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(58,146,198,0.04)_1px,transparent_1px)] bg-[length:64px_64px]" />
+      <div className="fixed left-1/2 top-1/2 z-0 pointer-events-none w-[80vw] h-[80vh] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse,rgba(58,146,198,0.07)_0%,transparent_65%)]" />
 
       <main className="relative z-10 min-h-screen flex items-center justify-center px-6 pt-[110px] pb-20">
         <div className="w-full max-w-[740px] text-center flex flex-col items-center">
-          <div className="inline-flex items-center gap-3.5 mb-10 text-[10px] tracking-[0.30em] uppercase text-[#4D9FE0]">
-            <span className="block w-7 h-px bg-[#4D9FE0]/60" />
+          <div className="inline-flex items-center gap-3.5 mb-10 text-[10px] tracking-[0.30em] uppercase text-[#3a92c6]">
+            <span className="block w-7 h-px bg-[#3a92c6]/60" />
             Impact Platform
-            <span className="block w-7 h-px bg-[#4D9FE0]/60" />
+            <span className="block w-7 h-px bg-[#3a92c6]/60" />
           </div>
 
           <h1 className="text-[clamp(64px,11vw,108px)] font-bold tracking-[0.08em] leading-none text-white">{BRAND}</h1>
 
-          <div className="w-px h-10 my-8 bg-[linear-gradient(180deg,#4D9FE0_0%,transparent_100%)]" />
+          <div className="w-px h-10 my-8 bg-[linear-gradient(180deg,#3a92c6_0%,transparent_100%)]" />
 
           <p className="text-[clamp(16px,2vw,20px)] leading-[1.5] text-white/70 mb-10">Strategic Assessment. Executive Clarity.</p>
 
@@ -97,7 +97,7 @@ export default function LandingPage() {
             ) : (
               <button
                 onClick={() => router.push('/survey')}
-                className="w-full inline-flex items-center justify-center gap-3 px-14 py-5 bg-[#4D9FE0] text-[#0a1e33] text-[12px] md:text-[13px] font-bold tracking-[0.24em] uppercase rounded-[2px] hover:shadow-[0_10px_40px_rgba(77,159,224,0.35)] transition-all"
+                className="w-full inline-flex items-center justify-center gap-3 px-14 py-5 bg-[#3a92c6] text-[#0a1e33] text-[12px] md:text-[13px] font-bold tracking-[0.24em] uppercase rounded-[2px] hover:shadow-[0_10px_40px_rgba(58,146,198,0.35)] transition-all"
               >
                 Begin Assessment
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

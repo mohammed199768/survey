@@ -103,7 +103,7 @@ export function Sidebar() {
       />
 
       <aside
-        className={`fixed z-40 left-0 top-16 h-[calc(100vh-4rem)] w-[86vw] max-w-[320px] bg-white rounded-r-2xl shadow-2xl flex flex-col overflow-hidden transition-transform duration-300 ease-out lg:left-6 lg:top-24 lg:w-[300px] lg:max-w-none lg:h-[calc(100vh-7rem)] lg:rounded-2xl lg:shadow-xl ${
+        className={`fixed z-40 left-0 top-16 h-[calc(100vh-4rem)] w-[86vw] max-w-[320px] bg-[#1d6996] rounded-r-2xl shadow-2xl flex flex-col overflow-hidden transition-transform duration-300 ease-out lg:left-6 lg:top-24 lg:w-[300px] lg:max-w-none lg:h-[calc(100vh-7rem)] lg:rounded-2xl lg:shadow-xl ${
           isLocked ? 'opacity-90 lg:opacity-80' : ''
         } ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
       >
@@ -111,7 +111,7 @@ export function Sidebar() {
           <div className="space-y-0">
             {assessment.dimensions.map((dimension, dimIdx) => (
               <div key={dimension.id} className="mb-6">
-                <h3 className="text-sm font-medium text-gray-500 mb-2 px-2">
+                <h3 className="text-xs uppercase tracking-wider font-semibold text-[#7fbadc] mb-2 px-2">
                   {dimIdx + 1}. {dimension.title}
                 </h3>
 
@@ -125,28 +125,28 @@ export function Sidebar() {
                     let textClass = '';
 
                     if (active) {
-                      itemClass = 'flex items-center gap-2 px-3 py-2.5 mb-0.5 rounded-lg bg-[#E3F2FD] transition-colors';
+                      itemClass = 'flex items-center gap-2 px-3 py-2.5 mb-0.5 rounded-lg bg-[#3a92c6] transition-colors';
                       icon = (
-                        <span className="text-[#0066cc]">
+                        <span className="text-white">
                           <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M6 4l8 6-8 6V4z" />
                           </svg>
                         </span>
                       );
-                      textClass = 'text-[#0066cc] font-medium text-[15px]';
+                      textClass = 'text-white font-medium text-[15px]';
                     } else if (completed) {
-                      itemClass = 'flex items-center gap-2 px-3 py-2.5 mb-0.5 rounded-lg hover:bg-gray-50 transition-colors';
+                      itemClass = 'flex items-center gap-2 px-3 py-2.5 mb-0.5 rounded-lg hover:bg-[rgba(255,255,255,0.10)] transition-colors';
                       icon = (
-                        <span className="text-[#0066cc]">
+                        <span className="text-white">
                           <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M7.8 14.2L3.6 10l1.4-1.4 2.8 2.8L15 4.2 16.4 5.6 7.8 14.2z" />
                           </svg>
                         </span>
                       );
-                      textClass = 'text-[#0066cc] font-normal text-[15px]';
+                      textClass = 'text-white font-normal text-[15px]';
                     } else {
-                      itemClass = 'block px-3 py-2.5 mb-0.5 rounded-lg';
-                      textClass = 'text-gray-400 italic text-[15px] font-normal';
+                      itemClass = 'block px-3 py-2.5 mb-0.5 rounded-lg hover:bg-[rgba(255,255,255,0.10)] transition-colors';
+                      textClass = 'text-white/80 italic text-[15px] font-normal';
                     }
 
                     return (
@@ -170,13 +170,13 @@ export function Sidebar() {
           </div>
         </nav>
 
-        <div className="shrink-0 px-5 lg:px-6 py-4 lg:py-5 bg-white space-y-3">
+        <div className="shrink-0 px-5 lg:px-6 py-4 lg:py-5 bg-[#1d6996] border-t border-[rgba(255,255,255,0.12)] space-y-3">
           <button
             onClick={() => {
               handleSubmit();
               setIsMobileOpen(false);
             }}
-            className="block w-full px-6 py-3.5 bg-[#0066cc] text-white rounded-full text-base font-semibold text-center cursor-pointer transition-all duration-300 hover:bg-[#0052a3] shadow-md hover:shadow-lg"
+            className="block w-full px-6 py-3.5 bg-[#3a92c6] text-white rounded-full text-base font-semibold text-center cursor-pointer transition-all duration-300 hover:bg-[#54a5d5] focus:ring-2 focus:ring-[#3a92c6] focus:ring-offset-2 focus:ring-offset-[#1d6996] shadow-md hover:shadow-lg"
           >
             Submit
           </button>
@@ -185,10 +185,10 @@ export function Sidebar() {
         </div>
 
         {isLocked && (
-          <div className="absolute inset-0 z-30 rounded-r-2xl lg:rounded-2xl bg-white/45 backdrop-blur-[2px] flex items-center justify-center p-6 text-center">
+          <div className="absolute inset-0 z-30 rounded-r-2xl lg:rounded-2xl bg-[#1d6996]/65 backdrop-blur-[2px] flex items-center justify-center p-6 text-center">
             <div>
-              <p className="text-sm font-semibold text-slate-800">Sidebar Locked</p>
-              <p className="text-xs text-slate-600 mt-1">
+              <p className="text-sm font-semibold text-white">Sidebar Locked</p>
+              <p className="text-xs text-white/85 mt-1">
                 Complete the intake form and click Begin Assessment to unlock navigation.
               </p>
             </div>

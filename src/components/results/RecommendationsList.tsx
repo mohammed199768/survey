@@ -82,7 +82,7 @@ export function RecommendationsList({
         <h3 className="text-lg font-semibold text-gray-900">Recommendations</h3>
         <button
           onClick={toggleAll}
-          className="px-4 py-2 text-sm font-medium text-blue-600 border-2 border-blue-600 rounded-full hover:bg-blue-50 transition-colors"
+          className="px-4 py-2 text-sm font-medium text-horvath-700 border-2 border-horvath-700 rounded-full hover:bg-horvath-50 transition-colors"
         >
           {expandedAll ? 'Collapse All' : 'Expand All'}
         </button>
@@ -138,10 +138,10 @@ function RecommendationItem({
     <div
       id={`recommendation-${rank}`}
       className={`border-2 rounded-lg overflow-hidden transition-all duration-200 ${
-        isSelected ? 'ring-4 ring-blue-300' : ''
+        isSelected ? 'ring-4 ring-horvath-300' : ''
       }`}
       style={{
-        borderColor: isExpanded ? color : '#e5e7eb',
+        borderColor: isExpanded ? color : '#b6d5eb',
         opacity: isDimmed ? 0.45 : 1,
       }}
     >

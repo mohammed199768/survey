@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
@@ -361,7 +361,7 @@ export default function AssessmentDetailPage() {
                             </div>
                             <button
                               type="button"
-                              className="text-xs text-blue-600"
+                              className="text-xs text-horvath-700"
                               onClick={() =>
                                 setExpandedTopicId((prev) => (prev === topic.id ? null : topic.id))
                               }
@@ -374,19 +374,19 @@ export default function AssessmentDetailPage() {
                             <div className="space-y-3">
                               <div className="flex flex-wrap gap-2">
                                 <button
-                                  className={`rounded px-2 py-1 text-xs ${getTopicTab(topic.id) === 'question' ? 'bg-blue-600 text-white' : 'bg-white border'}`}
+                                  className={`rounded px-2 py-1 text-xs ${getTopicTab(topic.id) === 'question' ? 'bg-horvath-700 text-white' : 'bg-white border'}`}
                                   onClick={() => setTopicTab(topic.id, 'question')}
                                 >
                                   Question
                                 </button>
                                 <button
-                                  className={`rounded px-2 py-1 text-xs ${getTopicTab(topic.id) === 'levels' ? 'bg-blue-600 text-white' : 'bg-white border'}`}
+                                  className={`rounded px-2 py-1 text-xs ${getTopicTab(topic.id) === 'levels' ? 'bg-horvath-700 text-white' : 'bg-white border'}`}
                                   onClick={() => setTopicTab(topic.id, 'levels')}
                                 >
                                   Level Labels {isLevelsComplete(topic) ? '✓' : '⚠'}
                                 </button>
                                 <button
-                                  className={`rounded px-2 py-1 text-xs ${getTopicTab(topic.id) === 'recommendations' ? 'bg-blue-600 text-white' : 'bg-white border'}`}
+                                  className={`rounded px-2 py-1 text-xs ${getTopicTab(topic.id) === 'recommendations' ? 'bg-horvath-700 text-white' : 'bg-white border'}`}
                                   onClick={() => setTopicTab(topic.id, 'recommendations')}
                                 >
                                   Recommendations ({topicRecCounts[topic.id] ?? 0})

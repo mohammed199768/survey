@@ -25,7 +25,7 @@ export function TopGapsList({ gaps }: TopGapsListProps) {
                 <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-0.5">
                    {gap.dimensionTitle}
                 </span>
-                <h4 className="text-sm font-black text-horvath-dark uppercase tracking-tight">{gap.topicLabel}</h4>
+                <h4 className="text-sm font-black text-horvath-900 uppercase tracking-tight">{gap.topicLabel}</h4>
              </div>
           </div>
           

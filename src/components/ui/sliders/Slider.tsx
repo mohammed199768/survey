@@ -15,15 +15,15 @@ interface SliderProps {
 }
 
 const colors = {
-  blue: 'bg-blue-600',
-  indigo: 'bg-indigo-600',
+  blue: 'bg-horvath-700',
+  indigo: 'bg-horvath-900',
   purple: 'bg-purple-600',
   gray: 'bg-gray-600',
 };
 
 const trackColors = {
-  blue: 'bg-blue-100',
-  indigo: 'bg-indigo-100',
+  blue: 'bg-horvath-50',
+  indigo: 'bg-horvath-50',
   purple: 'bg-purple-100',
   gray: 'bg-gray-200',
 };

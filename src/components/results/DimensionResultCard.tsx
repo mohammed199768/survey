@@ -24,7 +24,7 @@ export function DimensionResultCard({
                   {maturity.stage.label}
                </div>
             )}
-            <h3 className="text-xl font-black text-horvath-dark group-hover:text-horvath-primary transition-colors leading-tight uppercase tracking-tight">
+            <h3 className="text-xl font-black text-horvath-900 group-hover:text-horvath-700 transition-colors leading-tight uppercase tracking-tight">
                 {dimension.title}
             </h3>
          </div>
@@ -32,7 +32,7 @@ export function DimensionResultCard({
          <div className={twMerge(
             "w-10 h-10 rounded-xl flex items-center justify-center border transition-all",
             dimension.isComplete 
-               ? "bg-horvath-primary/5 text-horvath-primary border-horvath-primary/20" 
+               ? "bg-horvath-700/5 text-horvath-700 border-horvath-700/20" 
                : "bg-slate-50 text-slate-200 border-slate-100"
          )}>
             {dimension.isComplete ? (
@@ -46,11 +46,11 @@ export function DimensionResultCard({
       <div className="grid grid-cols-3 gap-4 mb-8 py-4 border-y border-slate-50 font-mono">
          <div className="flex flex-col">
             <span className="text-[8px] text-slate-400 block uppercase font-black tracking-widest mb-1">Actual</span>
-            <span className="text-xl font-black text-horvath-dark tracking-tighter leading-none">{formatScore(dimension.currentAvg)}</span>
+            <span className="text-xl font-black text-horvath-900 tracking-tighter leading-none">{formatScore(dimension.currentAvg)}</span>
          </div>
          <div className="flex flex-col border-x border-slate-100 px-4">
-            <span className="text-[8px] text-horvath-primary block uppercase font-black tracking-widest mb-1">Target</span>
-            <span className="text-xl font-black text-horvath-primary tracking-tighter leading-none">{formatScore(dimension.targetAvg)}</span>
+            <span className="text-[8px] text-horvath-700 block uppercase font-black tracking-widest mb-1">Target</span>
+            <span className="text-xl font-black text-horvath-700 tracking-tighter leading-none">{formatScore(dimension.targetAvg)}</span>
          </div>
          <div className="flex flex-col text-right">
             <span className="text-[8px] text-slate-400 block uppercase font-black tracking-widest mb-1">Gap</span>
@@ -66,14 +66,14 @@ export function DimensionResultCard({
       <div className="mt-auto flex items-center justify-between">
          <div className="flex flex-col">
             <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Coverage</span>
-            <span className="text-xs font-black text-horvath-dark">
+            <span className="text-xs font-black text-horvath-900">
                {dimension.answeredCount} / {dimension.totalCount}
             </span>
          </div>
          
          <Link 
            href={`/survey/${dimension.id}`}
-           className="px-6 py-2 bg-horvath-base hover:bg-horvath-dark text-horvath-dark hover:text-white rounded-xl text-[9px] font-black uppercase tracking-widest border border-slate-200 hover:border-horvath-dark transition-all flex items-center gap-2 group/link"
+           className="px-6 py-2 bg-horvath-50 hover:bg-horvath-900 text-horvath-900 hover:text-white rounded-xl text-[9px] font-black uppercase tracking-widest border border-slate-200 hover:border-horvath-900 transition-all flex items-center gap-2 group/link"
          >
            Configure
            <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />

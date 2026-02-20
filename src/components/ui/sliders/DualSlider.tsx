@@ -85,8 +85,8 @@ export function DualSlider({
   const labelColumnClass = 'shrink-0';
   const labelColumnWidth = 'clamp(56px, 7.5vw, 72px)';
   const railPaddingClass = 'px-0';
-  const scoreLabelColor = 'rgb(184, 92, 164)';
-  const targetLabelColor = 'rgb(58, 102, 214)';
+  const scoreLabelColor = '#7fbadc';
+  const targetLabelColor = '#3a92c6';
 
   React.useEffect(() => {
     const element = railRef.current;
@@ -152,13 +152,13 @@ export function DualSlider({
           <>
             <div className="sm:hidden rounded-xl bg-white/65 border border-slate-200/70 p-3 space-y-2 mb-5">
               <div>
-                <p className="text-[11px] uppercase tracking-[0.08em] font-bold text-[#b353a1]">Score Level</p>
+                <p className="text-[11px] uppercase tracking-[0.08em] font-bold text-[#7fbadc]">Score Level</p>
                 <p className="text-[clamp(0.92rem,2.95vw,1.04rem)] lg:text-[1rem] font-medium text-slate-800 leading-[1.5]">
                   {currentAnchor ?? 'No level description'}
                 </p>
               </div>
               <div>
-                <p className="text-[11px] uppercase tracking-[0.08em] font-bold text-[#3467d6]">Target Level</p>
+                <p className="text-[11px] uppercase tracking-[0.08em] font-bold text-[#3a92c6]">Target Level</p>
                 <p className="text-[clamp(0.92rem,2.95vw,1.04rem)] lg:text-[1rem] font-medium text-slate-800 leading-[1.5]">
                   {targetAnchor ?? 'No level description'}
                 </p>
@@ -207,13 +207,13 @@ export function DualSlider({
                 </div>
                 <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[10px] bg-[#f6f6f6] rounded-full border border-slate-200/60 shadow-[inset_0_1px_1px_rgba(15,23,42,0.08)]" />
                 <motion.div
-                  className="absolute left-0 top-1/2 -translate-y-1/2 h-[10px] rounded-full bg-gradient-to-r from-[rgb(215,109,217)] to-[rgb(139,92,246)] shadow-[0_2px_14px_rgba(168,85,247,0.32)]"
+                  className="absolute left-0 top-1/2 -translate-y-1/2 h-[10px] rounded-full bg-gradient-to-r from-[#b6d5eb] to-[#7fbadc] shadow-[0_2px_14px_rgba(127,186,220,0.32)]"
                   animate={{ width: `${getPercentage(safeCurrent)}%` }}
                   transition={springTrack}
                   style={{ transformOrigin: 'left center' }}
                 />
                 <motion.div
-                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 min-w-[52px] h-[36px] px-[14px] bg-[linear-gradient(135deg,#d580f7_0%,#9333ea_100%)] rounded-full shadow-[0_4px_20px_rgba(168,85,247,0.4),0_1px_3px_rgba(0,0,0,0.1)] flex items-center justify-center border-[2.5px] border-white/90 z-20"
+                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 min-w-[52px] h-[36px] px-[14px] bg-[linear-gradient(135deg,#b6d5eb_0%,#7fbadc_100%)] rounded-full shadow-[0_4px_20px_rgba(127,186,220,0.4),0_1px_3px_rgba(0,0,0,0.1)] flex items-center justify-center border-[2.5px] border-white/90 z-20"
                   animate={{ left: `${getPercentage(safeCurrent)}%` }}
                   transition={springBubble}
                 >
@@ -248,22 +248,22 @@ export function DualSlider({
                 </div>
                 <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[10px] bg-[#f6f6f6] rounded-full border border-slate-200/60 shadow-[inset_0_1px_1px_rgba(15,23,42,0.08)]" />
                 <motion.div
-                  className="absolute left-0 top-1/2 -translate-y-1/2 h-[10px] rounded-full bg-gradient-to-r from-[rgb(30,144,255)] to-[rgb(0,86,179)] shadow-[0_2px_14px_rgba(37,99,235,0.28)]"
+                  className="absolute left-0 top-1/2 -translate-y-1/2 h-[10px] rounded-full bg-gradient-to-r from-[#54a5d5] to-[#3a92c6] shadow-[0_2px_14px_rgba(58,146,198,0.28)]"
                   animate={{ width: `${getPercentage(safeTarget)}%` }}
                   transition={springTrack}
                   style={{ transformOrigin: 'left center' }}
                 />
                 <motion.div
-                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 min-w-[52px] h-[36px] px-[14px] rounded-full shadow-[0_4px_20px_rgba(37,99,235,0.34),0_1px_3px_rgba(0,0,0,0.1)] flex items-center justify-center border-[2.5px] z-20"
+                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 min-w-[52px] h-[36px] px-[14px] rounded-full shadow-[0_4px_20px_rgba(58,146,198,0.34),0_1px_3px_rgba(0,0,0,0.1)] flex items-center justify-center border-[2.5px] z-20"
                   style={
                     safeTarget <= min
-                      ? { background: '#f6f6f6', color: 'rgb(81,160,255)', borderColor: 'rgb(81,160,255)' }
-                      : { background: 'linear-gradient(135deg, #60a5fa 0%, #2563eb 100%)', borderColor: 'rgba(255,255,255,0.9)' }
+                      ? { background: '#f6f6f6', color: '#54a5d5', borderColor: '#54a5d5' }
+                      : { background: 'linear-gradient(135deg, #54a5d5 0%, #3a92c6 100%)', borderColor: 'rgba(255,255,255,0.9)' }
                   }
                   animate={{ left: `${getPercentage(safeTarget)}%` }}
                   transition={springBubble}
                 >
-                  <span className={`font-bold text-[15px] tabular-nums ${safeTarget <= min ? 'text-[rgb(81,160,255)]' : 'text-white'}`}>
+                  <span className={`font-bold text-[15px] tabular-nums ${safeTarget <= min ? 'text-[#54a5d5]' : 'text-white'}`}>
                     {safeTarget.toFixed(1)}
                   </span>
                 </motion.div>

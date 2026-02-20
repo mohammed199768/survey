@@ -10,6 +10,20 @@ interface MaturityGaugeProps {
   title?: string;
 }
 
+const BRAND_COLORS = {
+  primary: '#1d6996',
+  secondary: '#3a92c6',
+  tertiary: '#54a5d5',
+  light: '#7fbadc',
+  pale: '#b6d5eb',
+} as const;
+
+const SEMANTIC_COLORS = {
+  success: '#10b981',
+  warning: '#f59e0b',
+  error: '#ef4444',
+} as const;
+
 export function MaturityGauge({ 
   score, 
   targetScore,
@@ -18,11 +32,11 @@ export function MaturityGauge({
 }: MaturityGaugeProps) {
   
   const maturityLevels = useMemo(() => [
-    { value: 5.0, label: 'LEADING', color: '#10b981' },    // emerald
-    { value: 4.0, label: 'ADVANCED', color: '#8b5cf6' },   // violet
-    { value: 3.0, label: 'READY', color: '#3b82f6' },      // blue
-    { value: 2.0, label: 'EXPLORING', color: '#f59e0b' }, // amber
-    { value: 1.0, label: 'BEGINNER', color: '#ec4899' },  // pink
+    { value: 5.0, label: 'LEADING', color: BRAND_COLORS.primary },
+    { value: 4.0, label: 'ADVANCED', color: BRAND_COLORS.secondary },
+    { value: 3.0, label: 'READY', color: BRAND_COLORS.tertiary },
+    { value: 2.0, label: 'EXPLORING', color: BRAND_COLORS.light },
+    { value: 1.0, label: 'BEGINNER', color: BRAND_COLORS.pale },
   ], []);
   
   // Convert score (1-5) to percentage (0-100%)
@@ -51,9 +65,9 @@ export function MaturityGauge({
           {/* Background Bar (Light Gray) */}
           <div className="absolute inset-0 bg-gray-100 rounded-full" />
           
-          {/* Filled Bar (Pink to Purple Gradient) */}
+          {/* Filled Bar (Horvath brand gradient) */}
           <motion.div
-            className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-pink-500 via-purple-500 to-violet-500 rounded-full"
+            className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-horvath-100 via-horvath-500 to-horvath-900 rounded-full"
             initial={{ height: 0 }}
             animate={{ height: `${scorePercent}%` }}
             transition={{ duration: 1.2, ease: 'easeOut' }}
@@ -62,15 +76,15 @@ export function MaturityGauge({
           {/* Target Indicator (Blue Line) */}
           {targetPercent !== null && (
             <motion.div
-              className="absolute left-0 right-0 h-0.5 bg-blue-500 z-0"
+              className="absolute left-0 right-0 h-0.5 bg-horvath-500 z-0"
               style={{ bottom: `${targetPercent}%` }}
               initial={{ opacity: 0, scaleX: 0 }}
               animate={{ opacity: 1, scaleX: 1 }}
               transition={{ duration: 0.6, delay: 1.0 }}
             >
               {/* Optional: Small circles at line ends */}
-              <div className="absolute -left-1 -top-1 w-2 h-2 bg-blue-500 rounded-full" />
-              <div className="absolute -right-1 -top-1 w-2 h-2 bg-blue-500 rounded-full" />
+              <div className="absolute -left-1 -top-1 w-2 h-2 bg-horvath-500 rounded-full" />
+              <div className="absolute -right-1 -top-1 w-2 h-2 bg-horvath-500 rounded-full" />
             </motion.div>
           )}
           
@@ -82,8 +96,8 @@ export function MaturityGauge({
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 1.2, type: 'spring', bounce: 0.4 }}
           >
-            <div className="w-full h-full rounded-full bg-white shadow-lg border-4 border-purple-600 flex items-center justify-center">
-              <span className="text-xl font-bold text-purple-700">
+            <div className="w-full h-full rounded-full bg-white shadow-lg border-4 border-horvath-700 flex items-center justify-center">
+              <span className="text-xl font-bold text-horvath-900">
                 {clampedScore.toFixed(1)}
               </span>
             </div>

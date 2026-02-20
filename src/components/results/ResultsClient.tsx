@@ -38,7 +38,7 @@ export default function ResultsClient({
 
   if (error || !results) {
     return (
-      <div className="brand-theme min-h-screen bg-[#f5f5f5] font-sans flex items-center justify-center">
+      <div className="brand-theme min-h-screen bg-[#f9fafb] font-sans flex items-center justify-center">
         <div className="text-center">
           <div className="text-red-500 font-medium mb-4">{error || 'No results found'}</div>
           <button onClick={() => router.push('/')} className="brand-btn px-6 py-2.5 text-sm">Return Home</button>
@@ -53,7 +53,7 @@ export default function ResultsClient({
     : '/results/recommendations';
 
   return (
-    <div className="brand-theme min-h-screen bg-[#f5f5f5] font-sans">
+    <div className="brand-theme min-h-screen bg-[#f9fafb] font-sans">
       <Navbar />
 
       <main className="pt-24 pb-12 px-12">

@@ -54,14 +54,14 @@ function StatusBadge({ status }: { status: string }) {
 function ScoreBadge({ score, gap }: { score: number; gap: number }) {
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'bg-green-100 text-green-800';
-    if (score >= 60) return 'bg-blue-100 text-blue-800';
+    if (score >= 60) return 'bg-horvath-50 text-horvath-900';
     if (score >= 40) return 'bg-yellow-100 text-yellow-800';
     return 'bg-red-100 text-red-800';
   };
 
   const getGapColor = (gap: number) => {
     if (gap <= 10) return 'text-green-600';
-    if (gap <= 20) return 'text-blue-600';
+    if (gap <= 20) return 'text-horvath-700';
     if (gap <= 30) return 'text-yellow-600';
     return 'text-red-600';
   };
@@ -399,7 +399,7 @@ export default function ResponsesPage() {
                           e.stopPropagation();
                           handleRowClick(response.id);
                         }}
-                        className="text-primary hover:text-primary-dark font-medium"
+                        className="text-primary hover:text-primary-hover font-medium"
                       >
                         View
                       </button>
