@@ -18,6 +18,11 @@ export interface TopicStructure {
   prompt: string;
   orderIndex: number;
   helpText?: string;
+  level_1_label?: string | null;
+  level_2_label?: string | null;
+  level_3_label?: string | null;
+  level_4_label?: string | null;
+  level_5_label?: string | null;
   levelAnchors: (string | null)[];
 }
 

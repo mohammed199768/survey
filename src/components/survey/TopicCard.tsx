@@ -18,11 +18,25 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
   const [localTarget, setLocalTarget] = React.useState(confirmedTarget);
 
   const levelDescriptions = React.useMemo(() => {
+    // Priority 1: individual level label fields from API
+    const fromFields = [
+      topic.level_1_label,
+      topic.level_2_label,
+      topic.level_3_label,
+      topic.level_4_label,
+      topic.level_5_label,
+    ].filter((label): label is string => typeof label === 'string' && label.trim().length > 0);
+
+    if (fromFields.length === 5) {
+      return fromFields;
+    }
+
+    // Priority 2: levelAnchors array
     if (Array.isArray(topic.levelAnchors) && topic.levelAnchors.length === 5) {
       return topic.levelAnchors;
     }
 
-    // Backward compatibility fallback for legacy prompt-encoded levels.
+    // Priority 3: backward compatibility fallback for legacy prompt-encoded levels.
     if (!topic.prompt) return [];
     if (topic.prompt.includes('|')) {
       return topic.prompt
@@ -41,7 +55,15 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
     }
 
     return [];
-  }, [topic.levelAnchors, topic.prompt]);
+  }, [
+    topic.level_1_label,
+    topic.level_2_label,
+    topic.level_3_label,
+    topic.level_4_label,
+    topic.level_5_label,
+    topic.levelAnchors,
+    topic.prompt,
+  ]);
 
   React.useEffect(() => {
     setLocalCurrent(confirmedCurrent);
