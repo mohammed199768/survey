@@ -381,7 +381,7 @@ export default function AssessmentDetailPage() {
                                   className={`rounded px-2 py-1 text-xs ${getTopicTab(topic.id) === 'levels' ? 'bg-horvath-700 text-white' : 'bg-white border'}`}
                                   onClick={() => setTopicTab(topic.id, 'levels')}
                                 >
-                                  Level Labels {isLevelsComplete(topic) ? 'âœ“' : 'âš '}
+                                  Level Labels {isLevelsComplete(topic) ? '✓' : '⚠'}
                                 </button>
                                 <button
                                   className={`rounded px-2 py-1 text-xs ${getTopicTab(topic.id) === 'recommendations' ? 'bg-horvath-700 text-white' : 'bg-white border'}`}

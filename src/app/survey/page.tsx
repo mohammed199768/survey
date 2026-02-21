@@ -93,7 +93,7 @@ export default function SurveyPage() {
                 Start Your Assessment
               </h1>
               <p className="text-slate-600 mt-3 text-sm md:text-base max-w-2xl mx-auto">
-                Provide your professional details to launch a personalized HORVÃTH readiness assessment.
+                Provide your professional details to launch a personalized HORVATH readiness assessment.
               </p>
             </div>
           
