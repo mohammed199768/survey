@@ -60,10 +60,54 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
 
   const dimension = assessment?.dimensions.find((d) => d.dimensionKey === dimensionId);
 
-  if (!assessment || !dimension) {
+  if (!assessment) {
     return (
       <div className="h-[70vh] flex items-center justify-center">
         <BrandPreloader size={120} label="Loading dimension..." />
+      </div>
+    );
+  }
+
+  if (!dimension) {
+    const firstDimension = assessment.dimensions[0];
+    const firstTopic = firstDimension?.topics[0];
+    const fallbackSurveyUrl =
+      firstDimension && firstTopic
+        ? `/survey/${firstDimension.dimensionKey}?topic=${firstTopic.topicKey}`
+        : '/survey';
+
+    return (
+      <div className="relative z-10 flex min-h-[calc(100vh-3rem)] sm:min-h-[calc(100vh-3.4rem)] flex-col px-4 sm:px-6 pt-4 pb-10 lg:ml-[344px] lg:mr-8 lg:mt-6 lg:h-[calc(100vh-5.9rem)] lg:min-h-0 lg:px-0 lg:pt-0 lg:pb-0">
+        <div className="flex-1 min-h-[calc(100vh-6.6rem)] sm:min-h-[calc(100vh-7.2rem)] lg:min-h-0 overflow-hidden">
+          <div
+            className="bg-white/96 backdrop-blur-[1.5px] flex-1 min-h-[calc(100vh-6.6rem)] sm:min-h-[calc(100vh-7.2rem)] lg:min-h-0 flex items-center justify-center rounded-2xl lg:rounded-[32px]
+                        shadow-[0_14px_34px_rgba(15,23,42,0.09),0_2px_8px_rgba(15,23,42,0.06),inset_0_1px_0_rgba(255,255,255,0.92)] lg:shadow-[0_24px_54px_rgba(15,23,42,0.12),0_6px_14px_rgba(15,23,42,0.08),inset_0_1px_0_rgba(255,255,255,0.95)]
+                        border border-transparent relative min-w-0 px-4 sm:px-8"
+          >
+            <div className="w-full max-w-2xl rounded-2xl border border-[#b6d5eb] bg-white px-6 py-8 sm:px-10 sm:py-10 text-center shadow-[0_18px_45px_rgba(15,23,42,0.1)]">
+              <p className="text-xs sm:text-sm uppercase tracking-[0.2em] font-semibold text-[#3a92c6]">Error 404</p>
+              <h2 className="mt-3 text-2xl sm:text-3xl font-black text-[#0F3F52]">Survey Section Not Found</h2>
+              <p className="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed">
+                The requested dimension does not exist in the active assessment. Continue from the first available
+                section.
+              </p>
+              <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+                <button
+                  onClick={() => router.push(fallbackSurveyUrl)}
+                  className="brand-btn w-full sm:w-auto px-8 py-3 text-sm"
+                >
+                  Go To Survey
+                </button>
+                <button
+                  onClick={() => router.push('/')}
+                  className="brand-btn-outline w-full sm:w-auto px-8 py-3 text-sm"
+                >
+                  Return Home
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
