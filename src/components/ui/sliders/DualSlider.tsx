@@ -29,7 +29,7 @@ const getAnchorForValue = (value: number, anchors: Array<string | null>): string
   return anchors[idx] ?? null;
 };
 
-const LABEL_COL_W = 62; // px — width of SCORE/TARGET text column
+const LABEL_COL_W = 74; // px — width of SCORE/TARGET text column
 
 // Label positions as percentages — same math as bubble: ((val-min)/(max-min))*100
 // val=1 → 0%, val=2 → 25%, val=3 → 50%, val=4 → 75%, val=5 → 100%
@@ -94,8 +94,7 @@ export function DualSlider({
     idx === 0 ? '0%' : idx === 4 ? '-100%' : '-50%';
 
   // Text alignment follows the same logic
-  const labelAlign = (idx: number): React.CSSProperties['textAlign'] =>
-    idx === 0 ? 'left' : idx === 4 ? 'right' : 'center';
+  const labelAlign = (_idx: number): React.CSSProperties['textAlign'] => 'center';
 
   return (
     <div
@@ -120,7 +119,7 @@ export function DualSlider({
 
         {/* ── Desktop: label grid ────────────────────────────────────── */}
         {labels.length > 0 && (
-          <div className="hidden sm:flex items-stretch mt-2 lg:mt-3 mb-1 gap-3 sm:gap-5">
+          <div className="hidden sm:flex items-stretch mt-3 lg:mt-4 mb-1 gap-3 sm:gap-5">
             {/* Spacer = same width as SCORE/TARGET col */}
             <div style={colStyle} />
             {/* Rail-width container with absolute-positioned labels */}
@@ -157,7 +156,7 @@ export function DualSlider({
 
           {/* SCORE */}
           <div className="flex items-center gap-3 sm:gap-5">
-            <div className="shrink-0 pr-2 text-left sm:text-right" style={colStyle}>
+            <div className="shrink-0 pr-3 sm:pr-4 text-left sm:text-right" style={colStyle}>
               <span className="text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: '#0F3F52' }}>SCORE</span>
             </div>
             <div className="flex-1 min-w-0">
@@ -187,7 +186,7 @@ export function DualSlider({
 
           {/* TARGET */}
           <div className="flex items-center gap-3 sm:gap-5">
-            <div className="shrink-0 pr-2 text-left sm:text-right" style={colStyle}>
+            <div className="shrink-0 pr-3 sm:pr-4 text-left sm:text-right" style={colStyle}>
               <span className="text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: '#3a92c6' }}>TARGET</span>
             </div>
             <div className="flex-1 min-w-0">
@@ -260,3 +259,4 @@ export function DualSlider({
     </div>
   );
 }
+

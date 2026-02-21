@@ -116,7 +116,7 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
 
   return (
     <div
-      className="flex flex-col h-full overflow-hidden relative bg-white border border-horvath-100 rounded-2xl"
+      className="flex flex-col h-full overflow-hidden relative bg-white border border-transparent rounded-2xl"
       style={{ fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif' }}
     >
       {/* Header */}
@@ -139,7 +139,7 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
       </div>
 
       {/* Body */}
-      <div className="px-4 sm:px-5 lg:px-8 pt-1 pb-7 sm:pb-8 lg:pb-10 bg-white flex-1 flex flex-col justify-start">
+      <div className="px-4 sm:px-5 lg:px-8 pt-1 pb-8 sm:pb-9 lg:pb-11 bg-white flex-1 flex flex-col justify-start">
         <div className="w-full mx-auto max-w-[1240px]">
           <DualSlider
             current={localCurrent}
