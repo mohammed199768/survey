@@ -75,6 +75,12 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
   // Refs for debouncing - survives HMR
   const saveTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
   const errorTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+  React.useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+      if (errorTimeoutRef.current) clearTimeout(errorTimeoutRef.current);
+    };
+  }, []);
 
   const debouncedSave = React.useCallback((tId: string, current: number, target: number, rollbackCurrent: number, rollbackTarget: number) => {
       if (saveTimeoutRef.current) {
