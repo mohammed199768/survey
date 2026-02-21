@@ -9,7 +9,6 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
   // Use flat responses structure from new store
   const response = useReadinessStore((state) => state.responses[topic.id]);
   const submitAnswer = useReadinessStore((state) => state.submitAnswer);
-  const isSubmitting = useReadinessStore((state) => state.isSubmitting);
   const [localError, setLocalError] = React.useState(false);
   
   const confirmedCurrent = response?.current ?? 1.0;
@@ -120,13 +119,6 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
       className="flex flex-col h-full overflow-hidden relative bg-white border border-horvath-100 rounded-2xl"
       style={{ fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif' }}
     >
-       {/* Save indicator - subtle */}
-       {isSubmitting && (
-        <div className="absolute top-2 right-2 text-xs text-horvath-500 font-medium animate-pulse">
-            Saving...
-        </div>
-      )}
-
       {/* Header */}
       <div className="px-4 sm:px-5 lg:px-8 pt-5 lg:pt-6 pb-0 bg-white shrink-0">
         <div className="w-full max-w-[1240px] mx-auto">
