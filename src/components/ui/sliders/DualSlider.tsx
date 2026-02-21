@@ -36,7 +36,7 @@ const LABEL_COL_W = 74; // px — width of SCORE/TARGET text column
 const MARK_POSITIONS = [0, 25, 50, 75, 100]; // %
 
 // Label width — fixed so text has room to wrap without being too wide
-const LABEL_W = 120; // px
+const LABEL_W = 132; // px
 
 export function DualSlider({
   current,
@@ -90,8 +90,7 @@ export function DualSlider({
   //   - first mark (0%):   translateX(0)        — left edge of label = left edge of rail
   //   - last  mark (100%): translateX(-100%)    — right edge of label = right edge of rail
   //   - middle marks:      translateX(-50%)     — center of label = mark position
-  const labelTranslate = (idx: number) =>
-    idx === 0 ? '0%' : idx === 4 ? '-100%' : '-50%';
+  const labelTranslate = (_idx: number) => '-50%';
 
   // Text alignment follows the same logic
   const labelAlign = (_idx: number): React.CSSProperties['textAlign'] => 'center';
@@ -135,7 +134,7 @@ export function DualSlider({
                   }}
                 >
                   <p
-                    className="text-[clamp(0.66rem,0.72vw+0.13rem,0.84rem)] font-semibold text-[#4B5563] leading-[1.36] break-words hyphens-auto"
+                    className="text-[clamp(0.66rem,0.72vw+0.13rem,0.84rem)] font-semibold text-[#4B5563] leading-[1.36] break-normal hyphens-none"
                     style={{ textAlign: labelAlign(idx) }}
                   >
                     {label}
@@ -143,7 +142,7 @@ export function DualSlider({
                   {/* Tick below label */}
                   <div
                     className="w-px h-[14px] bg-slate-300 mt-[5px] flex-shrink-0"
-                    style={{ alignSelf: idx === 0 ? 'flex-start' : idx === 4 ? 'flex-end' : 'center' }}
+                    style={{ alignSelf: 'center' }}
                   />
                 </div>
               ))}
@@ -243,7 +242,7 @@ export function DualSlider({
                 style={{
                   left: `${MARK_POSITIONS[idx]}%`,
                   transform: `translateX(${labelTranslate(idx)})`,
-                  alignItems: idx === 0 ? 'flex-start' : idx === 4 ? 'flex-end' : 'center',
+                  alignItems: 'center',
                 }}
               >
                 <div className="w-px h-3 bg-slate-300" />
