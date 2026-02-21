@@ -29,10 +29,14 @@ const getAnchorForValue = (value: number, anchors: Array<string | null>): string
   return anchors[idx] ?? null;
 };
 
-// LABEL_COL_W: fixed width for SCORE/TARGET text column
-// Must be identical across labels row, slider rows, and ruler row
-// so that all three share the same left edge → perfect alignment.
-const LABEL_COL_W = 62; // px
+const LABEL_COL_W = 62; // px — width of SCORE/TARGET text column
+
+// Label positions as percentages — same math as bubble: ((val-min)/(max-min))*100
+// val=1 → 0%, val=2 → 25%, val=3 → 50%, val=4 → 75%, val=5 → 100%
+const MARK_POSITIONS = [0, 25, 50, 75, 100]; // %
+
+// Label width — fixed so text has room to wrap without being too wide
+const LABEL_W = 120; // px
 
 export function DualSlider({
   current,
@@ -51,161 +55,115 @@ export function DualSlider({
         return Math.max(min, Math.min(max, value));
       }
       const parsed = Number(value);
-      if (Number.isFinite(parsed)) {
-        return Math.max(min, Math.min(max, parsed));
-      }
+      if (Number.isFinite(parsed)) return Math.max(min, Math.min(max, parsed));
       return fallback;
     },
     [max, min]
   );
 
   const safeCurrent = toSafeScore(current, min);
-  const safeTarget = toSafeScore(target, min);
+  const safeTarget  = toSafeScore(target,  min);
 
-  const getPercentage = (val: number) => {
-    const percentage = ((val - min) / (max - min)) * 100;
-    return Math.max(0, Math.min(100, percentage));
-  };
+  const getPercentage = (val: number) =>
+    Math.max(0, Math.min(100, ((val - min) / (max - min)) * 100));
 
-  const handleCurrentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCurrentChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     onCurrentChange(snapToValidScore(parseFloat(e.target.value)));
-  };
 
-  const handleTargetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTargetChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     onTargetChange(snapToValidScore(parseFloat(e.target.value)));
-  };
 
-  const scaleMarkers = [1, 2, 3, 4, 5];
+  const scaleMarkers  = [1, 2, 3, 4, 5];
   const currentAnchor = React.useMemo(() => getAnchorForValue(safeCurrent, labels), [safeCurrent, labels]);
-  const targetAnchor = React.useMemo(() => getAnchorForValue(safeTarget, labels), [safeTarget, labels]);
+  const targetAnchor  = React.useMemo(() => getAnchorForValue(safeTarget,  labels), [safeTarget,  labels]);
+  const labelsForGrid = Array.from({ length: 5 }, (_, i) => labels[i] ?? '');
 
   const springTrack  = { type: 'spring', stiffness: 220, damping: 28 } as const;
   const springBubble = { type: 'spring', stiffness: 300, damping: 30 } as const;
 
-  const labelsForGrid = Array.from({ length: 5 }, (_, idx) => labels[idx] ?? '');
+  // Shared inline style for the SCORE/TARGET label column spacer
+  const colStyle: React.CSSProperties = { width: LABEL_COL_W, minWidth: LABEL_COL_W, flexShrink: 0 };
 
-  // ─── Shared layout helpers ──────────────────────────────────────────────────
-  //
-  // Every row (labels, SCORE rail, TARGET rail, ruler) is built from:
-  //   [fixed spacer: LABEL_COL_W px] + [flex-1 rail/grid]
-  //
-  // The spacer width is identical in all rows → left edges align perfectly.
-  // NO negative margins anywhere — they were the root cause of misalignment.
-  //
-  // Inside the labels/ruler grid we use grid-cols-5 with alignment per cell:
-  //   col 0 → items-start / text-left   (tick at far left  = slider 0%)
-  //   col 4 → items-end   / text-right  (tick at far right = slider 100%)
-  //   cols 1-3 → items-center / text-center
-  //
-  // This matches the slider bubble math: left = ((val-min)/(max-min)) * 100%
+  // ─── Absolute-position helper ─────────────────────────────────────────────
+  // Every mark sits at left: MARK_POSITIONS[i]% inside a position:relative container.
+  // translateX offset:
+  //   - first mark (0%):   translateX(0)        — left edge of label = left edge of rail
+  //   - last  mark (100%): translateX(-100%)    — right edge of label = right edge of rail
+  //   - middle marks:      translateX(-50%)     — center of label = mark position
+  const labelTranslate = (idx: number) =>
+    idx === 0 ? '0%' : idx === 4 ? '-100%' : '-50%';
 
-  const labelColStyle: React.CSSProperties = {
-    width: LABEL_COL_W,
-    minWidth: LABEL_COL_W,
-    flexShrink: 0,
-  };
-
-  // ─── KEY INSIGHT ────────────────────────────────────────────────────────────
-  //
-  // The slider rail uses `justify-between` with 5 tick marks.
-  // In a flex justify-between with N items, the items sit at positions:
-  //   0%, 25%, 50%, 75%, 100%  of the rail width
-  // which matches the scale marks 1, 2, 3, 4, 5.
-  //
-  // The bubble/fill use left% calculated from (val-min)/(max-min)*100
-  // which also gives 0%, 25%, 50%, 75%, 100% for values 1,2,3,4,5.
-  //
-  // THEREFORE: the labels grid and ruler grid just need to be the same
-  // width as the rail, starting at the same x-position.
-  //
-  // We achieve this with a single shared row structure:
-  //   [fixed spacer = LABEL_COL_W px] [flex-1 = rail area]
-  //
-  // The gap between label-col and rail (gap-3 sm:gap-5) adds extra space.
-  // We must account for this gap in the labels/ruler rows too.
-  // Solution: use the SAME gap on labels/ruler rows as on slider rows.
-  //
-  // The outer container padding (px-[2%]) applies equally to ALL rows,
-  // so it doesn't affect relative alignment — no need to compensate for it.
-  // ────────────────────────────────────────────────────────────────────────────
-
-  // Shared row: used for labels, score, target, ruler
-  // Classes must be identical so all rows share the same column geometry
-  const ROW_CLASS = 'flex items-center gap-3 sm:gap-5';
+  // Text alignment follows the same logic
+  const labelAlign = (idx: number): React.CSSProperties['textAlign'] =>
+    idx === 0 ? 'left' : idx === 4 ? 'right' : 'center';
 
   return (
     <div
       className="w-full select-none py-[0.25rem]"
       style={{ fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif' }}
     >
-      {/* Same outer container as original — px-[2%] applies to ALL rows equally */}
       <div className="w-[96%] max-w-[940px] mx-auto flex flex-col px-[2%]">
 
-        {/* ── Mobile: anchor text boxes ──────────────────────────────────────── */}
+        {/* ── Mobile: anchor text boxes ──────────────────────────────── */}
         {labels.length > 0 && (
           <div className="sm:hidden rounded-xl bg-white/65 border border-slate-200/70 p-3 space-y-2 mb-5">
             <div>
               <p className="text-[11px] uppercase tracking-[0.08em] font-bold text-[#7fbadc]">Score Level</p>
-              <p className="text-sm font-medium text-slate-800 leading-[1.5]">
-                {currentAnchor ?? 'No level description'}
-              </p>
+              <p className="text-sm font-medium text-slate-800 leading-[1.5]">{currentAnchor ?? 'No level description'}</p>
             </div>
             <div>
               <p className="text-[11px] uppercase tracking-[0.08em] font-bold text-[#3a92c6]">Target Level</p>
-              <p className="text-sm font-medium text-slate-800 leading-[1.5]">
-                {targetAnchor ?? 'No level description'}
-              </p>
+              <p className="text-sm font-medium text-slate-800 leading-[1.5]">{targetAnchor ?? 'No level description'}</p>
             </div>
           </div>
         )}
 
-        {/* ── Desktop: label grid ────────────────────────────────────────────── */}
-        {/* Uses SAME ROW_CLASS as slider rows → identical column widths → perfect alignment */}
+        {/* ── Desktop: label grid ────────────────────────────────────── */}
         {labels.length > 0 && (
-          <div className={`hidden sm:flex items-end mb-2 gap-3 sm:gap-5`}>
-            {/* Spacer: exact same width as SCORE/TARGET label col */}
-            <div style={labelColStyle} className="shrink-0" />
-            {/* 
-              Label positions MUST match slider bubble positions exactly:
-              mark 1=0%, 2=25%, 3=50%, 4=75%, 5=100%
-              
-              Using flex with flex-1 spacers between items achieves this:
-              [item] [flex-1] [item] [flex-1] [item] [flex-1] [item] [flex-1] [item]
-              Items land at 0%, 25%, 50%, 75%, 100% of container width.
-              Each item is centered with -translate-x-1/2.
-            */}
-            <div className="flex-1 min-w-0 flex items-end">
+          <div className="hidden sm:flex items-stretch mb-1 gap-3 sm:gap-5">
+            {/* Spacer = same width as SCORE/TARGET col */}
+            <div style={colStyle} />
+            {/* Rail-width container with absolute-positioned labels */}
+            <div className="flex-1 min-w-0 relative" style={{ minHeight: 80 }}>
               {labelsForGrid.map((label, idx) => (
-                <React.Fragment key={idx}>
-                  <div className="flex flex-col items-center flex-shrink-0" style={{ transform: 'translateX(-50%)' }}>
-                    <p className="text-[clamp(0.62rem,0.7vw+0.1rem,0.78rem)] font-medium text-slate-700 leading-[1.38] min-h-[4rem] flex items-end justify-center text-center break-words hyphens-auto" style={{ width: 'clamp(60px, 18%, 140px)' }}>
-                      {label}
-                    </p>
-                    <div className="w-px h-[14px] bg-slate-300 mt-[5px] flex-shrink-0" />
-                  </div>
-                  {idx < 4 && <div className="flex-1" />}
-                </React.Fragment>
+                <div
+                  key={idx}
+                  className="absolute bottom-0 flex flex-col"
+                  style={{
+                    left: `${MARK_POSITIONS[idx]}%`,
+                    transform: `translateX(${labelTranslate(idx)})`,
+                    width: LABEL_W,
+                  }}
+                >
+                  <p
+                    className="text-[clamp(0.6rem,0.65vw+0.12rem,0.76rem)] font-medium text-slate-700 leading-[1.35] break-words hyphens-auto"
+                    style={{ textAlign: labelAlign(idx) }}
+                  >
+                    {label}
+                  </p>
+                  {/* Tick below label */}
+                  <div
+                    className="w-px h-[14px] bg-slate-300 mt-[5px] flex-shrink-0"
+                    style={{ alignSelf: idx === 0 ? 'flex-start' : idx === 4 ? 'flex-end' : 'center' }}
+                  />
+                </div>
               ))}
             </div>
           </div>
         )}
 
-        {/* ── SCORE + TARGET slider rows ─────────────────────────────────────── */}
+        {/* ── Sliders ────────────────────────────────────────────────── */}
         <div className="space-y-5">
 
           {/* SCORE */}
-          <div className={ROW_CLASS}>
-            <div className="shrink-0 pr-2 text-left sm:text-right" style={labelColStyle}>
-              <span className="text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: '#7fbadc' }}>
-                SCORE
-              </span>
+          <div className="flex items-center gap-3 sm:gap-5">
+            <div className="shrink-0 pr-2 text-left sm:text-right" style={colStyle}>
+              <span className="text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: '#7fbadc' }}>SCORE</span>
             </div>
             <div className="flex-1 min-w-0">
               <div className="w-full relative h-[52px]">
                 <div className="absolute inset-x-0 top-[5px] flex justify-between">
-                  {scaleMarkers.map((mark) => (
-                    <div key={`score-top-${mark}`} className="w-px h-[10px] bg-slate-300/80" />
-                  ))}
+                  {scaleMarkers.map((m) => <div key={m} className="w-px h-[10px] bg-slate-300/80" />)}
                 </div>
                 <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[10px] bg-[#f6f6f6] rounded-full border border-slate-200/60 shadow-[inset_0_1px_1px_rgba(15,23,42,0.08)]" />
                 <motion.div
@@ -221,28 +179,21 @@ export function DualSlider({
                 >
                   <span className="text-white font-bold text-[15px] tabular-nums">{safeCurrent.toFixed(1)}</span>
                 </motion.div>
-                <input
-                  type="range" min={min} max={max} step={step} value={safeCurrent}
-                  onChange={handleCurrentChange}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-30"
-                />
+                <input type="range" min={min} max={max} step={step} value={safeCurrent} onChange={handleCurrentChange}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-30" />
               </div>
             </div>
           </div>
 
           {/* TARGET */}
-          <div className={ROW_CLASS}>
-            <div className="shrink-0 pr-2 text-left sm:text-right" style={labelColStyle}>
-              <span className="text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: '#3a92c6' }}>
-                TARGET
-              </span>
+          <div className="flex items-center gap-3 sm:gap-5">
+            <div className="shrink-0 pr-2 text-left sm:text-right" style={colStyle}>
+              <span className="text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: '#3a92c6' }}>TARGET</span>
             </div>
             <div className="flex-1 min-w-0">
               <div className="w-full relative h-[52px]">
                 <div className="absolute inset-x-0 top-[5px] flex justify-between">
-                  {scaleMarkers.map((mark) => (
-                    <div key={`target-top-${mark}`} className="w-px h-[10px] bg-slate-300/80" />
-                  ))}
+                  {scaleMarkers.map((m) => <div key={m} className="w-px h-[10px] bg-slate-300/80" />)}
                 </div>
                 <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[10px] bg-[#f6f6f6] rounded-full border border-slate-200/60 shadow-[inset_0_1px_1px_rgba(15,23,42,0.08)]" />
                 <motion.div
@@ -253,11 +204,9 @@ export function DualSlider({
                 />
                 <motion.div
                   className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 min-w-[52px] h-[36px] px-[14px] rounded-full shadow-[0_4px_20px_rgba(58,146,198,0.34),0_1px_3px_rgba(0,0,0,0.1)] flex items-center justify-center border-[2.5px] z-20"
-                  style={
-                    safeTarget <= min
-                      ? { background: '#f6f6f6', color: '#54a5d5', borderColor: '#54a5d5' }
-                      : { background: 'linear-gradient(135deg,#54a5d5 0%,#3a92c6 100%)', borderColor: 'rgba(255,255,255,0.9)' }
-                  }
+                  style={safeTarget <= min
+                    ? { background: '#f6f6f6', color: '#54a5d5', borderColor: '#54a5d5' }
+                    : { background: 'linear-gradient(135deg,#54a5d5 0%,#3a92c6 100%)', borderColor: 'rgba(255,255,255,0.9)' }}
                   animate={{ left: `${getPercentage(safeTarget)}%` }}
                   transition={springBubble}
                 >
@@ -265,47 +214,44 @@ export function DualSlider({
                     {safeTarget.toFixed(1)}
                   </span>
                 </motion.div>
-                <input
-                  type="range" min={min} max={max} step={step} value={safeTarget}
-                  onChange={handleTargetChange}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-30"
-                />
+                <input type="range" min={min} max={max} step={step} value={safeTarget} onChange={handleTargetChange}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-30" />
               </div>
             </div>
           </div>
         </div>
 
-        {/* ── Scale ruler ───────────────────────────────────────────────────── */}
+        {/* ── Ruler ──────────────────────────────────────────────────── */}
 
-        {/* Mobile: simple centered grid */}
-        <div className="sm:hidden mt-5">
-          <div className="px-3 grid grid-cols-5">
-            {scaleMarkers.map((mark) => (
-              <div key={mark} className="flex flex-col items-center">
+        {/* Mobile */}
+        <div className="sm:hidden mt-5 px-3 grid grid-cols-5">
+          {scaleMarkers.map((mark) => (
+            <div key={mark} className="flex flex-col items-center">
+              <div className="w-px h-3 bg-slate-300" />
+              <span className="mt-2 text-[11px] font-bold text-slate-400 tabular-nums italic">{mark.toFixed(1)}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop — same structure as label grid */}
+        <div className="hidden sm:flex items-start mt-3 gap-3 sm:gap-5">
+          <div style={colStyle} />
+          <div className="flex-1 min-w-0 relative h-8">
+            {scaleMarkers.map((mark, idx) => (
+              <div
+                key={mark}
+                className="absolute top-0 flex flex-col"
+                style={{
+                  left: `${MARK_POSITIONS[idx]}%`,
+                  transform: `translateX(${labelTranslate(idx)})`,
+                  alignItems: idx === 0 ? 'flex-start' : idx === 4 ? 'flex-end' : 'center',
+                }}
+              >
                 <div className="w-px h-3 bg-slate-300" />
-                <span className="mt-2 text-[11px] font-bold text-slate-400 tabular-nums italic">
+                <span className="mt-1.5 text-[11px] font-bold text-slate-400 tabular-nums italic">
                   {mark.toFixed(1)}
                 </span>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Desktop ruler: same ROW_CLASS + grid-cols-5 → guaranteed alignment with slider marks */}
-        <div className={`hidden sm:flex items-start mt-3 gap-3 sm:gap-5`}>
-          <div style={labelColStyle} className="shrink-0" />
-          {/* Same flex spacer pattern as labels — ruler marks at 0,25,50,75,100% */}
-          <div className="flex-1 min-w-0 flex items-start">
-            {scaleMarkers.map((mark, idx) => (
-              <React.Fragment key={mark}>
-                <div className="flex flex-col items-center flex-shrink-0" style={{ transform: 'translateX(-50%)' }}>
-                  <div className="w-px h-3 bg-slate-300" />
-                  <span className="mt-1.5 text-[11px] font-bold text-slate-400 tabular-nums italic">
-                    {mark.toFixed(1)}
-                  </span>
-                </div>
-                {idx < 4 && <div className="flex-1" />}
-              </React.Fragment>
             ))}
           </div>
         </div>
