@@ -108,7 +108,7 @@ export function DualSlider({
         {labels.length > 0 && (
           <div className="sm:hidden rounded-xl bg-white/65 border border-slate-200/70 p-3 space-y-2 mb-5">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.08em] font-bold text-[#7fbadc]">Score Level</p>
+                <p className="text-[11px] uppercase tracking-[0.08em] font-bold text-[#0F3F52]">Score Level</p>
               <p className="text-sm font-medium text-slate-800 leading-[1.5]">{currentAnchor ?? 'No level description'}</p>
             </div>
             <div>
@@ -158,7 +158,7 @@ export function DualSlider({
           {/* SCORE */}
           <div className="flex items-center gap-3 sm:gap-5">
             <div className="shrink-0 pr-2 text-left sm:text-right" style={colStyle}>
-              <span className="text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: '#7fbadc' }}>SCORE</span>
+              <span className="text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: '#0F3F52' }}>SCORE</span>
             </div>
             <div className="flex-1 min-w-0">
               <div className="w-full relative h-[52px]">
@@ -167,13 +167,13 @@ export function DualSlider({
                 </div>
                 <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[10px] bg-[#f6f6f6] rounded-full border border-slate-200/60 shadow-[inset_0_1px_1px_rgba(15,23,42,0.08)]" />
                 <motion.div
-                  className="absolute left-0 top-1/2 -translate-y-1/2 h-[10px] rounded-full bg-gradient-to-r from-[#b6d5eb] to-[#7fbadc] shadow-[0_2px_14px_rgba(127,186,220,0.32)]"
+                  className="absolute left-0 top-1/2 -translate-y-1/2 h-[10px] rounded-full bg-gradient-to-r from-[#0F3F52] to-[#0F3F52] shadow-[0_2px_14px_rgba(15,63,82,0.32)]"
                   animate={{ width: `${getPercentage(safeCurrent)}%` }}
                   transition={springTrack}
                   style={{ transformOrigin: 'left center' }}
                 />
                 <motion.div
-                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 min-w-[52px] h-[36px] px-[14px] bg-[linear-gradient(135deg,#b6d5eb_0%,#7fbadc_100%)] rounded-full shadow-[0_4px_20px_rgba(127,186,220,0.4),0_1px_3px_rgba(0,0,0,0.1)] flex items-center justify-center border-[2.5px] border-white/90 z-20"
+                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 min-w-[52px] h-[36px] px-[14px] bg-[linear-gradient(135deg,#0F3F52_0%,#0F3F52_100%)] rounded-full shadow-[0_4px_20px_rgba(15,63,82,0.4),0_1px_3px_rgba(0,0,0,0.1)] flex items-center justify-center border-[2.5px] border-white/90 z-20"
                   animate={{ left: `${getPercentage(safeCurrent)}%` }}
                   transition={springBubble}
                 >
