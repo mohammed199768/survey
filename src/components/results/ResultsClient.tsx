@@ -82,7 +82,7 @@ export default function ResultsClient({
           <div className="col-span-1 lg:col-span-4 bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-medium text-gray-700">Top Topics</h3>
-              <span className="text-xs font-medium text-gray-500">Score</span>
+              <span className="text-xs font-medium text-gray-500">Score / Target</span>
             </div>
             <div className="max-h-[360px] overflow-y-auto">
               <TopTopicsList topics={topTopics} />

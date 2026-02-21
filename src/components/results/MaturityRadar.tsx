@@ -48,7 +48,7 @@ export function MaturityRadar({ definition, dimensions }: MaturityRadarProps) {
       >
         <title id={titleId}>Maturity radar chart</title>
         <desc id={descId}>
-          Radar visualization for current and target maturity scores across the six readiness dimensions.
+          Radar visualization for score and target maturity levels across the six readiness dimensions.
         </desc>
         {/* Concentric Grid Lines (Ultra-thin Slate) */}
         {GRID_LEVELS.map((level) => (

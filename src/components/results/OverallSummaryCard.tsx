@@ -10,7 +10,7 @@ export function OverallSummaryCard({ summary }: { summary: OverallScoreSummary }
   const progressPercent = (summary.completedDimensions / summary.totalDimensions) * 100;
 
   const stats = [
-    { label: 'Current Base', value: formatScore(summary.currentAvg), color: 'text-horvath-900' },
+    { label: 'Score Baseline', value: formatScore(summary.currentAvg), color: 'text-horvath-900' },
     { label: 'Strategic Target', value: formatScore(summary.targetAvg), color: 'text-horvath-700' },
     { label: 'Capability Gap', value: formatGap(summary.targetAvg - summary.currentAvg), color: 'text-slate-400' },
   ];

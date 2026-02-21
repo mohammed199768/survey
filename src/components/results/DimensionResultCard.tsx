@@ -45,7 +45,7 @@ export function DimensionResultCard({
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 py-4 border-y border-slate-50 font-mono">
          <div className="flex flex-col">
-            <span className="text-[8px] text-slate-400 block uppercase font-black tracking-widest mb-1">Actual</span>
+            <span className="text-[8px] text-slate-400 block uppercase font-black tracking-widest mb-1">Score</span>
             <span className="text-xl font-black text-horvath-900 tracking-tighter leading-none">{formatScore(dimension.currentAvg)}</span>
          </div>
          <div className="flex flex-col sm:border-x border-slate-100 px-0 sm:px-4">

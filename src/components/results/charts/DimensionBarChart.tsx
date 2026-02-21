@@ -110,7 +110,7 @@ export function DimensionBarChart({ dimensions }: DimensionBarChartProps) {
             className="w-3 h-3 rounded-full"
             style={{ backgroundColor: BRAND_COLORS.light }}
           />
-          <span className="text-xs text-gray-500">Current - {dateNow}</span>
+          <span className="text-xs text-gray-500">Score - {dateNow}</span>
         </div>
         <div className="flex items-center gap-2">
           <div

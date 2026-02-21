@@ -66,7 +66,7 @@ function TopicRow({ topic, rank }: { topic: TopTopic; rank: number }) {
 
       {/* Score */}
       <div className="flex-shrink-0 text-sm font-semibold text-horvath-700">
-        {formatScore(topic.target)}
+        {formatScore(topic.current)} / {formatScore(topic.target)}
       </div>
     </div>
   );
