@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
@@ -79,7 +79,6 @@ export function RecommendationsPageClient({ initialResults, responseIdFromQuery 
         const data = await ResponseAPI.getResults(responseId);
         setApiResults(data);
       } catch (e) {
-        console.error('Failed to fetch results:', e);
       } finally {
         setLoading(false);
       }

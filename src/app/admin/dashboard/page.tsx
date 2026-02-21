@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { AssessmentAdminAPI, DashboardAPI } from '@/lib/api/adminEndpoints';
@@ -40,7 +40,6 @@ export default function AdminDashboardPage() {
           setPublishedSurveyTitle('No published survey');
         }
       } catch (err) {
-        console.error('Failed to fetch dashboard stats:', err);
         setError('Failed to load dashboard data');
       } finally {
         setIsLoadingStats(false);
@@ -53,7 +52,6 @@ export default function AdminDashboardPage() {
         const data = await DashboardAPI.getActivity();
         setActivities(data);
       } catch (err) {
-        console.error('Failed to fetch activity:', err);
       } finally {
         setIsLoadingActivity(false);
       }

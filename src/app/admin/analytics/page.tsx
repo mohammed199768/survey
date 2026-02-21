@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { AnalyticsAPI, DashboardAPI } from '@/lib/api/adminEndpoints';
@@ -21,7 +21,6 @@ export default function AdminAnalyticsPage() {
         const data = await AnalyticsAPI.getDimensionBreakdown();
         setDimensionBreakdown(data);
       } catch (err) {
-        console.error('Failed to fetch dimension breakdown:', err);
         setError('Failed to load analytics data');
       } finally {
         setIsLoadingDimensions(false);
@@ -34,7 +33,6 @@ export default function AdminAnalyticsPage() {
         const data = await DashboardAPI.getStats('all');
         setDashboardStats(data.overview);
       } catch (err) {
-        console.error('Failed to fetch dashboard stats:', err);
         setError('Failed to load analytics data');
       } finally {
         setIsLoadingStats(false);

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Updated Zustand Store with API Integration
  * 
  * Changes from original:
@@ -121,7 +121,6 @@ export const useReadinessStore = create<ReadinessState>()(
           const structure = await AssessmentAPI.getStructure(active.id);
           // 3. Store in state
           set({ assessment: structure, isLoading: false });
-          console.log('✅ Assessment loaded from API');
         } catch (error: unknown) {
           set({ error: getErrorMessage(error, 'Failed to load assessment'), isLoading: false });
         }
@@ -131,7 +130,6 @@ export const useReadinessStore = create<ReadinessState>()(
         // Skip if already loaded
         const { recommendationsDefinition, narrativeDefinition } = get();
         if (recommendationsDefinition && narrativeDefinition) {
-          console.log('ℹ️ Definitions already loaded');
           return;
         }
 
@@ -149,12 +147,8 @@ export const useReadinessStore = create<ReadinessState>()(
             isLoadingDefinitions: false
           });
           
-          console.log('✅ Definitions loaded from API');
-          console.log(`   - ${recDef.dimensions.length} dimensions with recommendations`);
-          console.log(`   - ${Object.keys(narDef.themeMap).length} narrative themes`);
           
         } catch (error: unknown) {
-          console.error('❌ Failed to load definitions:', error);
           set({ 
             error: getErrorMessage(error, 'Failed to load definitions'),
             isLoadingDefinitions: false 
@@ -173,7 +167,6 @@ export const useReadinessStore = create<ReadinessState>()(
             participantToken: response.participantToken ?? existingToken ?? null,
             isLoading: false 
           });
-          console.log('✅ Participant registered:', response.participantId);
         } catch (error: unknown) {
           set({ error: getErrorMessage(error, 'Failed to register participant'), isLoading: false });
           throw error; // Re-throw to allow component to handle validation errors if needed
@@ -209,7 +202,6 @@ export const useReadinessStore = create<ReadinessState>()(
             isLoading: false 
           });
 
-          console.log('✅ Assessment started:', response.responseId);
         } catch (error: unknown) {
           set({ error: getErrorMessage(error, 'Failed to start assessment'), isLoading: false });
           throw error;
@@ -283,7 +275,6 @@ export const useReadinessStore = create<ReadinessState>()(
             });
             const message = getErrorMessage(error, 'Failed to submit answer');
             set({ error: message });
-            console.error('Answer submission failed, not saved locally:', error);
             throw error;
         }
       },
@@ -296,7 +287,6 @@ export const useReadinessStore = create<ReadinessState>()(
         try {
           await ResponseAPI.complete(responseId);
           set({ isLoading: false });
-          console.log('✅ Assessment completed');
         } catch (error: unknown) {
           set({ error: getErrorMessage(error, 'Failed to complete assessment'), isLoading: false });
           throw error;
@@ -387,7 +377,6 @@ export const useReadinessStore = create<ReadinessState>()(
 
       clearAllData: () => {
         get().clearSessionState();
-        console.log('🗑️ All data cleared');
       },
 
       setError: (error) => set({ error, isLoading: false }),

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -63,7 +63,6 @@ export default function SurveyPage() {
          setError('Assessment structure not found. Please try again.');
       }
     } catch (err: unknown) {
-      console.error('Failed to start assessment:', err);
       const message = err instanceof Error ? err.message : 'Failed to start assessment. Please try again.';
       setError(message);
     }
@@ -92,7 +91,7 @@ export default function SurveyPage() {
                 Start Your Assessment
               </h1>
               <p className="text-slate-600 mt-3 text-sm md:text-base max-w-2xl mx-auto">
-                Provide your professional details to launch a personalized HORVÁTH readiness assessment.
+                Provide your professional details to launch a personalized HORVÃTH readiness assessment.
               </p>
             </div>
           

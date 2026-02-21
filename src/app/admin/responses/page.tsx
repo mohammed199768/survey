@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -139,7 +139,6 @@ export default function ResponsesPage() {
       setResponses(result.data);
       setPagination(result.pagination);
     } catch (err) {
-      console.error('Failed to fetch responses:', err);
       setError('Failed to load responses. Please try again.');
     } finally {
       setIsLoading(false);
@@ -189,7 +188,6 @@ export default function ResponsesPage() {
         setCurrentPage((page) => Math.max(1, page - 1));
       }
     } catch (err) {
-      console.error('Failed to delete response:', err);
       setResponses(previousResponses);
       setPagination(previousPagination);
       setError('Failed to delete response. Please try again.');

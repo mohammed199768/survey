@@ -1,4 +1,4 @@
-// src/components/survey/DimensionContent.tsx
+﻿// src/components/survey/DimensionContent.tsx
 
 'use client';
 
@@ -134,7 +134,6 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
           const target = responseId ? `/results?responseId=${encodeURIComponent(responseId)}` : '/results';
           router.push(target);
         } catch (e) {
-          console.error('Completion failed', e);
         }
       }
       return;

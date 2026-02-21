@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
@@ -338,7 +338,7 @@ function GeneratedRecommendations({ priorities }: { priorities: PriorityScore[] 
             <ul className="mt-3 space-y-1">
               {rec.action_items.map((item, i) => (
                 <li key={`${rec.id}-action-${i}`} className="text-sm text-gray-700">
-                  • {item}
+                  â€¢ {item}
                 </li>
               ))}
             </ul>
@@ -365,7 +365,6 @@ export default function ResponseDetailPage({ params }: { params: Promise<{ id: s
         const data = await ResponseAdminAPI.get(resolvedParams.id);
         setResponseDetail(data);
       } catch (err) {
-        console.error('Failed to fetch response detail:', err);
         setError('Failed to load response details. Please try again.');
       } finally {
         setIsLoading(false);

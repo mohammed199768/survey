@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -29,7 +29,6 @@ export default function ParticipantsPage() {
       setParticipants(result.data);
       setPagination(result.pagination);
     } catch (err) {
-      console.error('Failed to fetch participants:', err);
       setError('Failed to load participants. Please try again.');
     } finally {
       setIsLoading(false);
@@ -67,7 +66,6 @@ export default function ParticipantsPage() {
         setCurrentPage((page) => Math.max(1, page - 1));
       }
     } catch (err) {
-      console.error('Failed to delete participant:', err);
       setParticipants(previousParticipants);
       setPagination(previousPagination);
       setError('Failed to delete participant. Please try again.');

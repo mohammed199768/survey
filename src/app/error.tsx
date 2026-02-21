@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import * as React from 'react';
 
@@ -9,7 +9,6 @@ interface ErrorPageProps {
 
 export default function ErrorPage({ error, reset }: ErrorPageProps) {
   React.useEffect(() => {
-    console.error('App route error:', error);
   }, [error]);
 
   return (

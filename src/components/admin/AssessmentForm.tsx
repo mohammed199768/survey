@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import { AssessmentAdminAPI } from '@/lib/api/adminEndpoints';
@@ -77,7 +77,6 @@ export function AssessmentForm({ assessment, onSuccess, onCancel }: AssessmentFo
       // Expand all dimensions by default
       setExpandedDimensions(new Set(details.dimensions?.map((_, i) => i) || []));
     } catch (err) {
-      console.error('Failed to load assessment details:', err);
       setError('Failed to load assessment details');
     } finally {
       setIsLoadingDetails(false);
@@ -118,7 +117,6 @@ export function AssessmentForm({ assessment, onSuccess, onCancel }: AssessmentFo
 
       onSuccess();
     } catch (err) {
-      console.error('Failed to save assessment:', err);
       setError('Failed to save assessment. Please try again.');
     } finally {
       setIsLoading(false);

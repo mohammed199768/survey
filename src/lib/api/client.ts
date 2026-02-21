@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Core HTTP client for API communication
  * Features:
  * - Automatic error handling
@@ -123,7 +123,6 @@ export class ApiClient {
 
       } catch (error: unknown) {
         attempts++;
-        console.error(`API Request failed (Attempt ${attempts}/${maxAttempts}):`, error);
         const message = error instanceof Error ? error.message : 'Network request failed';
 
         if (attempts >= maxAttempts) {

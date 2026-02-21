@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { AdminUser, AdminAuthResponse } from '../api/adminTypes';
@@ -51,7 +51,6 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
           clearAdminAuthMarker();
         }
       } catch (err) {
-        console.error('Token verification failed:', err);
         setUser(null);
         clearAdminAuthMarker();
       } finally {

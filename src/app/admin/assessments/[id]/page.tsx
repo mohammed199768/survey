@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
@@ -64,7 +64,6 @@ export default function AssessmentDetailPage() {
       );
       setTopicRecCounts(Object.fromEntries(countEntries));
     } catch (err) {
-      console.error('Failed to fetch assessment:', err);
       setError('Failed to load assessment details');
     } finally {
       setIsLoading(false);
@@ -113,7 +112,6 @@ export default function AssessmentDetailPage() {
       );
       fetchAssessment();
     } catch (err) {
-      console.error('Failed to publish/unpublish:', err);
       showToast('Failed to update publish status', 'error');
     } finally {
       setIsPublishing(false);
@@ -383,7 +381,7 @@ export default function AssessmentDetailPage() {
                                   className={`rounded px-2 py-1 text-xs ${getTopicTab(topic.id) === 'levels' ? 'bg-horvath-700 text-white' : 'bg-white border'}`}
                                   onClick={() => setTopicTab(topic.id, 'levels')}
                                 >
-                                  Level Labels {isLevelsComplete(topic) ? '✓' : '⚠'}
+                                  Level Labels {isLevelsComplete(topic) ? 'âœ“' : 'âš '}
                                 </button>
                                 <button
                                   className={`rounded px-2 py-1 text-xs ${getTopicTab(topic.id) === 'recommendations' ? 'bg-horvath-700 text-white' : 'bg-white border'}`}

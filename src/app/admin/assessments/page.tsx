@@ -41,7 +41,6 @@ export default function AssessmentsPage() {
       const data = await AssessmentAdminAPI.list();
       setAssessments(data);
     } catch (err) {
-      console.error('Failed to fetch assessments:', err);
       setError('Failed to load assessments');
     } finally {
       setIsLoading(false);
@@ -86,7 +85,6 @@ export default function AssessmentsPage() {
       showToast(!currentStatus ? 'Assessment published successfully' : 'Assessment unpublished', 'success');
       fetchAssessments();
     } catch (err) {
-      console.error('Failed to publish/unpublish:', err);
       showToast('Failed to update publish status', 'error');
     } finally {
       setActionLoading(null);
