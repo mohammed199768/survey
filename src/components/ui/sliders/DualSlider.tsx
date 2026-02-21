@@ -80,23 +80,11 @@ export function DualSlider({
   const springTrack = { type: 'spring', stiffness: 220, damping: 28 } as const;
   const springBubble = { type: 'spring', stiffness: 300, damping: 30 } as const;
   const labelColumnClass = 'shrink-0';
-  const LABEL_COL_W = 62; // px - fixed, used inline for spacers
+  const LABEL_COL_W = '62px';
   const railPaddingClass = 'px-0';
   const scoreLabelColor = '#7fbadc';
   const targetLabelColor = '#3a92c6';
   const labelsForGrid = Array.from({ length: 5 }, (_, idx) => labels[idx] ?? '');
-  const labelsZoneRef = React.useRef<HTMLDivElement>(null);
-  const [labelRowHeight, setLabelRowHeight] = React.useState<number>(72);
-
-  // Recalculate label row height after render so all labels align at bottom
-  React.useLayoutEffect(() => {
-    const zone = labelsZoneRef.current;
-    if (!zone) return;
-    const paragraphs = zone.querySelectorAll('p');
-    let max = 0;
-    paragraphs.forEach((p) => { max = Math.max(max, p.scrollHeight); });
-    if (max > 0) setLabelRowHeight(max);
-  }, [labelsForGrid]);
 
   const renderScaleRuler = () => (
     <>
@@ -113,17 +101,20 @@ export function DualSlider({
         </div>
       </div>
 
-      <div className="hidden sm:flex items-start mt-4" style={{ gap: 0 }}>
-        <div style={{ width: LABEL_COL_W, minWidth: LABEL_COL_W, flexShrink: 0 }} />
-        <div className="flex-1 min-w-0 relative h-9 -ml-[1.55%] sm:-ml-[2.05%]">
+      <div className="hidden sm:block mt-3" style={{ marginLeft: LABEL_COL_W }}>
+        <div className="grid grid-cols-5">
           {scaleMarkers.map((mark, idx) => (
             <div
               key={mark}
-              className="absolute top-0 -translate-x-1/2 flex flex-col items-center"
-              style={{ left: `${(idx / 4) * 100}%` }}
+              className={`
+          flex flex-col
+          ${idx === 0 ? 'items-start' : ''}
+          ${idx === 4 ? 'items-end' : ''}
+          ${idx > 0 && idx < 4 ? 'items-center' : ''}
+        `}
             >
               <div className="w-px h-3 bg-slate-300" />
-              <span className="mt-2 text-[11px] font-bold text-slate-400 tabular-nums italic">
+              <span className="mt-1.5 text-[11px] font-bold text-slate-400 tabular-nums italic">
                 {mark.toFixed(1)}
               </span>
             </div>
@@ -153,29 +144,33 @@ export function DualSlider({
               </div>
             </div>
 
-            <div className="hidden sm:flex items-start mb-2" style={{ gap: 0 }}>
-              {/* Spacer - same width as SCORE/TARGET label column */}
-              <div style={{ width: LABEL_COL_W, minWidth: LABEL_COL_W, flexShrink: 0 }} />
-              {/* Aligned zone with same negative margin as rail/ruler for sync */}
-              <div className="flex-1 min-w-0 relative -ml-[1.55%] sm:-ml-[2.05%]" style={{ minHeight: 4 }} ref={labelsZoneRef}>
+            <div className="hidden sm:block mb-2" style={{ marginLeft: LABEL_COL_W }}>
+              <div className="grid grid-cols-5">
                 {labelsForGrid.map((label, idx) => (
                   <div
                     key={idx}
-                    className="absolute top-0 -translate-x-1/2 flex flex-col items-center"
-                    style={{
-                      left: `${(idx / 4) * 100}%`,
-                      width: idx === 0 || idx === 4 ? '18%' : '26%',
-                    }}
+                    className="flex flex-col items-center px-1"
                   >
                     <p
-                      className="text-[clamp(0.64rem,0.8vw+0.1rem,0.82rem)] font-medium text-slate-700
-                     leading-[1.38] text-center w-full flex items-end justify-center
-                     overflow-wrap-anywhere hyphens-auto pb-0"
-                      style={{ height: labelRowHeight }}
+                      className={`
+            text-[clamp(0.64rem,0.75vw+0.15rem,0.8rem)]
+            font-medium text-slate-700 leading-[1.38]
+            min-h-[4rem] w-full flex items-end
+            break-words hyphens-auto
+            ${idx === 0 ? 'justify-start text-left' : ''}
+            ${idx === 4 ? 'justify-end text-right' : ''}
+            ${idx > 0 && idx < 4 ? 'justify-center text-center' : ''}
+          `}
                     >
                       {label}
                     </p>
-                    <div className="w-px h-[14px] bg-slate-300 mt-[5px]" />
+                    <div
+                      className={`
+            w-px h-[14px] bg-slate-300 mt-[5px] flex-shrink-0
+            ${idx === 0 ? 'self-start ml-0' : ''}
+            ${idx === 4 ? 'self-end mr-0' : ''}
+          `}
+                    />
                   </div>
                 ))}
               </div>
