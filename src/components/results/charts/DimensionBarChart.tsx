@@ -10,10 +10,10 @@ interface DimensionBarChartProps {
 }
 
 const BRAND_COLORS = {
-  primary: '#1d6996',
+  primary: '#0F3F52',
   secondary: '#3a92c6',
   tertiary: '#54a5d5',
-  light: '#7fbadc',
+  light: '#0F3F52',
   pale: '#b6d5eb',
 } as const;
 

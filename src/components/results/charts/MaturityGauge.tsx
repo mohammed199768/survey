@@ -11,7 +11,7 @@ interface MaturityGaugeProps {
 }
 
 const BRAND_COLORS = {
-  primary: '#1d6996',
+  primary: '#0F3F52',
   secondary: '#3a92c6',
   tertiary: '#54a5d5',
   light: '#7fbadc',
@@ -67,7 +67,8 @@ export function MaturityGauge({
           
           {/* Filled Bar (Horvath brand gradient) */}
           <motion.div
-            className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-horvath-100 via-horvath-500 to-horvath-900 rounded-full"
+            className="absolute bottom-0 left-0 right-0 rounded-full"
+            style={{ background: 'linear-gradient(to top, #0F3F52 0%, #0F3F52 100%)' }}
             initial={{ height: 0 }}
             animate={{ height: `${scorePercent}%` }}
             transition={{ duration: 1.2, ease: 'easeOut' }}
@@ -96,8 +97,8 @@ export function MaturityGauge({
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 1.2, type: 'spring', bounce: 0.4 }}
           >
-            <div className="w-full h-full rounded-full bg-white shadow-lg border-4 border-horvath-700 flex items-center justify-center">
-              <span className="text-xl font-bold text-horvath-900">
+            <div className="w-full h-full rounded-full bg-white shadow-lg border-4 flex items-center justify-center" style={{ borderColor: '#0F3F52' }}>
+              <span className="text-xl font-bold" style={{ color: '#0F3F52' }}>
                 {clampedScore.toFixed(1)}
               </span>
             </div>
