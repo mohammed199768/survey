@@ -12,6 +12,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { AssessmentAPI, ParticipantAPI, ResponseAPI } from '@/lib/api/endpoints';
+import { logger } from '@/lib/utils/logger';
 import type { 
   AssessmentStructureResponse,
   ParticipantData,
@@ -122,6 +123,7 @@ export const useReadinessStore = create<ReadinessState>()(
           // 3. Store in state
           set({ assessment: structure, isLoading: false });
         } catch (error: unknown) {
+          logger.error('Failed to load assessment', error);
           set({ error: getErrorMessage(error, 'Failed to load assessment'), isLoading: false });
         }
       },
@@ -146,9 +148,8 @@ export const useReadinessStore = create<ReadinessState>()(
             narrativeDefinition: narDef,
             isLoadingDefinitions: false
           });
-          
-          
         } catch (error: unknown) {
+          logger.error('Failed to load definitions', error);
           set({ 
             error: getErrorMessage(error, 'Failed to load definitions'),
             isLoadingDefinitions: false 
@@ -168,6 +169,7 @@ export const useReadinessStore = create<ReadinessState>()(
             isLoading: false 
           });
         } catch (error: unknown) {
+          logger.error('Failed to register participant', error);
           set({ error: getErrorMessage(error, 'Failed to register participant'), isLoading: false });
           throw error; // Re-throw to allow component to handle validation errors if needed
         }
@@ -203,6 +205,7 @@ export const useReadinessStore = create<ReadinessState>()(
           });
 
         } catch (error: unknown) {
+          logger.error('Failed to start assessment', error);
           set({ error: getErrorMessage(error, 'Failed to start assessment'), isLoading: false });
           throw error;
         }
@@ -218,6 +221,7 @@ export const useReadinessStore = create<ReadinessState>()(
             }
             await startSessionPromise;
           } catch (error: unknown) {
+            logger.error('Unable to start response session', error);
             const message = getErrorMessage(error, 'Unable to start response session');
             set({ error: message });
             throw new Error(message);
@@ -275,6 +279,7 @@ export const useReadinessStore = create<ReadinessState>()(
             });
             const message = getErrorMessage(error, 'Failed to submit answer');
             set({ error: message });
+            logger.error('Failed to submit answer', { topicId, error });
             throw error;
         }
       },
@@ -288,6 +293,7 @@ export const useReadinessStore = create<ReadinessState>()(
           await ResponseAPI.complete(responseId);
           set({ isLoading: false });
         } catch (error: unknown) {
+          logger.error('Failed to complete assessment', error);
           set({ error: getErrorMessage(error, 'Failed to complete assessment'), isLoading: false });
           throw error;
         }
@@ -326,6 +332,7 @@ export const useReadinessStore = create<ReadinessState>()(
                await get().loadAssessment();
            }
         } catch (error: unknown) {
+          logger.error('Failed to resume session', error);
           const message = getErrorMessage(error, 'Failed to resume session');
           get().clearSessionState();
           set({ error: message });

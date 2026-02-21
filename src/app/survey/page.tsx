@@ -6,6 +6,7 @@ import { useReadinessStore } from '@/store/readiness/readiness.store';
 import { Navbar } from '@/components/layout/Navbar';
 import { BrandPreloader } from '@/components/common/BrandPreloader';
 import Link from 'next/link';
+import { logger } from '@/lib/utils/logger';
 
 export default function SurveyPage() {
   const router = useRouter();
@@ -63,6 +64,7 @@ export default function SurveyPage() {
          setError('Assessment structure not found. Please try again.');
       }
     } catch (err: unknown) {
+      logger.error('Failed to start assessment from survey intake', err);
       const message = err instanceof Error ? err.message : 'Failed to start assessment. Please try again.';
       setError(message);
     }

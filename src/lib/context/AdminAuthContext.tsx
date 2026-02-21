@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { AdminUser, AdminAuthResponse } from '../api/adminTypes';
 import { AdminAuthAPI } from '../api/adminEndpoints';
+import { logger } from '../utils/logger';
 import {
   clearAdminAuthMarker,
   hasAdminAuthMarker,
@@ -51,6 +52,7 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
           clearAdminAuthMarker();
         }
       } catch (err) {
+        logger.warn('Admin token verification failed during initial load', err);
         setUser(null);
         clearAdminAuthMarker();
       } finally {
@@ -75,6 +77,7 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
         throw new Error(response.error || 'Login failed');
       }
     } catch (err: unknown) {
+      logger.warn('Admin login failed', err);
       clearAdminAuthMarker();
       setError(toMessage(err));
       throw err;
@@ -106,6 +109,7 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
       clearAdminAuthMarker();
       return false;
     } catch {
+      logger.warn('Admin verify call failed');
       setUser(null);
       clearAdminAuthMarker();
       return false;

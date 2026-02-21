@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import * as React from 'react';
+import { logger } from '@/lib/utils/logger';
 
 interface ErrorPageProps {
   error: Error & { digest?: string };
@@ -9,6 +10,7 @@ interface ErrorPageProps {
 
 export default function ErrorPage({ error, reset }: ErrorPageProps) {
   React.useEffect(() => {
+    logger.error('App route error:', error);
   }, [error]);
 
   return (

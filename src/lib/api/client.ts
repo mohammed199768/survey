@@ -10,6 +10,7 @@
 
 import { API_BASE_URL } from '@/config/api';
 import { clearAdminAuthMarker } from '@/lib/auth/adminAuthMarker';
+import { logger } from '@/lib/utils/logger';
 
 const CSRF_ENDPOINT = '/csrf-token';
 const CSRF_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
@@ -123,6 +124,11 @@ export class ApiClient {
 
       } catch (error: unknown) {
         attempts++;
+        logger.warn(`API request failed (attempt ${attempts}/${maxAttempts})`, {
+          endpoint,
+          method: resolvedMethod,
+          error,
+        });
         const message = error instanceof Error ? error.message : 'Network request failed';
 
         if (attempts >= maxAttempts) {

@@ -9,6 +9,7 @@ import { useReadinessStore } from '@/store/readiness/readiness.store';
 import { AssessmentGateDialog } from '@/components/survey/AssessmentGateDialog';
 import { AssessmentStructureResponse } from '@/lib/api/types';
 import { BrandPreloader } from '@/components/common/BrandPreloader';
+import { logger } from '@/lib/utils/logger';
 
 type MissingItem = {
   dimensionId: string;
@@ -134,6 +135,7 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
           const target = responseId ? `/results?responseId=${encodeURIComponent(responseId)}` : '/results';
           router.push(target);
         } catch (e) {
+          logger.error('Completion failed', e);
         }
       }
       return;

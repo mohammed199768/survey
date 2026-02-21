@@ -12,6 +12,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { ResetButton } from '@/components/common/ResetButton';
 import { EnhancedRecommendation } from '@/lib/recommendations/definition';
 import { FullPagePreloader } from '@/components/common/BrandPreloader';
+import { logger } from '@/lib/utils/logger';
 
 interface RecommendationsPageClientProps {
   initialResults: ResultsData | null;
@@ -79,6 +80,7 @@ export function RecommendationsPageClient({ initialResults, responseIdFromQuery 
         const data = await ResponseAPI.getResults(responseId);
         setApiResults(data);
       } catch (e) {
+        logger.error('Failed to fetch results for recommendations page', e);
       } finally {
         setLoading(false);
       }
