@@ -165,15 +165,26 @@ export function DualSlider({
           <div className={`hidden sm:flex items-end mb-2 gap-3 sm:gap-5`}>
             {/* Spacer: exact same width as SCORE/TARGET label col */}
             <div style={labelColStyle} className="shrink-0" />
-            {/* Label cells: grid-cols-5 — all centered uniformly */}
-            <div className="flex-1 min-w-0 grid grid-cols-5">
+            {/* 
+              Label positions MUST match slider bubble positions exactly:
+              mark 1=0%, 2=25%, 3=50%, 4=75%, 5=100%
+              
+              Using flex with flex-1 spacers between items achieves this:
+              [item] [flex-1] [item] [flex-1] [item] [flex-1] [item] [flex-1] [item]
+              Items land at 0%, 25%, 50%, 75%, 100% of container width.
+              Each item is centered with -translate-x-1/2.
+            */}
+            <div className="flex-1 min-w-0 flex items-end">
               {labelsForGrid.map((label, idx) => (
-                <div key={idx} className="flex flex-col items-center px-1">
-                  <p className="text-[clamp(0.62rem,0.7vw+0.1rem,0.78rem)] font-medium text-slate-700 leading-[1.38] min-h-[4rem] w-full flex items-end justify-center text-center break-words hyphens-auto">
-                    {label}
-                  </p>
-                  <div className="w-px h-[14px] bg-slate-300 mt-[5px] flex-shrink-0" />
-                </div>
+                <React.Fragment key={idx}>
+                  <div className="flex flex-col items-center flex-shrink-0" style={{ transform: 'translateX(-50%)' }}>
+                    <p className="text-[clamp(0.62rem,0.7vw+0.1rem,0.78rem)] font-medium text-slate-700 leading-[1.38] min-h-[4rem] flex items-end justify-center text-center break-words hyphens-auto" style={{ width: 'clamp(60px, 18%, 140px)' }}>
+                      {label}
+                    </p>
+                    <div className="w-px h-[14px] bg-slate-300 mt-[5px] flex-shrink-0" />
+                  </div>
+                  {idx < 4 && <div className="flex-1" />}
+                </React.Fragment>
               ))}
             </div>
           </div>
@@ -191,7 +202,7 @@ export function DualSlider({
             </div>
             <div className="flex-1 min-w-0">
               <div className="w-full relative h-[52px]">
-                <div className="absolute inset-x-0 top-[5px] flex justify-between px-[1px]">
+                <div className="absolute inset-x-0 top-[5px] flex justify-between">
                   {scaleMarkers.map((mark) => (
                     <div key={`score-top-${mark}`} className="w-px h-[10px] bg-slate-300/80" />
                   ))}
@@ -228,7 +239,7 @@ export function DualSlider({
             </div>
             <div className="flex-1 min-w-0">
               <div className="w-full relative h-[52px]">
-                <div className="absolute inset-x-0 top-[5px] flex justify-between px-[1px]">
+                <div className="absolute inset-x-0 top-[5px] flex justify-between">
                   {scaleMarkers.map((mark) => (
                     <div key={`target-top-${mark}`} className="w-px h-[10px] bg-slate-300/80" />
                   ))}
@@ -283,14 +294,18 @@ export function DualSlider({
         {/* Desktop ruler: same ROW_CLASS + grid-cols-5 → guaranteed alignment with slider marks */}
         <div className={`hidden sm:flex items-start mt-3 gap-3 sm:gap-5`}>
           <div style={labelColStyle} className="shrink-0" />
-          <div className="flex-1 min-w-0 grid grid-cols-5">
-            {scaleMarkers.map((mark) => (
-              <div key={mark} className="flex flex-col items-center">
-                <div className="w-px h-3 bg-slate-300" />
-                <span className="mt-1.5 text-[11px] font-bold text-slate-400 tabular-nums italic">
-                  {mark.toFixed(1)}
-                </span>
-              </div>
+          {/* Same flex spacer pattern as labels — ruler marks at 0,25,50,75,100% */}
+          <div className="flex-1 min-w-0 flex items-start">
+            {scaleMarkers.map((mark, idx) => (
+              <React.Fragment key={mark}>
+                <div className="flex flex-col items-center flex-shrink-0" style={{ transform: 'translateX(-50%)' }}>
+                  <div className="w-px h-3 bg-slate-300" />
+                  <span className="mt-1.5 text-[11px] font-bold text-slate-400 tabular-nums italic">
+                    {mark.toFixed(1)}
+                  </span>
+                </div>
+                {idx < 4 && <div className="flex-1" />}
+              </React.Fragment>
             ))}
           </div>
         </div>
