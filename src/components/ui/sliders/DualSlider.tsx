@@ -120,7 +120,7 @@ export function DualSlider({
 
         {/* ── Desktop: label grid ────────────────────────────────────── */}
         {labels.length > 0 && (
-          <div className="hidden sm:flex items-stretch mt-2 mb-1 gap-3 sm:gap-5">
+          <div className="hidden sm:flex items-stretch mb-1 gap-3 sm:gap-5">
             {/* Spacer = same width as SCORE/TARGET col */}
             <div style={colStyle} />
             {/* Rail-width container with absolute-positioned labels */}
@@ -136,7 +136,7 @@ export function DualSlider({
                   }}
                 >
                   <p
-                    className="text-[clamp(0.68rem,0.75vw+0.14rem,0.86rem)] font-semibold text-slate-800 leading-[1.38] break-words hyphens-auto"
+                    className="text-[clamp(0.66rem,0.72vw+0.13rem,0.84rem)] font-semibold text-[#4B5563] leading-[1.36] break-words hyphens-auto"
                     style={{ textAlign: labelAlign(idx) }}
                   >
                     {label}
