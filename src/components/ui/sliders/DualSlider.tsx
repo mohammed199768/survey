@@ -115,7 +115,7 @@ export function DualSlider({
 
       <div className="hidden sm:flex items-start mt-4" style={{ gap: 0 }}>
         <div style={{ width: LABEL_COL_W, minWidth: LABEL_COL_W, flexShrink: 0 }} />
-        <div className="flex-1 min-w-0 relative h-9">
+        <div className="flex-1 min-w-0 relative h-9 -ml-[1.55%] sm:-ml-[2.05%]">
           {scaleMarkers.map((mark, idx) => (
             <div
               key={mark}
@@ -156,8 +156,8 @@ export function DualSlider({
             <div className="hidden sm:flex items-start mb-2" style={{ gap: 0 }}>
               {/* Spacer - same width as SCORE/TARGET label column */}
               <div style={{ width: LABEL_COL_W, minWidth: LABEL_COL_W, flexShrink: 0 }} />
-              {/* Aligned zone: flex-1, same width as the slider rail */}
-              <div className="flex-1 min-w-0 relative" style={{ minHeight: 4 }} ref={labelsZoneRef}>
+              {/* Aligned zone with same negative margin as rail/ruler for sync */}
+              <div className="flex-1 min-w-0 relative -ml-[1.55%] sm:-ml-[2.05%]" style={{ minHeight: 4 }} ref={labelsZoneRef}>
                 {labelsForGrid.map((label, idx) => (
                   <div
                     key={idx}
@@ -190,7 +190,7 @@ export function DualSlider({
                 SCORE
               </span>
             </div>
-            <div className={`flex-1 ${railPaddingClass}`}>
+            <div className={`flex-1 ${railPaddingClass} -ml-[1.55%] sm:-ml-[2.05%]`}>
               <div className="w-full relative h-[52px]">
                 <div className="absolute inset-x-0 top-[5px] flex justify-between px-[1px]">
                   {scaleMarkers.map((mark) => (
@@ -231,7 +231,7 @@ export function DualSlider({
                 TARGET
               </span>
             </div>
-            <div className={`flex-1 ${railPaddingClass}`}>
+            <div className={`flex-1 ${railPaddingClass} -ml-[1.55%] sm:-ml-[2.05%]`}>
               <div className="w-full relative h-[52px]">
                 <div className="absolute inset-x-0 top-[5px] flex justify-between px-[1px]">
                   {scaleMarkers.map((mark) => (
