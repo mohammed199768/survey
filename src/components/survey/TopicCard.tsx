@@ -130,7 +130,7 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
       {/* Header */}
       <div className="px-4 sm:px-5 lg:px-8 pt-5 lg:pt-6 pb-0 bg-white shrink-0">
         <div className="w-full max-w-[1240px] mx-auto">
-          <h2 className="text-[clamp(1.12rem,4.3vw,1.72rem)] lg:text-[1.72rem] font-semibold text-slate-900 tracking-[-0.005em] leading-tight">
+          <h2 className="text-[clamp(1.05rem,2.2vw+0.3rem,1.65rem)] font-semibold text-slate-900 tracking-[-0.005em] leading-tight break-words">
             {topic.label}
           </h2>
           <div className="h-px bg-[#d8e9f5] mt-3.5" />
@@ -140,7 +140,7 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
       {/* Prompt Strip */}
       <div className="px-4 sm:px-5 lg:px-8 pt-5 pb-2 lg:pb-3 bg-white shrink-0">
         <div className="w-full max-w-[1240px] mx-auto">
-          <p className="text-[clamp(0.92rem,2.95vw,1.04rem)] lg:text-[1rem] font-medium text-slate-800 leading-[1.5] max-w-[1120px]">
+          <p className="text-[clamp(0.88rem,1vw+0.5rem,1rem)] font-medium text-slate-800 leading-[1.55] max-w-[1120px]">
             {topic.prompt}
           </p>
         </div>

@@ -19,22 +19,22 @@ export function DimensionSummaryBar({
 
   return (
     <div className="bg-white border-b border-slate-100 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex flex-wrap items-center justify-between gap-y-2">
         <div className="flex items-center gap-4">
            <div className="w-10 h-10 bg-horvath-50 rounded-xl flex items-center justify-center border border-horvath-100">
               <ShieldCheck className="w-5 h-5 text-horvath-700" />
            </div>
            <div>
               <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none block mb-1">Strategic Stream</span>
-              <h2 className="text-lg font-black text-horvath-900 uppercase tracking-tight">{dimensionTitle}</h2>
+              <h2 className="text-[clamp(0.85rem,2vw,1.125rem)] font-black text-horvath-900 uppercase tracking-tight truncate max-w-[28ch]">{dimensionTitle}</h2>
            </div>
         </div>
 
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-4 sm:gap-6 md:gap-8 flex-wrap">
            <div className="flex flex-col items-end">
               <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Progress Intensity</span>
               <div className="flex items-center gap-4">
-                 <div className="w-48 h-1.5 bg-horvath-50 rounded-full overflow-hidden">
+                 <div className="w-24 sm:w-36 md:w-48 h-1.5 bg-horvath-50 rounded-full overflow-hidden">
                     <motion.div 
                       initial={{ width: 0 }}
                       animate={{ width: `${percent}%` }}
@@ -48,7 +48,7 @@ export function DimensionSummaryBar({
               </div>
            </div>
 
-           <div className="h-8 w-px bg-slate-100" />
+          <div className="hidden sm:block h-8 w-px bg-slate-100" />
 
            <div className="flex flex-col items-end">
               <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Integrity Check</span>

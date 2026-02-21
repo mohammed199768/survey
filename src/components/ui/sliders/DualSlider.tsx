@@ -40,9 +40,6 @@ export function DualSlider({
   topicId: _topicId,
   labels = [],
 }: DualSliderProps) {
-  const railRef = React.useRef<HTMLDivElement>(null);
-  const [railWidth, setRailWidth] = React.useState<number>(0);
-
   const toSafeScore = React.useCallback((value: unknown, fallback: number) => {
     if (typeof value === 'number' && Number.isFinite(value)) {
       return Math.max(min, Math.min(max, value));
@@ -83,30 +80,23 @@ export function DualSlider({
   const springTrack = { type: 'spring', stiffness: 220, damping: 28 } as const;
   const springBubble = { type: 'spring', stiffness: 300, damping: 30 } as const;
   const labelColumnClass = 'shrink-0';
-  const labelColumnWidth = 'clamp(56px, 7.5vw, 72px)';
+  const LABEL_COL_W = 62; // px - fixed, used inline for spacers
   const railPaddingClass = 'px-0';
   const scoreLabelColor = '#7fbadc';
   const targetLabelColor = '#3a92c6';
+  const labelsForGrid = Array.from({ length: 5 }, (_, idx) => labels[idx] ?? '');
+  const labelsZoneRef = React.useRef<HTMLDivElement>(null);
+  const [labelRowHeight, setLabelRowHeight] = React.useState<number>(72);
 
-  React.useEffect(() => {
-    const element = railRef.current;
-    if (!element) return;
-
-    const updateWidth = () => {
-      setRailWidth(element.getBoundingClientRect().width);
-    };
-
-    updateWidth();
-
-    const observer = new ResizeObserver(() => {
-      updateWidth();
-    });
-    observer.observe(element);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
+  // Recalculate label row height after render so all labels align at bottom
+  React.useLayoutEffect(() => {
+    const zone = labelsZoneRef.current;
+    if (!zone) return;
+    const paragraphs = zone.querySelectorAll('p');
+    let max = 0;
+    paragraphs.forEach((p) => { max = Math.max(max, p.scrollHeight); });
+    if (max > 0) setLabelRowHeight(max);
+  }, [labelsForGrid]);
 
   const renderScaleRuler = () => (
     <>
@@ -123,27 +113,25 @@ export function DualSlider({
         </div>
       </div>
 
-      <div className="hidden sm:block mt-6" style={{ marginLeft: labelColumnWidth }}>
-        <div className="relative h-9">
-          {railWidth > 0 &&
-            scaleMarkers.map((mark) => (
-              <div
-                key={mark}
-                className="absolute top-0 -translate-x-1/2 flex flex-col items-center"
-                style={{ left: `${((mark - 1) / 4) * railWidth}px` }}
-              >
-                <div className="w-px h-3 bg-slate-300" />
-                <span className="mt-2 text-[12px] font-bold text-slate-400 tabular-nums italic">
-                  {mark.toFixed(1)}
-                </span>
-              </div>
-            ))}
+      <div className="hidden sm:flex items-start mt-4" style={{ gap: 0 }}>
+        <div style={{ width: LABEL_COL_W, minWidth: LABEL_COL_W, flexShrink: 0 }} />
+        <div className="flex-1 min-w-0 relative h-9">
+          {scaleMarkers.map((mark, idx) => (
+            <div
+              key={mark}
+              className="absolute top-0 -translate-x-1/2 flex flex-col items-center"
+              style={{ left: `${(idx / 4) * 100}%` }}
+            >
+              <div className="w-px h-3 bg-slate-300" />
+              <span className="mt-2 text-[11px] font-bold text-slate-400 tabular-nums italic">
+                {mark.toFixed(1)}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </>
   );
-
-  const labelsForGrid = Array.from({ length: 5 }, (_, idx) => labels[idx] ?? '');
 
   return (
     <div className="w-full select-none py-[0.25rem]" style={{ fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif' }}>
@@ -153,39 +141,43 @@ export function DualSlider({
             <div className="sm:hidden rounded-xl bg-white/65 border border-slate-200/70 p-3 space-y-2 mb-5">
               <div>
                 <p className="text-[11px] uppercase tracking-[0.08em] font-bold text-[#7fbadc]">Score Level</p>
-                <p className="text-[clamp(0.92rem,2.95vw,1.04rem)] lg:text-[1rem] font-medium text-slate-800 leading-[1.5]">
+                <p className="text-sm font-medium text-slate-800 leading-[1.5]">
                   {currentAnchor ?? 'No level description'}
                 </p>
               </div>
               <div>
                 <p className="text-[11px] uppercase tracking-[0.08em] font-bold text-[#3a92c6]">Target Level</p>
-                <p className="text-[clamp(0.92rem,2.95vw,1.04rem)] lg:text-[1rem] font-medium text-slate-800 leading-[1.5]">
+                <p className="text-sm font-medium text-slate-800 leading-[1.5]">
                   {targetAnchor ?? 'No level description'}
                 </p>
               </div>
             </div>
 
-            <div className="hidden sm:block mb-3" style={{ marginLeft: labelColumnWidth }}>
-              <div className="relative h-[108px]">
-                {railWidth > 0 &&
-                  labelsForGrid.map((label, idx) => {
-                    const mark = idx + 1;
-                    return (
-                      <div
-                        key={idx}
-                        className="absolute top-0 -translate-x-1/2 flex flex-col items-center"
-                        style={{
-                          left: `${((mark - 1) / 4) * railWidth}px`,
-                          width: `${railWidth / 4}px`,
-                        }}
-                      >
-                        <p className="text-[clamp(0.86rem,2.5vw,0.96rem)] lg:text-[0.95rem] font-medium text-slate-800 leading-[1.45] text-center h-[74px] w-full flex items-end justify-center">
-                          {label}
-                        </p>
-                        <div className="w-px h-[16px] bg-slate-300 mt-2" />
-                      </div>
-                    );
-                  })}
+            <div className="hidden sm:flex items-start mb-2" style={{ gap: 0 }}>
+              {/* Spacer - same width as SCORE/TARGET label column */}
+              <div style={{ width: LABEL_COL_W, minWidth: LABEL_COL_W, flexShrink: 0 }} />
+              {/* Aligned zone: flex-1, same width as the slider rail */}
+              <div className="flex-1 min-w-0 relative" style={{ minHeight: 4 }} ref={labelsZoneRef}>
+                {labelsForGrid.map((label, idx) => (
+                  <div
+                    key={idx}
+                    className="absolute top-0 -translate-x-1/2 flex flex-col items-center"
+                    style={{
+                      left: `${(idx / 4) * 100}%`,
+                      width: idx === 0 || idx === 4 ? '18%' : '26%',
+                    }}
+                  >
+                    <p
+                      className="text-[clamp(0.64rem,0.8vw+0.1rem,0.82rem)] font-medium text-slate-700
+                     leading-[1.38] text-center w-full flex items-end justify-center
+                     overflow-wrap-anywhere hyphens-auto pb-0"
+                      style={{ height: labelRowHeight }}
+                    >
+                      {label}
+                    </p>
+                    <div className="w-px h-[14px] bg-slate-300 mt-[5px]" />
+                  </div>
+                ))}
               </div>
             </div>
           </>
@@ -193,12 +185,12 @@ export function DualSlider({
 
         <div className="space-y-5">
           <div className="relative flex items-center gap-3 sm:gap-5">
-            <div className={`${labelColumnClass} pr-2 text-left sm:text-right`} style={{ width: labelColumnWidth }}>
+            <div className={`${labelColumnClass} pr-2 text-left sm:text-right`} style={{ width: LABEL_COL_W, minWidth: LABEL_COL_W }}>
               <span className="text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: scoreLabelColor }}>
                 SCORE
               </span>
             </div>
-            <div ref={railRef} className={`flex-1 ${railPaddingClass} -ml-[1.55%] sm:-ml-[2.05%]`}>
+            <div className={`flex-1 ${railPaddingClass}`}>
               <div className="w-full relative h-[52px]">
                 <div className="absolute inset-x-0 top-[5px] flex justify-between px-[1px]">
                   {scaleMarkers.map((mark) => (
@@ -234,12 +226,12 @@ export function DualSlider({
           </div>
 
           <div className="relative flex items-center gap-3 sm:gap-5">
-            <div className={`${labelColumnClass} pr-2 text-left sm:text-right`} style={{ width: labelColumnWidth }}>
+            <div className={`${labelColumnClass} pr-2 text-left sm:text-right`} style={{ width: LABEL_COL_W, minWidth: LABEL_COL_W }}>
               <span className="text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: targetLabelColor }}>
                 TARGET
               </span>
             </div>
-            <div className={`flex-1 ${railPaddingClass} -ml-[1.55%] sm:-ml-[2.05%]`}>
+            <div className={`flex-1 ${railPaddingClass}`}>
               <div className="w-full relative h-[52px]">
                 <div className="absolute inset-x-0 top-[5px] flex justify-between px-[1px]">
                   {scaleMarkers.map((mark) => (
