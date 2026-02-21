@@ -103,7 +103,7 @@ export default function ResultsClient({
 
           <button
             onClick={() => router.push(recommendationsUrl)}
-            className="brand-btn px-4 sm:px-8 py-3 w-full sm:w-auto"
+            className="px-8 sm:px-10 lg:px-12 py-2.5 bg-[#3a92c6] text-white rounded-full text-sm sm:text-base font-semibold text-center cursor-pointer transition-all duration-300 hover:bg-[#54a5d5] focus:ring-2 focus:ring-[#3a92c6] focus:ring-offset-2 focus:ring-offset-white shadow-md hover:shadow-lg active:scale-95 flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
           >
             See Recommendations
           </button>
