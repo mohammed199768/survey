@@ -136,7 +136,7 @@ export function DualSlider({
                   }}
                 >
                   <p
-                    className="text-[clamp(0.6rem,0.65vw+0.12rem,0.76rem)] font-medium text-slate-700 leading-[1.35] break-words hyphens-auto"
+                    className="text-[clamp(0.68rem,0.75vw+0.14rem,0.86rem)] font-semibold text-slate-800 leading-[1.38] break-words hyphens-auto"
                     style={{ textAlign: labelAlign(idx) }}
                   >
                     {label}
