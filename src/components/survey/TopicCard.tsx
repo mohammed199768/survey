@@ -139,7 +139,7 @@ export function TopicCard({ dimensionId: _dimensionId, topic }: { dimensionId: s
       </div>
 
       {/* Body */}
-      <div className="px-4 sm:px-5 lg:px-8 pt-1 pb-6 lg:pb-8 bg-white flex-1 flex flex-col justify-start">
+      <div className="px-4 sm:px-5 lg:px-8 pt-1 pb-7 sm:pb-8 lg:pb-10 bg-white flex-1 flex flex-col justify-start">
         <div className="w-full mx-auto max-w-[1240px]">
           <DualSlider
             current={localCurrent}
