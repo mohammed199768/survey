@@ -91,7 +91,7 @@ export default function LandingPage() {
 
           <div className="max-w-md mx-auto space-y-4 mb-6 w-full">
             {isLoading ? (
-              <BrandPreloader size={120} label="Loading assessment..." />
+              <BrandPreloader label="Loading assessment..." />
             ) : error ? (
               <div className="text-red-300 font-medium">Error: {error}</div>
             ) : (
