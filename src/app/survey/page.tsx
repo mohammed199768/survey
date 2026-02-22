@@ -82,7 +82,7 @@ export default function SurveyPage() {
           <div className="rounded-3xl border border-white/80 bg-white/90 shadow-[0_12px_40px_rgba(15,23,42,0.08)] backdrop-blur p-8 md:p-10 relative">
             {isLoading && (
               <div className="absolute inset-0 z-20 rounded-3xl bg-white/70 backdrop-blur-[2px] flex items-center justify-center">
-                <BrandPreloader size={120} label="Starting assessment..." />
+                <BrandPreloader label="Starting assessment..." />
               </div>
             )}
             <div className="text-center mb-8 md:mb-10">

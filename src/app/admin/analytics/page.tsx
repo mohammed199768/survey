@@ -61,7 +61,7 @@ export default function AdminAnalyticsPage() {
   if (isLoadingStats && isLoadingDimensions && !dashboardStats && dimensionBreakdown.length === 0) {
     return (
       <div className="p-6 lg:p-8 min-h-[60vh] flex items-center justify-center">
-        <BrandPreloader size={130} label="Loading analytics..." />
+        <BrandPreloader label="Loading analytics..." />
       </div>
     );
   }

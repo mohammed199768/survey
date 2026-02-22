@@ -72,7 +72,7 @@ export default function AdminDashboardPage() {
   if (isLoadingStats && !dashboardData) {
     return (
       <div className="p-6 lg:p-8 min-h-[60vh] flex items-center justify-center">
-        <BrandPreloader size={130} label="Loading dashboard..." />
+        <BrandPreloader label="Loading dashboard..." />
       </div>
     );
   }

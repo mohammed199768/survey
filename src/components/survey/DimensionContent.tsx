@@ -64,7 +64,7 @@ export function DimensionContent({ dimensionId }: { dimensionId: string }) {
   if (!assessment) {
     return (
       <div className="h-[70vh] flex items-center justify-center">
-        <BrandPreloader size={120} label="Loading dimension..." />
+        <BrandPreloader label="Loading dimension..." />
       </div>
     );
   }
