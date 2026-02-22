@@ -154,9 +154,9 @@ export function DualSlider({
         <div className="space-y-5">
 
           {/* SCORE */}
-          <div className="flex items-center gap-3 sm:gap-5">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-5">
             <div className="shrink-0 pr-3 sm:pr-4 text-left sm:text-right" style={colStyle}>
-              <span className="text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: '#0F3F52' }}>SCORE</span>
+              <span className="text-[13px] sm:text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: '#0F3F52' }}>SCORE</span>
             </div>
             <div className="flex-1 min-w-0">
               <div className="w-full relative h-[52px]">
@@ -184,9 +184,9 @@ export function DualSlider({
           </div>
 
           {/* TARGET */}
-          <div className="flex items-center gap-3 sm:gap-5">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-5">
             <div className="shrink-0 pr-3 sm:pr-4 text-left sm:text-right" style={colStyle}>
-              <span className="text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: '#3a92c6' }}>TARGET</span>
+              <span className="text-[13px] sm:text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: '#3a92c6' }}>TARGET</span>
             </div>
             <div className="flex-1 min-w-0">
               <div className="w-full relative h-[52px]">
@@ -222,11 +222,19 @@ export function DualSlider({
         {/* ── Ruler ──────────────────────────────────────────────────── */}
 
         {/* Mobile */}
-        <div className="sm:hidden mt-5 px-3 grid grid-cols-5">
-          {scaleMarkers.map((mark) => (
-            <div key={mark} className="flex flex-col items-center">
+        <div className="sm:hidden mt-3 relative h-8">
+          {scaleMarkers.map((mark, idx) => (
+            <div
+              key={mark}
+              className="absolute top-0 flex flex-col"
+              style={{
+                left: `${MARK_POSITIONS[idx]}%`,
+                transform: 'translateX(-50%)',
+                alignItems: 'center',
+              }}
+            >
               <div className="w-px h-3 bg-slate-300" />
-              <span className="mt-2 text-[11px] font-bold text-slate-400 tabular-nums italic">{mark.toFixed(1)}</span>
+              <span className="mt-1.5 text-[11px] font-bold text-slate-400 tabular-nums italic">{mark.toFixed(1)}</span>
             </div>
           ))}
         </div>

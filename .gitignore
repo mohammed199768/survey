@@ -7,3 +7,5 @@ build/
 *.log
 *.tsbuildinfo
 RAILWAY_AUDIT_RAW_OUTPUT.md
+*.md
+*.txt
