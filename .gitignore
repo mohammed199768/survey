@@ -1,17 +1,28 @@
+# Secrets
 .env
 .env.local
+.env.*
+!.env.example
+
+# Dependencies / builds
 node_modules/
 dist/
 build/
 .next/
-*.log
 *.tsbuildinfo
-RAILWAY_AUDIT_RAW_OUTPUT.md
-*.md
-*.txt
-# Ignore all markdown
-*.md
 
-# But keep the important ones
+# Logs
+*.log
+
+# Editor / OS
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Internal dumps / exports
+*.txt
+
+# Docs (ignore all markdown, keep only key docs)
+*.md
 !README.md
 !LICENSE.md
