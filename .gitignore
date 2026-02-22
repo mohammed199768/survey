@@ -9,3 +9,9 @@ build/
 RAILWAY_AUDIT_RAW_OUTPUT.md
 *.md
 *.txt
+# Ignore all markdown
+*.md
+
+# But keep the important ones
+!README.md
+!LICENSE.md
